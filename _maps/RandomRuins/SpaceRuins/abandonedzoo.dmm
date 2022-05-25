@@ -257,11 +257,23 @@
 /obj/structure/frame/machine,
 /obj/structure/cable,
 /obj/machinery/light/directional/west,
+/obj/merge_conflict_marker{
+	name = "---Merge Conflict Marker---";
+	desc = "A best-effort merge was performed. You must resolve this conflict yourself (manually) and remove this object once complete."
+	},
+/obj/structure/frame/machine,
+/obj/structure/cable,
 /turf/open/floor/iron/dark/side,
 /area/ruin/space/has_grav/abandonedzoo)
 "eY" = (
 /obj/structure/reagent_dispensers/watertank,
 /obj/effect/turf_decal/tile/green/fourcorners,
+/obj/merge_conflict_marker{
+	name = "---Merge Conflict Marker---";
+	desc = "A best-effort merge was performed. You must resolve this conflict yourself (manually) and remove this object once complete."
+	},
+/obj/effect/turf_decal/tile/green/fourcorners,
+/obj/structure/reagent_dispensers/watertank,
 /turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/abandonedzoo)
 "fn" = (
@@ -380,6 +392,13 @@
 "Bh" = (
 /obj/structure/cable,
 /obj/machinery/power/smes/engineering,
+/obj/merge_conflict_marker{
+	name = "---Merge Conflict Marker---";
+	desc = "A best-effort merge was performed. You must resolve this conflict yourself (manually) and remove this object once complete."
+	},
+/obj/machinery/light/directional/south,
+/obj/structure/cable,
+/obj/machinery/power/smes/engineering,
 /turf/open/floor/iron/dark/side,
 /area/ruin/space/has_grav/abandonedzoo)
 "Bt" = (
@@ -413,6 +432,17 @@
 /obj/item/food/carrotfries,
 /obj/machinery/light/directional/east,
 /turf/open/floor/iron/dark/side,
+/area/ruin/space/has_grav/abandonedzoo)
+"JF" = (
+/obj/structure/cable,
+/obj/effect/turf_decal/tile/green/fourcorners,
+/obj/merge_conflict_marker{
+	name = "---Merge Conflict Marker---";
+	desc = "A best-effort merge was performed. You must resolve this conflict yourself (manually) and remove this object once complete."
+	},
+/obj/effect/turf_decal/tile/green/fourcorners,
+/obj/structure/cable,
+/turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/abandonedzoo)
 "JW" = (
 /obj/structure/table/reinforced,
@@ -524,6 +554,23 @@
 "Xx" = (
 /obj/structure/flora/rock/pile/style_random,
 /turf/open/misc/asteroid,
+/area/ruin/space/has_grav/abandonedzoo)
+"XC" = (
+/obj/machinery/door/airlock/hatch{
+	name = "Bio-Research Station"
+	},
+/obj/structure/cable,
+/obj/effect/turf_decal/tile/green/fourcorners,
+/obj/merge_conflict_marker{
+	name = "---Merge Conflict Marker---";
+	desc = "A best-effort merge was performed. You must resolve this conflict yourself (manually) and remove this object once complete."
+	},
+/obj/machinery/door/airlock/hatch{
+	name = "Bio-Research Station"
+	},
+/obj/effect/turf_decal/tile/green/fourcorners,
+/obj/structure/cable,
+/turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/abandonedzoo)
 "YJ" = (
 /obj/structure/chair/office/light{
@@ -651,7 +698,7 @@ ac
 qX
 at
 aT
-oS
+JF
 Ni
 bf
 at
@@ -672,7 +719,7 @@ at
 at
 at
 TQ
-oS
+JF
 Ni
 Bh
 at
@@ -693,7 +740,7 @@ Vq
 aG
 Bt
 aV
-oS
+JF
 oS
 bh
 bm
@@ -714,7 +761,7 @@ eY
 Ni
 YJ
 Ni
-oS
+JF
 Ni
 Ni
 Ni
@@ -735,7 +782,7 @@ Ni
 Ni
 Ni
 Ni
-oS
+JF
 Ni
 Ni
 Ni
@@ -756,7 +803,7 @@ fn
 aI
 aP
 aW
-oS
+JF
 Ni
 bi
 HI
@@ -777,7 +824,7 @@ at
 at
 at
 RR
-oS
+JF
 Ni
 Ep
 at
@@ -798,7 +845,7 @@ ac
 qX
 at
 aY
-oS
+JF
 Ni
 bk
 at
@@ -819,7 +866,7 @@ aA
 ac
 at
 JW
-oS
+JF
 Ni
 bl
 at
@@ -840,7 +887,7 @@ Rz
 ac
 at
 at
-iX
+XC
 Ti
 at
 at
