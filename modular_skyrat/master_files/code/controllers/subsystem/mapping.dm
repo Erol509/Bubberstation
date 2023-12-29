@@ -53,6 +53,10 @@ SUBSYSTEM_DEF(mapping)
 
 ///  TEMPORARY ERROR fix for overmap-pr
 
+
+	/// Has the map for the next round been deliberately chosen by an admin?
+	var/map_force_chosen = FALSE
+
 	var/list/multiz_levels = list()
 
 
@@ -81,6 +85,16 @@ SUBSYSTEM_DEF(mapping)
 	var/list/critical_planes
 	/// The largest plane offset we've generated so far
 	var/max_plane_offset = 0
+	/// Has the map vote been rocked?
+	var/map_vote_rocked = FALSE
+
+	///shows the default gravity value for each z level. recalculated when gravity generators change.
+	///List in the form: list(z level num = max generator gravity in that z level OR the gravity level trait)
+	var/list/gravity_by_z_level = list()
+
+	/// list of lazy templates that have been loaded
+	var/list/loaded_lazy_templates
+
 
 ///  TEMPORARY ERROR fix for overmap-pr
 

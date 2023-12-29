@@ -113,7 +113,7 @@
 
 /obj/item/metal_density_scanner/AltClick(mob/living/user)
 	. = ..()
-	if(!istype(user) || !user.canUseTopic(src, BE_CLOSE))
+	if(!istype(user) || !user.can_use_topic(src, BE_CLOSE))
 		return
 	if(!has_readout || is_reading_out)
 		return

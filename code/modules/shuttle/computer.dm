@@ -100,7 +100,7 @@
 
 /obj/machinery/computer/shuttle/Topic(href, href_list)
 	var/mob/user = usr
-	if(!isliving(user) || !user.canUseTopic(src, BE_CLOSE, FALSE, NO_TK))
+	if(!isliving(user) || !user.can_use_topic(src, BE_CLOSE, FALSE, NO_TK))
 		return
 	var/obj/docking_port/mobile/M = SSshuttle.getShuttle(shuttleId)
 	if(M.gateway_stranded)

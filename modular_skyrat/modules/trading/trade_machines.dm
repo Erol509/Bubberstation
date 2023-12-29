@@ -311,7 +311,7 @@
 /obj/machinery/computer/trade_console/Topic(href, href_list)
 	. = ..()
 	var/mob/living/living_user = usr
-	if(!istype(living_user) || !living_user.canUseTopic(src, BE_CLOSE, FALSE, NO_TK))
+	if(!istype(living_user) || !living_user.can_use_topic(src, BE_CLOSE, FALSE, NO_TK))
 		return
 	switch(href_list["task"])
 		if("trader_task")

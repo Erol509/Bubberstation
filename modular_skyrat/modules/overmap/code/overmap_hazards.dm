@@ -49,7 +49,7 @@
 			if(entering_shuttle.z_alert_sounds)
 				for(var/iterating_level in entering_shuttle.related_levels)
 					var/datum/space_level/iterated_space_level = iterating_level
-					playsound_z_level(iterated_space_level.z_value, alert_sound, OVERMAP_SHUTTLE_ALERT_VOLUME, TRUE, SOUND_ANNOUNCEMENTS)
+					playsound_z_level(iterated_space_level.z_value, alert_sound, OVERMAP_SHUTTLE_ALERT_VOLUME, TRUE)
 			else
 				if(entering_shuttle.control_consoles.len)
 					for(var/atom/iterating_atom as anything in entering_shuttle.control_consoles)

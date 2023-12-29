@@ -26,8 +26,8 @@
 	target = aimed
 	effect = new
 	target.my_visual.vis_contents += effect
-	RegisterSignal(parent, COMSIG_PARENT_QDELETING, .proc/Destroy)
-	RegisterSignal(target, COMSIG_PARENT_QDELETING, .proc/Destroy)
+	RegisterSignal(parent, COMSIG_QDELETING, .proc/Destroy)
+	RegisterSignal(target, COMSIG_QDELETING, .proc/Destroy)
 
 	addtimer(CALLBACK(src, .proc/Calibrate), 3 SECONDS)
 
@@ -35,8 +35,8 @@
 	parent.LockLost()
 	target.my_visual.vis_contents -= effect
 	qdel(effect)
-	UnregisterSignal(parent, COMSIG_PARENT_QDELETING)
-	UnregisterSignal(target, COMSIG_PARENT_QDELETING)
+	UnregisterSignal(parent, COMSIG_QDELETING)
+	UnregisterSignal(target, COMSIG_QDELETING)
 	parent.lock = null
 	target = null
 	return ..()

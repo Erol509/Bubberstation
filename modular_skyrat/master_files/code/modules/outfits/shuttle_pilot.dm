@@ -63,7 +63,6 @@
 	icon = 'modular_skyrat/master_files/icons/obj/clothing/hats.dmi'
 	worn_icon = 'modular_skyrat/master_files/icons/mob/clothing/head.dmi'
 	armor_type = list(MELEE = 30, BULLET = 30, LASER = 30, ENERGY = 30, BOMB = 30, BIO = 0, FIRE = 80, ACID = 100, WOUND = 30)
-	mutant_variants = NONE
 
 /obj/item/clothing/suit/armor/vest/tan
 	name = "tan armor vest"

@@ -287,7 +287,7 @@
 		playsound(src, 'sound/effects/break_stone.ogg', 50, TRUE)
 	stored_ores.Cut()
 
-/obj/machinery/power/mining_drill/ComponentInitialize()
+/obj/machinery/power/mining_drill/Initialize()
 	. = ..()
 	//Very mechanical, so EMP proof
 	AddElement(/datum/element/empprotection, EMP_PROTECT_SELF | EMP_PROTECT_WIRES)
@@ -320,7 +320,7 @@
 		terminal.master = null
 		terminal = null
 
-/obj/machinery/power/mining_drill/RefreshParts()
+/obj/machinery/power/mining_drill/refresh_parts()
 	var/new_mining_speed = DRILL_MINING_SPEED
 	var/new_power_usage = DRILL_ACTIVE_POWER_USAGE
 	for(var/obj/item/stock_parts/micro_laser/L in component_parts)
