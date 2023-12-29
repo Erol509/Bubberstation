@@ -716,4 +716,73 @@ GLOBAL_LIST_EMPTY(the_station_areas)
 	RETURN_TYPE(/datum/turf_reservation)
 	return used_turfs[T]
 
+
+
+/// Adds a new reservation z level. A bit of space that can be handed out on request
+/// Of note, reservations default to transit turfs, to make their most common use, shuttles, faster
+/datum/controller/subsystem/mapping/proc/add_reservation_zlevel(for_shuttles)
+	num_of_res_levels++
+	return add_new_zlevel("Transit/Reserved #[num_of_res_levels]", list(ZTRAIT_RESERVED = TRUE))
+
+/// Requests a /datum/turf_reservation based on the given width, height, and z_size. You can specify a z_reservation to use a specific z level, or leave it null to use any z level.
+/datum/controller/subsystem/mapping/proc/request_turf_block_reservation(
+	width,
+	height,
+	z_size = 1,
+	z_reservation = null,
+	reservation_type = /datum/turf_reservation,
+	turf_type_override = null,
+)
+	UNTIL((!z_reservation || reservation_ready["[z_reservation]"]) && !clearing_reserved_turfs)
+	var/datum/turf_reservation/reserve = new reservation_type
+	if(!isnull(turf_type_override))
+		reserve.turf_type = turf_type_override
+	if(!z_reservation)
+		for(var/i in levels_by_trait(ZTRAIT_RESERVED))
+			if(reserve.reserve(width, height, z_size, i))
+				return reserve
+		//If we didn't return at this point, theres a good chance we ran out of room on the exisiting reserved z levels, so lets try a new one
+		var/datum/space_level/newReserved = add_reservation_zlevel()
+		initialize_reserved_level(newReserved.z_value)
+		if(reserve.reserve(width, height, z_size, newReserved.z_value))
+			return reserve
+	else
+		if(!level_trait(z_reservation, ZTRAIT_RESERVED))
+			qdel(reserve)
+			return
+		else
+			if(reserve.reserve(width, height, z_size, z_reservation))
+				return reserve
+	QDEL_NULL(reserve)
+
+/// Takes a turf or a z level, and returns a list of all the z levels that are connected to it
+/datum/controller/subsystem/mapping/proc/get_connected_levels(turf/connected)
+	var/z_level = connected
+	if(isturf(z_level))
+		z_level = connected.z
+	return z_level_to_stack[z_level]
+
+/datum/controller/subsystem/mapping/proc/lazy_load_template(template_key, force = FALSE)
+	RETURN_TYPE(/datum/turf_reservation)
+	var/static/lazy_loading = FALSE
+	UNTIL(!lazy_loading)
+
+	lazy_loading = TRUE
+	. = _lazy_load_template(template_key, force)
+	lazy_loading = FALSE
+	return .
+
+/datum/controller/subsystem/mapping/proc/_lazy_load_template(template_key, force = FALSE)
+	PRIVATE_PROC(TRUE)
+
+	if(LAZYACCESS(loaded_lazy_templates, template_key)  && !force)
+		var/datum/lazy_template/template = GLOB.lazy_templates[template_key]
+		return template.reservations[1]
+	LAZYSET(loaded_lazy_templates, template_key, TRUE)
+
+	var/datum/lazy_template/target = GLOB.lazy_templates[template_key]
+	if(!target)
+		CRASH("Attempted to lazy load a template key that does not exist: '[template_key]'")
+	return target.lazy_load()
+
 ///  TEMPORARY ERROR fix for overmap-pr

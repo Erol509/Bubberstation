@@ -70,12 +70,12 @@
 	playsound(my_turf, 'sound/items/poster_being_created.ogg', 100, 1)
 	var/obj/item/paper/P = new /obj/item/paper(my_turf)
 	P.name = "metal density readout"
-	P.info = "<CENTER><B>METAL DENSITY READOUT</B></CENTER><BR>"
-	P.info += "<B>GPS coordinates: x:[my_turf.x], y:[my_turf.y], z:[my_turf.z]</B><BR>"
+	P.default_raw_text = "<CENTER><B>METAL DENSITY READOUT</B></CENTER><BR>"
+	P.default_raw_text += "<B>GPS coordinates: x:[my_turf.x], y:[my_turf.y], z:[my_turf.z]</B><BR>"
 	if(ON)
-		P.info += ON.GetScannerReadout(my_turf)
+		P.default_raw_text += ON.GetScannerReadout(my_turf)
 	else
-		P.info += "No ores detected at the coordinates"
+		P.default_raw_text += "No ores detected at the coordinates"
 	P.update_icon()
 	//We're inside a storage? Put the printout in the storage
 	if(SEND_SIGNAL(loc, COMSIG_CONTAINS_STORAGE))

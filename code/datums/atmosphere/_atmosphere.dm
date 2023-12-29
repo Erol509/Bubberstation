@@ -61,7 +61,6 @@
 	while(gasmix.return_pressure() > target_pressure)
 		gaslist[gastype][MOLES] -= 1
 	gaslist[gastype][MOLES] = FLOOR(gaslist[gastype][MOLES], 0.1)
-	*/
 
 	gasmix.garbage_collect()
 

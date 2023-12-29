@@ -61,16 +61,16 @@
 	var/obj/item/paper/P = new /obj/item/paper(my_turf)
 	manifest_counter++
 	P.name = "trade manifest #[manifest_counter]"
-	P.info = "<CENTER><B>TRADE MANIFEST #[manifest_counter] - [last_trade_time]</B></CENTER><BR>Transaction between [last_user_name] and [connected_trader.name] at [connected_trader.origin]"
+	P.default_raw_text = "<CENTER><B>TRADE MANIFEST #[manifest_counter] - [last_trade_time]</B></CENTER><BR>Transaction between [last_user_name] and [connected_trader.name] at [connected_trader.origin]"
 	if(manifest_purchased)
-		P.info += "<HR><b>BOUGHT ITEMS:</b><BR>"
+		P.default_raw_text += "<HR><b>BOUGHT ITEMS:</b><BR>"
 		for(var/line in manifest_purchased)
-			P.info += "[line]<BR>"
+			P.default_raw_text += "[line]<BR>"
 	if(manifest_sold)
-		P.info += "<HR><b>SOLD ITEMS:</b><BR>"
+		P.default_raw_text += "<HR><b>SOLD ITEMS:</b><BR>"
 		for(var/line in manifest_sold)
-			P.info += "[line]<BR>"
-	P.info += "<HR>Total gain: [manifest_profit]<BR>Total loss: [manifest_loss]<BR><b>TOTAL PROFIT: [manifest_profit - manifest_loss]</b>"
+			P.default_raw_text += "[line]<BR>"
+	P.default_raw_text += "<HR>Total gain: [manifest_profit]<BR>Total loss: [manifest_loss]<BR><b>TOTAL PROFIT: [manifest_profit - manifest_loss]</b>"
 	P.update_icon()
 	manifest_purchased = null
 	manifest_sold = null
@@ -349,9 +349,9 @@
 							playsound(my_turf, 'sound/items/poster_being_created.ogg', 20, 1)
 							var/obj/item/paper/P = new /obj/item/paper(my_turf)
 							P.name = "Bounty: [bounty.bounty_name]"
-							P.info = "<CENTER><B>[connected_trader.origin] - BOUNTY: [bounty.bounty_name]</B></CENTER><HR>"
-							P.info += "[bounty.bounty_text]"
-							P.info += "<BR>Requested items: [bounty.name] x[bounty.amount]"
+							P.default_raw_text = "<CENTER><B>[connected_trader.origin] - BOUNTY: [bounty.bounty_name]</B></CENTER><HR>"
+							P.default_raw_text += "[bounty.bounty_text]"
+							P.default_raw_text += "<BR>Requested items: [bounty.name] x[bounty.amount]"
 							var/reward_line
 							if(bounty.reward_cash)
 								reward_line = "[bounty.reward_cash] cr."
@@ -360,7 +360,7 @@
 									reward_line += " & [bounty.reward_item_name]"
 								else
 									reward_line = bounty.reward_item_name
-							P.info += "<BR>Rewards: [reward_line]"
+							P.default_raw_text += "<BR>Rewards: [reward_line]"
 							P.update_icon()
 						if("claim")
 							last_transmission = connected_trader.requested_bounty_claim(living_user, src, bounty)

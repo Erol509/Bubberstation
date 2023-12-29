@@ -22,7 +22,7 @@
 
 	var/target_holograph = tgui_alert(usr, "Do you want to target a holograph?", "Target holograph?", list("Yes", "No"))
 
-	priority_announce("BLUESPACE TARGETING PARAMETERS SET, PREIGNITION STARTING... FIRING IN T-20 SECONDS!", "BLUESPACE ARTILLERY", ANNOUNCER_BLUESPACEARTY_2)
+	priority_announce("BLUESPACE TARGETING PARAMETERS SET, PREIGNITION STARTING... FIRING IN T-20 SECONDS!", "BLUESPACE ARTILLERY", ANNOUNCER_BLUESPACEARTY)
 	alert_sound_to_playing('modular_skyrat/modules/bsa_overhaul/sound/superlaser_prefire.ogg', override_volume = TRUE)
 
 	message_admins("[ADMIN_LOOKUPFLW(usr)] has fired bluespace artillery! Firing at: [ADMIN_VERBOSEJMP(turf_to_fire_at)]")

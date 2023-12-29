@@ -199,7 +199,7 @@ SUBSYSTEM_DEF(shuttle)
 
 	init_sold_shuttles()//SKYRAT EDIT ADDITON
 	return ..()
-	return SS_INIT_SUCCESS
+//	return SS_INIT_SUCCESS
 
 /datum/controller/subsystem/shuttle/proc/setup_shuttles(list/stationary)
 	for(var/obj/docking_port/stationary/port as anything in stationary)

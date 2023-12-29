@@ -209,7 +209,7 @@
 
 /datum/action/innate/freeform_docker_abort
 	name = "Abort Docking"
-	icon_icon = 'icons/mob/actions/actions_mecha.dmi'
+	button_icon = 'icons/mob/actions/actions_mecha.dmi'
 	button_icon_state = "mech_cycle_equip_off"
 
 /datum/action/innate/freeform_docker_abort/Activate()
@@ -218,7 +218,7 @@
 
 /datum/action/innate/freeform_docker_jump_view
 	name = "Jump View To Vista"
-	icon_icon = 'icons/mob/actions/actions_mecha.dmi'
+	button_icon = 'icons/mob/actions/actions_mecha.dmi'
 	button_icon_state = "mech_cycle_equip_off"
 
 /datum/action/innate/freeform_docker_jump_view/Activate() //TODO
@@ -226,7 +226,7 @@
 
 /datum/action/innate/freeform_docker_rotate
 	name = "Rotate"
-	icon_icon = 'icons/mob/actions/actions_mecha.dmi'
+	button_icon = 'icons/mob/actions/actions_mecha.dmi'
 	button_icon_state = "mech_cycle_equip_off"
 
 /datum/action/innate/freeform_docker_rotate/Activate()
@@ -235,7 +235,7 @@
 
 /datum/action/innate/freeform_docker_place
 	name = "Engage Docking"
-	icon_icon = 'icons/mob/actions/actions_mecha.dmi'
+	button_icon = 'icons/mob/actions/actions_mecha.dmi'
 	button_icon_state = "mech_zoom_off"
 
 /datum/action/innate/freeform_docker_place/Activate()
