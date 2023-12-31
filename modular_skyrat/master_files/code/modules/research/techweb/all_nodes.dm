@@ -139,6 +139,7 @@
 /datum/techweb_node/cyber_organs/New()
 	design_ids += list(
 		"cybernetic_tongue",
+		"cybernetic_tongue_lizard",
 	)
 	return ..()
 
@@ -253,5 +254,12 @@
 /datum/techweb_node/basic_mining/New()
 	design_ids += list(
 		"borg_upgrade_welding",
+	)
+	return ..()
+
+// ENGINEERING
+/datum/techweb_node/engineering/New()
+	design_ids += list(
+		"rad_collector",
 	)
 	return ..()
