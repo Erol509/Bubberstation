@@ -6,7 +6,6 @@ SUBSYSTEM_DEF(mapping)
 /* HEY LISTEN //
  * IF YOU ADD A NEW TYPE OF RUIN, ADD IT TO code\__DEFINES\ruins.dm
  */
-
 	var/list/ruin_types_list = list()
 	var/list/ruin_types_probabilities = list()
 	var/list/planet_types = list()

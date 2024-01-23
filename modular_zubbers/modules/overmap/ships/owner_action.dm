@@ -33,6 +33,7 @@
 		return FALSE
 	ui_interact(owner)
 
+
 /datum/action/ship_owner/proc/check_blinking()
 	var/should_blink = parent_ship.memo == null || (length(parent_ship.memo) <= 0)
 	if(!should_blink)

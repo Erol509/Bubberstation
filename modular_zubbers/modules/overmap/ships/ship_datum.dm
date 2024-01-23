@@ -1,3 +1,13 @@
+// /datum/overmap signals
+/// From overmap Move(): (old_x, old_y)
+#define COMSIG_OVERMAP_MOVED "overmap_moved"
+/// From overmap Dock(): (datum/overmap)
+#define COMSIG_OVERMAP_DOCK "overmap_dock"
+/// From overmap Undock(): (datum/overmap)
+#define COMSIG_OVERMAP_UNDOCK "overmap_undock"
+
+#define SQRT_2 1.414214
+#define DIRFLIP(d) turn(d, 180)
 /**
  * # Overmap ships
  *

@@ -98,7 +98,7 @@
 	if(preserve_level)
 		return
 
-	if(length(mapzone?.get_mind_mobs()) || SSlag_switch.measures[DISABLE_PLANETDEL])
+	if(length(mapzone?.get_mind_mobs()))
 		return //Dont fuck over stranded people
 
 	log_shuttle("[src] [REF(src)] UNLOAD")
@@ -177,8 +177,8 @@
  * * visiting shuttle - The docking port of the shuttle visiting the level.
  */
 /datum/overmap/dynamic/proc/load_level()
-	if(SSlag_switch.measures[DISABLE_PLANETGEN] && !(HAS_TRAIT(usr, TRAIT_BYPASS_MEASURES)))
-		return FALSE
+	//if(SSlag_switch.measures[DISABLE_PLANETGEN] && !(HAS_TRAIT(usr, TRAIT_BYPASS_MEASURES)))
+		//return FALSE
 	if(mapzone)
 		return TRUE
 
@@ -222,11 +222,11 @@
 	// THE ONLY REASON IT DIDN'T BEFORE IS BECAUSE THE CODE DIDN'T RESPECT THE FLAG
 	area_flags = HIDDEN_AREA | CAVES_ALLOWED | FLORA_ALLOWED | MOB_SPAWN_ALLOWED
 	flags_1 = CAN_BE_DIRTY_1
-	dynamic_lighting = DYNAMIC_LIGHTING_FORCED
+	//dynamic_lighting = DYNAMIC_LIGHTING_FORCED
 	sound_environment = SOUND_ENVIRONMENT_STONEROOM
-	ambientsounds = RUINS
+	//ambientsounds = RUINS
 	outdoors = TRUE
-	allow_weather = TRUE
+	//allow_weather = TRUE
 
 /area/overmap_encounter/New(...)
 	if(area_flags & UNIQUE_AREA)
@@ -243,8 +243,8 @@
 /area/overmap_encounter/planetoid/cave
 	name = "\improper Planetoid Cavern"
 	sound_environment = SOUND_ENVIRONMENT_CAVE
-	ambientsounds = SPOOKY
-	allow_weather = FALSE
+	//ambientsounds = SPOOKY
+	//allow_weather = FALSE
 
 /area/overmap_encounter/planetoid/cave/explored
 	area_flags = VALID_TERRITORY
@@ -253,7 +253,7 @@
 
 /area/overmap_encounter/planetoid/lava
 	name = "\improper Volcanic Planetoid"
-	ambientsounds = MINING
+	//ambientsounds = MINING
 
 /area/overmap_encounter/planetoid/lava/explored
 	area_flags = VALID_TERRITORY
@@ -261,7 +261,7 @@
 /area/overmap_encounter/planetoid/ice
 	name = "\improper Frozen Planetoid"
 	sound_environment = SOUND_ENVIRONMENT_CAVE
-	ambientsounds = SPOOKY
+	//ambientsounds = SPOOKY
 
 /area/overmap_encounter/planetoid/ice/explored
 	area_flags = VALID_TERRITORY
@@ -269,7 +269,7 @@
 /area/overmap_encounter/planetoid/sand
 	name = "\improper Sandy Planetoid"
 	sound_environment = SOUND_ENVIRONMENT_QUARRY
-	ambientsounds = MINING
+	//ambientsounds = MINING
 
 /area/overmap_encounter/planetoid/sand/explored
 	area_flags = VALID_TERRITORY
@@ -277,7 +277,7 @@
 /area/overmap_encounter/planetoid/jungle
 	name = "\improper Jungle Planetoid"
 	sound_environment = SOUND_ENVIRONMENT_FOREST
-	ambientsounds = AWAY_MISSION
+	//ambientsounds = AWAY_MISSION
 
 /area/overmap_encounter/planetoid/jungle/explored
 	area_flags = VALID_TERRITORY
@@ -285,7 +285,7 @@
 /area/overmap_encounter/planetoid/rockplanet
 	name = "\improper Rocky Planetoid"
 	sound_environment = SOUND_ENVIRONMENT_QUARRY
-	ambientsounds = AWAY_MISSION
+	//ambientsounds = AWAY_MISSION
 
 /area/overmap_encounter/planetoid/rockplanet/explored
 	area_flags = VALID_TERRITORY
@@ -293,7 +293,7 @@
 /area/overmap_encounter/planetoid/beachplanet
 	name = "\improper Beach Planetoid"
 	sound_environment = SOUND_ENVIRONMENT_FOREST
-	ambientsounds = BEACH
+	//ambientsounds = BEACH
 
 /area/overmap_encounter/planetoid/beachplanet/explored
 	area_flags = VALID_TERRITORY
@@ -301,7 +301,7 @@
 /area/overmap_encounter/planetoid/wasteplanet
 	name = "\improper Waste Planetoid"
 	sound_environment = SOUND_ENVIRONMENT_HANGAR
-	ambientsounds = MAINTENANCE
+	//ambientsounds = MAINTENANCE
 
 /area/overmap_encounter/planetoid/wasteplanet/explored
 	area_flags = VALID_TERRITORY
@@ -310,15 +310,15 @@
 	name = "\improper Yellow Space"
 	sound_environment = SOUND_ENVIRONMENT_MOUNTAINS
 	area_flags = HIDDEN_AREA | CAVES_ALLOWED | FLORA_ALLOWED | MOB_SPAWN_ALLOWED //allows jaunters to work
-	ambientsounds = REEBE
+	//ambientsounds = REEBE
 
 /area/overmap_encounter/planetoid/asteroid
 	name = "\improper Asteroid Field"
 	sound_environment = SOUND_ENVIRONMENT_QUARRY
-	ambientsounds = SPACE
+	//ambientsounds = SPACE
 
 /area/overmap_encounter/planetoid/gas_giant
 	name = "\improper Gas Giant"
 	sound_environment = SOUND_ENVIRONMENT_MOUNTAINS
-	ambientsounds = REEBE
-	has_gravity = GAS_GIANT_GRAVITY
+	//ambientsounds = REEBE
+	//has_gravity = GAS_GIANT_GRAVITY

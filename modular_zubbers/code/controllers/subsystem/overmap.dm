@@ -33,6 +33,26 @@ SUBSYSTEM_DEF(overmap)
 
 	///Whether or not a ship is currently being spawned. Used to prevent multiple ships from being spawned at once.
 	var/ship_spawning //TODO: Make a proper queue for this
+/datum/config_entry/number/max_overmap_event_clusters
+	config_entry_value = 10
+
+/datum/config_entry/number/max_overmap_events
+	config_entry_value = 150
+
+/datum/config_entry/number/max_overmap_dynamic_events
+	config_entry_value = 10
+
+/datum/config_entry/string/overmap_generator_type
+	config_entry_value = "solar_system"
+
+/datum/config_entry/number/overmap_size
+	config_entry_value = 30
+	min_val = 1
+
+/datum/config_entry/number/overmap_encounter_size
+	max_val = 255
+	config_entry_value = 127
+	min_val = 127
 
 /datum/controller/subsystem/overmap/get_metrics()
 	. = ..()
@@ -132,7 +152,7 @@ SUBSYSTEM_DEF(overmap)
 		spawn_events()
 		spawn_ruin_levels()
 
-	spawn_outpost()
+	//spawn_outpost()
 	spawn_initial_ships()
 
 /**
@@ -434,6 +454,7 @@ SUBSYSTEM_DEF(overmap)
 			if(D.mapzone?.is_in_bounds(source))
 				return D
 
+/*
 /// Returns TRUE if players should be allowed to create a ship by "standard" means, and FALSE otherwise.
 /datum/controller/subsystem/overmap/proc/player_ship_spawn_allowed()
 	if(!(GLOB.ship_spawn_enabled) || (get_num_cap_ships() >= CONFIG_GET(number/max_shuttle_count)))
@@ -447,7 +468,7 @@ SUBSYSTEM_DEF(overmap)
 		if(!Ship.source_template || Ship.source_template.category != "subshuttles")
 			ship_count++
 	return ship_count
-
+*/
 /*
 /datum/controller/subsystem/overmap/proc/get_manifest()
 	var/list/manifest_out = list()

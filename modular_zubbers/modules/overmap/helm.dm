@@ -37,21 +37,20 @@
 /obj/machinery/computer/helm/retro
 	icon = 'icons/obj/machines/retro_computer.dmi'
 	icon_state = "computer-retro"
-	deconpath = /obj/structure/frame/computer/retro
 
 /obj/machinery/computer/helm/solgov
 	icon = 'icons/obj/machines/retro_computer.dmi'
 	icon_state = "computer-solgov"
-	deconpath = /obj/structure/frame/computer/solgov
 
 /datum/config_entry/number/bluespace_jump_wait
 	default = 30 MINUTES
 
+/*
 /obj/machinery/computer/helm/Initialize(mapload, obj/item/circuitboard/C)
 	. = ..()
 	jump_allowed = world.time + CONFIG_GET(number/bluespace_jump_wait)
 	ntnet_relay = new(src)
-
+*/
 /obj/machinery/computer/helm/proc/calibrate_jump(inline = FALSE)
 	if(jump_allowed < 0)
 		say("Bluespace Jump Calibration offline. Please contact your system administrator.")
@@ -75,7 +74,6 @@
 	. = ..()
 	SStgui.close_uis(src)
 	ASSERT(length(concurrent_users) == 0)
-	QDEL_NULL(ntnet_relay)
 	if(current_ship)
 		current_ship.helms -= src
 		current_ship = null
@@ -85,6 +83,7 @@
 	calibrating = FALSE
 	deltimer(jump_timer)
 
+/*
 /obj/machinery/computer/helm/proc/jump_sequence()
 	switch(jump_state)
 		if(JUMP_STATE_OFF)
@@ -106,7 +105,7 @@
 /obj/machinery/computer/helm/proc/do_jump()
 	priority_announce("Bluespace Jump Initiated.", sender_override = "[current_ship.name] Bluespace Pylon", sound = 'sound/magic/lightningbolt.ogg', zlevel = virtual_z())
 	qdel(current_ship)
-
+*/
 /obj/machinery/computer/helm/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock)
 	if(current_ship && current_ship != port.current_ship)
 		current_ship.helms -= src
@@ -350,6 +349,7 @@
 			current_ship.Undock()
 
 /obj/machinery/computer/helm/ui_close(mob/user)
+	..()
 	var/user_ref = REF(user)
 	var/is_living = isliving(user)
 	// Living creature or not, we remove you anyway.
@@ -365,7 +365,7 @@
 	if(!length(concurrent_users) && is_living)
 		playsound(src, 'sound/machines/terminal_off.ogg', 25, FALSE)
 		use_power(0)
-
+/*
 /obj/machinery/computer/helm/attackby(obj/item/key, mob/living/user, params)
 	if(istype(key, /obj/item/clothing/accessory/medal/gold/captain))
 		var/obj/item/clothing/accessory/medal/gold/captain/medal = key
@@ -399,7 +399,7 @@
 	playsound(src, 'sound/effects/fuse.ogg')
 	current_ship.helm_locked = FALSE
 	return COMPONENT_BLOCK_TOOL_ATTACK
-
+*/
 /// Checks if this helm is locked, or for the key being destroyed. Returns TRUE if locked.
 /obj/machinery/computer/helm/proc/check_keylock(silent=FALSE)
 	if(!current_ship.helm_locked)
@@ -424,7 +424,6 @@
 	layer = SIGN_LAYER
 	density = FALSE
 	viewer = TRUE
-	unique_icon = TRUE
 
 /obj/machinery/computer/helm/viewscreen/computer
 	name = "viewscreen console"
