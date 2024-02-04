@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { useBackend } from '../backend';
 import {
   Box,
@@ -11,7 +13,6 @@ import {
 } from '../components';
 import { formatSiUnit } from '../format';
 import { Window } from '../layouts';
-import { useState } from '../React';
 
 type data = {
   control_rods: number;
@@ -34,9 +35,9 @@ type data = {
 };
 
 export const ReactorComputer = (props, context) => {
-  const [tabIndex, setTabIndex] = useState(context, 'tab-index', 1);
+  const [tabIndex, setTabIndex] = useState<number>(1);
   return (
-    <Window resizable width={360} height={540}>
+    <Window width={360} height={540}>
       <Window.Content fitted>
         <Tabs>
           <Tabs.Tab selected={tabIndex === 1} onClick={() => setTabIndex(1)}>

@@ -593,6 +593,58 @@ GLOBAL_VAR_INIT(counter, 0)
 	active = FALSE
 	update_icon()
 
+/obj/effect/decal/nuclear_waste/Initialize(mapload)
+	. = ..()
+	for(var/obj/A in get_turf(src))
+		if(istype(A, /obj/structure))
+			qdel(src) //It is more processing efficient to do this here rather than when searching for available turfs.
+	set_light(1)
+	START_PROCESSING(SSobj, src)
+
+/obj/effect/decal/nuclear_waste/process(delta_time)
+	if(prob(10)) // woah there, don't overload the radiation subsystem
+		radiation_pulse(src, 30)
+
+/obj/effect/decal/nuclear_waste/Destroy(force)
+	STOP_PROCESSING(SSobj, src)
+	return ..()
+
+/obj/effect/landmark/nuclear_waste_spawner //Clean way of spawning nuclear gunk after a reactor core meltdown.
+	name = "Nuclear waste spawner"
+	var/range = 15 //15 tile radius to spawn goop
+
+/obj/effect/landmark/nuclear_waste_spawner/strong
+	range = 30
+
+/obj/effect/landmark/nuclear_waste_spawner/proc/fire()
+	for(var/turf/open/floor in orange(range, get_turf(src)))
+		if(prob(35)) //Scatter the sludge, don't smear it everywhere
+			new /obj/effect/decal/nuclear_waste (floor)
+	qdel(src)
+
+/obj/effect/decal/nuclear_waste/attackby(obj/item/tool, mob/user)
+	if(tool.tool_behaviour == TOOL_SHOVEL)
+		to_chat(user, span_notice("You start to clear [src]..."))
+		if(tool.use_tool(src, user, 50, volume=100))
+			radiation_pulse(src, 40, 5) //MORE RADS
+			to_chat(user, span_notice("You clear [src]. "))
+			qdel(src)
+			return
+	. = ..()
+
+/area/engineering/main/reactor_core
+	name = "Nuclear Reactor Core"
+
+/area/engineering/main/reactor_control
+	name = "Reactor Control Room"
+
+/obj/item/sealant
+	name = "Flexi seal"
+	desc = "A neat spray can that can repair torn inflatable segments, and more!"
+	icon = 'icons/obj/maintenance_loot.dmi'
+	icon_state = "lead_pipe"
+	w_class = WEIGHT_CLASS_TINY
+
 //Controlling the reactor.
 
 /obj/machinery/computer/reactor
@@ -645,12 +697,13 @@ GLOBAL_VAR_INIT(counter, 0)
 	ui_interact(user)
 
 /obj/machinery/computer/reactor/ui_interact(mob/user, datum/tgui/ui)
-	. = ..()
+	..()
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "ReactorComputer")
 		ui.open()
 		ui.set_autoupdate(TRUE)
+
 /obj/machinery/computer/reactor/ui_act(action, params)
 	if(..())
 		return
@@ -731,13 +784,23 @@ GLOBAL_VAR_INIT(counter, 0)
 	return FALSE
 
 /obj/machinery/computer/reactor/proc/link_to_reactor()
-	for(var/obj/machinery/atmospherics/components/trinary/nuclear_reactor/asdf in SSmachines.get_machines_by_type_and_subtypes(/obj/machinery/atmospherics/components/trinary/nuclear_reactor))
+	for(var/obj/machinery/atmospherics/components/trinary/nuclear_reactor/asdf in SSmachines.get_all_machines())
 		if(asdf.id && asdf.id == id)
 			reactor = asdf
 			return TRUE
 	return FALSE
 
 #define FREQ_REACTOR_CONTROL 1439.69
+
+//Preset pumps for mappers. You can also set the id tags yourself.
+/obj/machinery/atmospherics/components/binary/pump/reactor_input
+	id_tag = "reactor_input"
+
+/obj/machinery/atmospherics/components/binary/pump/reactor_output
+	id_tag = "reactor_output"
+
+/obj/machinery/atmospherics/components/binary/pump/reactor_moderator
+	id_tag = "reactor_moderator"
 
 /obj/machinery/computer/reactor/pump
 	name = "Reactor inlet valve computer"
@@ -812,56 +875,3 @@ GLOBAL_VAR_INIT(counter, 0)
 	name = "Reactor moderator valve computer"
 	icon_screen = "reactor_moderator"
 	id = "reactor_moderator"
-
-
-/obj/effect/decal/nuclear_waste/Initialize(mapload)
-	. = ..()
-	for(var/obj/A in get_turf(src))
-		if(istype(A, /obj/structure))
-			qdel(src) //It is more processing efficient to do this here rather than when searching for available turfs.
-	set_light(1)
-	START_PROCESSING(SSobj, src)
-
-/obj/effect/decal/nuclear_waste/process(delta_time)
-	if(prob(10)) // woah there, don't overload the radiation subsystem
-		radiation_pulse(src, 30)
-
-/obj/effect/decal/nuclear_waste/Destroy(force)
-	STOP_PROCESSING(SSobj, src)
-	return ..()
-
-/obj/effect/landmark/nuclear_waste_spawner //Clean way of spawning nuclear gunk after a reactor core meltdown.
-	name = "Nuclear waste spawner"
-	var/range = 15 //15 tile radius to spawn goop
-
-/obj/effect/landmark/nuclear_waste_spawner/strong
-	range = 30
-
-/obj/effect/landmark/nuclear_waste_spawner/proc/fire()
-	for(var/turf/open/floor in orange(range, get_turf(src)))
-		if(prob(35)) //Scatter the sludge, don't smear it everywhere
-			new /obj/effect/decal/nuclear_waste (floor)
-	qdel(src)
-
-/obj/effect/decal/nuclear_waste/attackby(obj/item/tool, mob/user)
-	if(tool.tool_behaviour == TOOL_SHOVEL)
-		to_chat(user, span_notice("You start to clear [src]..."))
-		if(tool.use_tool(src, user, 50, volume=100))
-			radiation_pulse(src, 40, 5) //MORE RADS
-			to_chat(user, span_notice("You clear [src]. "))
-			qdel(src)
-			return
-	. = ..()
-
-/area/engineering/main/reactor_core
-	name = "Nuclear Reactor Core"
-
-/area/engineering/main/reactor_control
-	name = "Reactor Control Room"
-
-/obj/item/sealant
-	name = "Flexi seal"
-	desc = "A neat spray can that can repair torn inflatable segments, and more!"
-	icon = 'icons/obj/maintenance_loot.dmi'
-	icon_state = "lead_pipe"
-	w_class = WEIGHT_CLASS_TINY
