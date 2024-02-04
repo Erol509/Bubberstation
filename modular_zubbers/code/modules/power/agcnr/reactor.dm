@@ -17,7 +17,7 @@
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
 	light_color = LIGHT_COLOR_CYAN
 	dir = 2 //Less headache inducing
-	volume = 600 // 3x base
+	//volume =  600 // 3x base
 	var/id = null //Change me mappers
 	//Variables essential to operation
 	var/active = FALSE
@@ -61,6 +61,8 @@
 	var/list/tempInputData = list()
 	var/list/tempOutputData = list()
 
+	var/obj/structure/cable/powercable
+
 //Use this in your maps if you want everything to be preset.
 /obj/machinery/atmospherics/components/trinary/nuclear_reactor/preset
 	id = "default_reactor_for_lazy_mappers"
@@ -72,14 +74,19 @@
 	crew_channel = RADIO_CHANNEL_SYNDICATE
 	key_type = /obj/item/encryptionkey/syndicate
 
-
+GLOBAL_VAR_INIT(counter, 0)
+/// Return a unique ID
+/proc/getnewid()
+	GLOB.counter += 1
+	return GLOB.counter
 
 /obj/machinery/atmospherics/components/trinary/nuclear_reactor/New()
 	. = ..()
 	if(isnull(id))
 		id = getnewid()
 
-/obj/machinery/atmospherics/components/trinary/nuclear_reactor/proc/get_integrity()
+/obj/machinery/atmospherics/components/trinary/nuclear_reactor/get_integrity()
+	..()
 	return round(100 * vessel_integrity / initial(vessel_integrity), 0.01)
 
 /obj/machinery/atmospherics/components/trinary/nuclear_reactor/examine(mob/user)
@@ -132,15 +139,6 @@
 		return TRUE
 	return ..()
 
-/obj/machinery/atmospherics/components/trinary/nuclear_reactor/MouseDrop_T(atom/A, mob/living/user)
-	if(user.incapacitated())
-		return
-	if(!ISADVANCEDTOOLUSER())
-		to_chat(user, span_warning("You don't have the dexterity to do this!"))
-		return
-	if(istype(A, /obj/item/fuel_rod))
-		try_insert_fuel(A, user)
-
 /obj/machinery/atmospherics/components/trinary/nuclear_reactor/proc/try_insert_fuel(obj/item/fuel_rod/rod, mob/user)
 	if(!istype(rod))
 		return FALSE
@@ -180,7 +178,6 @@
 		if(temperature > REACTOR_TEMPERATURE_MINIMUM)
 			var/turf/T = get_turf(src)
 			T.atmos_spawn_air("water_vapor=[pressure/100];TEMP=[temperature]")
-		user.radiation_pulse(rod.fuel_power * 1000)
 		fuel_rods.Remove(rod)
 		if(!user.put_in_hands(rod))
 			rod.forceMove(user.loc)
@@ -204,10 +201,11 @@
 		to_chat(user, span_notice("You weld together some of [src]'s cracks. This'll do for now."))
 	return TRUE
 
-/obj/machinery/atmospherics/components/trinary/nuclear_reactor/multitool_act(mob/living/user, obj/item/multitool/I)
-	if(istype(I))
+/obj/machinery/atmospherics/components/trinary/nuclear_reactor/multitool_act(mob/living/user, obj/item/multitool/tool)
+	if(istype(tool))
 		to_chat(user, "<span class='notice'>You add \the [src]'s ID into the multitool's buffer.</span>")
-		I.buffer = src
+		var/obj/item/multitool/multitool = tool
+		multitool.set_buffer(src)
 		return TRUE
 
 //Admin procs to mess with the reaction environment.
@@ -238,18 +236,8 @@
 	STOP_PROCESSING(SSmachines, src) //We'll handle this one ourselves.
 
 /obj/machinery/atmospherics/components/trinary/nuclear_reactor/process()
+	powercable.add_avail(last_power_produced)
 	..()
-	add_avail(last_power_produced)
-
-	// You're overloading the reactor. Give a more subtle warning that power is getting out of control.
-	if(power >= 100 && world.time >= next_flicker)
-		next_flicker = world.time + 1.5 MINUTES
-		for(var/obj/machinery/light/L in GLOB.lights)
-			if(prob(25) && L.z == z) //If youre running the reactor cold though, no need to flicker the lights.
-				L.flicker()
-		investigate_log("Reactor overloading at [power]% power", INVESTIGATE_REACTOR)
-
-
 
 /obj/machinery/atmospherics/components/trinary/nuclear_reactor/process_atmos(delta_time)
 	//Let's get our gasses sorted out.
@@ -270,17 +258,15 @@
 	if(active && moderator_input.total_moles() >= minimum_coolant_level)
 		// Fuel types: increases power and K
 
-		/datum/gas_mixture/proc/get_moles(gas_type)
-
 		var/total_fuel_moles = 0
-		total_fuel_moles += moderator_input.get_moles(/datum/gas/plasma) * PLASMA_FUEL_POWER
-		total_fuel_moles += moderator_input.get_moles(/datum/gas/tritium) * TRITIUM_FUEL_POWER
-		total_fuel_moles += moderator_input.get_moles(/datum/gas/antinoblium) * ANTINOBLIUM_FUEL_POWER
+		total_fuel_moles += moderator_input.total_moles(/datum/gas/plasma) * PLASMA_FUEL_POWER
+		total_fuel_moles += moderator_input.total_moles(/datum/gas/tritium) * TRITIUM_FUEL_POWER
+		total_fuel_moles += moderator_input.total_moles(/datum/gas/antinoblium) * ANTINOBLIUM_FUEL_POWER
 
 		// Power modifier types: increases fuel effectiveness
 		var/power_mod_moles = 0
-		power_mod_moles += moderator_input.get_moles(/datum/gas/oxygen) * OXYGEN_POWER_MOD
-		power_mod_moles += moderator_input.get_moles(/datum/gas/hydrogen) * HYDROGEN_POWER_MOD
+		power_mod_moles += moderator_input.total_moles(/datum/gas/oxygen) * OXYGEN_POWER_MOD
+		power_mod_moles += moderator_input.total_moles(/datum/gas/hydrogen) * HYDROGEN_POWER_MOD
 
 		// Now make some actual power!
 		if(total_fuel_moles >= minimum_coolant_level) //You at least need SOME fuel.
@@ -288,34 +274,34 @@
 			var/power_modifier = max(power_mod_moles * 10 / moderator_input.total_moles(), 1) //You can never have negative IPM. For now.
 			power_produced = max(0,((fuel_power*power_modifier)*moderator_input.total_moles())) / delta_time
 			if(active)
-				coolant_output.adjust_moles(/datum/gas/pluonium, total_fuel_moles/20) //Shove out pluonium into the air when it's fuelled. You need to filter this off, or you're gonna have a bad time.
+				coolant_output.remove_specific(/datum/gas/pluoxium, total_fuel_moles/20) //Shove out pluoxium into the air when it's fuelled. You need to filter this off, or you're gonna have a bad time.
 
 		// Control types: increases control of K
 		var/total_control_moles = 0
-		total_control_moles += moderator_input.get_moles(/datum/gas/nitrogen) * NITROGEN_CONTROL_MOD
-		total_control_moles += moderator_input.get_moles(/datum/gas/carbon_dioxide) * CARBON_CONTROL_MOD
-		total_control_moles += moderator_input.get_moles(/datum/gas/pluoxium) * PLUOXIUM_CONTROL_MOD
+		total_control_moles += moderator_input.total_moles(/datum/gas/nitrogen) * NITROGEN_CONTROL_MOD
+		total_control_moles += moderator_input.total_moles(/datum/gas/carbon_dioxide) * CARBON_CONTROL_MOD
+		total_control_moles += moderator_input.total_moles(/datum/gas/pluoxium) * PLUOXIUM_CONTROL_MOD
 		if(total_control_moles >= minimum_coolant_level)
 			var/control_bonus = total_control_moles / REACTOR_CONTROL_FACTOR //1 mol of n2 -> 0.002 bonus control rod effectiveness, if you want a super controlled reaction, you'll have to sacrifice some power.
 			control_rod_effectiveness = initial(control_rod_effectiveness) + control_bonus
 
 		// Permeability types: increases cooling efficiency
 		var/total_permeability_moles = 0
-		total_permeability_moles += moderator_input.get_moles(/datum/gas/bz) * BZ_PERMEABILITY_MOD
-		total_permeability_moles += moderator_input.get_moles(/datum/gas/water_vapor) * WATER_PERMEABILITY_MOD
-		total_permeability_moles += moderator_input.get_moles(/datum/gas/hypernoblium) * NOBLIUM_PERMEABILITY_MOD
+		total_permeability_moles += moderator_input.total_moles(/datum/gas/bz) * BZ_PERMEABILITY_MOD
+		total_permeability_moles += moderator_input.total_moles(/datum/gas/water_vapor) * WATER_PERMEABILITY_MOD
+		total_permeability_moles += moderator_input.total_moles(/datum/gas/hypernoblium) * NOBLIUM_PERMEABILITY_MOD
 		if(total_permeability_moles >= minimum_coolant_level)
 			gas_absorption_effectiveness = clamp(gas_absorption_constant + (total_permeability_moles / REACTOR_PERMEABILITY_FACTOR), 0, 1)
 
 		// Radiation types: increases radiation
-		radioactivity_spice_multiplier += moderator_input.get_moles(/datum/gas/nitrogen) * NITROGEN_RAD_MOD //An example setup of 50 moles of n2 (for dealing with spent fuel) leaves us with a radioactivity spice multiplier of 3.
-		radioactivity_spice_multiplier += moderator_input.get_moles(/datum/gas/carbon_dioxide) * CARBON_RAD_MOD
-		radioactivity_spice_multiplier += moderator_input.get_moles(/datum/gas/hydrogen) * HYDROGEN_RAD_MOD
-		radioactivity_spice_multiplier += moderator_input.get_moles(/datum/gas/tritium) * TRITIUM_RAD_MOD
-		radioactivity_spice_multiplier += moderator_input.get_moles(/datum/gas/antinoblium) * ANTINOBLIUM_RAD_MOD
+		radioactivity_spice_multiplier += moderator_input.total_moles(/datum/gas/nitrogen) * NITROGEN_RAD_MOD //An example setup of 50 moles of n2 (for dealing with spent fuel) leaves us with a radioactivity spice multiplier of 3.
+		radioactivity_spice_multiplier += moderator_input.total_moles(/datum/gas/carbon_dioxide) * CARBON_RAD_MOD
+		radioactivity_spice_multiplier += moderator_input.total_moles(/datum/gas/hydrogen) * HYDROGEN_RAD_MOD
+		radioactivity_spice_multiplier += moderator_input.total_moles(/datum/gas/tritium) * TRITIUM_RAD_MOD
+		radioactivity_spice_multiplier += moderator_input.total_moles(/datum/gas/antinoblium) * ANTINOBLIUM_RAD_MOD
 
 		// Degradation types: degrades the fuel rods
-		var/total_degradation_moles = moderator_input.get_moles(/datum/gas/pluonium) //Because it's quite hard to get.
+		var/total_degradation_moles = moderator_input.total_moles(/datum/gas/pluoxium) //Because it's quite hard to get.
 		if(total_degradation_moles >= minimum_coolant_level) //I'll be nice.
 			depletion_modifier += total_degradation_moles / 15 //Oops! All depletion. This causes your fuel rods to get SPICY.
 			if(prob(total_degradation_moles)) // don't spam the sound so much please
@@ -325,7 +311,7 @@
 		moderator_input.remove_ratio(REACTOR_MODERATOR_DECAY_RATE) //Remove about 10% of the gases
 		K += total_fuel_moles / 1000
 	else // if there's not enough to do anything, just clear it
-		moderator_input.clear()
+		moderator_input.remove()
 
 	var/fuel_power = 0 //So that you can't magically generate K with your control rods.
 	if(active)
@@ -378,9 +364,9 @@
 		var/coolant_heat_factor = coolant_input.heat_capacity() / (coolant_input.heat_capacity() + REACTOR_HEAT_CAPACITY + (REACTOR_ROD_HEAT_CAPACITY * has_fuel())) //What percent of the total heat capacity is in the coolant
 		last_heat_delta = heat_delta
 		temperature += heat_delta * coolant_heat_factor
-		coolant_input.set_temperature(last_coolant_temperature - (heat_delta * (1 - coolant_heat_factor))) //Heat the coolant output gas that we just had pass through us.
+		coolant_input.return_temperature(last_coolant_temperature - (heat_delta * (1 - coolant_heat_factor))) //Heat the coolant output gas that we just had pass through us.
 		coolant_output.merge(coolant_input) //And now, shove the input into the output.
-		coolant_input.clear() //Clear out anything left in the input gate.
+		coolant_input.remove() //Clear out anything left in the input gate.
 		color = null
 
 	// And finally, set our pressure.
@@ -484,7 +470,7 @@
 	if(!alert) //Congrats! You stopped the meltdown / blowout.
 		if(!next_warning)
 			return // don't bother if the reactor wasn't in trouble
-		stop_relay(CHANNEL_REACTOR_ALERT)
+		stop_relay(RADIO_CHANNEL_ENGINEERING)
 		next_warning = 0 // there's no next warning if the reactor is fine
 		set_light(0)
 		light_color = LIGHT_COLOR_CYAN
@@ -508,11 +494,11 @@
 		evacuation_procedures = TRUE
 		radio.talk_into(src, "WARNING: Reactor failure imminent. Integrity: [get_integrity()]%", engi_channel)
 		radio.talk_into(src, "Reactor failure imminent. Please remain calm and evacuate the facility immediately.", crew_channel)
-		playsound(src, 'sound/machines/reactor_alert_3.ogg', 100, extrarange=100, pressure_affected=FALSE, ignore_walls=TRUE)
-		relay('sound/effects/reactor/alarm.ogg', null, TRUE, channel = CHANNEL_REACTOR_ALERT)
+		playsound(src, 'modular_zubbers/code/modules/power/agcnr/sounds/machines/reactor_alert_3.ogg', 100, extrarange=100, pressure_affected=FALSE, ignore_walls=TRUE)
+		relay('modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/alarm.ogg', null, TRUE, channel = RADIO_CHANNEL_ENGINEERING)
 	else if(get_integrity() < 95)
 		radio.talk_into(src, "WARNING: Reactor structural integrity faltering. Integrity: [get_integrity()]%", engi_channel)
-		playsound(src, 'sound/machines/reactor_alert_1.ogg', 75, extrarange=50, pressure_affected=FALSE, ignore_walls=TRUE)
+		playsound(src, 'modular_zubbers/code/modules/power/agcnr/sounds/machines/reactor_alert_1.ogg', 75, extrarange=50, pressure_affected=FALSE, ignore_walls=TRUE)
 
 	set_light(0)
 	light_color = "#FF0000"
@@ -534,35 +520,29 @@
 	icon_state = "reactor_slagged"
 	radiation_pulse(src, 40, 5)
 	var/obj/effect/landmark/nuclear_waste_spawner/NSW = new /obj/effect/landmark/nuclear_waste_spawner/strong(get_turf(src))
-	relay('sound/effects/reactor/meltdown.ogg', "<span class='userdanger'>You hear a horrible metallic hissing.</span>")
-	stop_relay(CHANNEL_REACTOR_ALERT)
+	relay('modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/meltdown.ogg', "<span class='userdanger'>You hear a horrible metallic hissing.</span>")
+	stop_relay(RADIO_CHANNEL_ENGINEERING)
 	NSW.fire() //This will take out engineering for a decent amount of time as they have to clean up the sludge.
-	for(var/obj/machinery/power/apc/apc in GLOB.apcs_list)
+	for(var/obj/machinery/power/apc/apc in SSmachines.get_machines_by_type_and_subtypes(/obj/machinery/power/apc))
 		if((apc.z == z) && prob(70))
 			apc.overload_lighting()
 	var/datum/gas_mixture/coolant_input = airs[COOLANT_INPUT_GATE]
 	var/datum/gas_mixture/moderator_input = airs[MODERATOR_INPUT_GATE]
 	var/datum/gas_mixture/coolant_output = airs[COOLANT_OUTPUT_GATE]
 	var/turf/T = get_turf(src)
-	coolant_input.temperature(temperature*2)
-	moderator_input.temperature(temperature*2)
-	coolant_output.temperature(temperature*2)
+	coolant_input.return_temperature(temperature*2)
+	moderator_input.return_temperature(temperature*2)
+	coolant_output.return_temperature(temperature*2)
 	T.assume_air(coolant_input)
 	T.assume_air(moderator_input)
 	T.assume_air(coolant_output)
-	var/turf/lower_turf = SSmapping.get_turf_below(T)
-	if(lower_turf) // reactor fuel will melt down into the lower levels on multi-z maps like icemeta
-		new /obj/structure/reactor_corium(lower_turf)
-		var/turf/lowest_turf = SSmapping.get_turf_below(lower_turf)
-		if(lowest_turf) // WE NEED TO GO DEEPER
-			new /obj/structure/reactor_corium(lower_turf)
 	explosion(get_turf(src), 0, 5, 10, 20, TRUE, TRUE)
 
 //Failure condition 2: Blowout. Achieved by reactor going over-pressured. This is a round-ender because it requires more fuckery to achieve.
 /obj/machinery/atmospherics/components/trinary/nuclear_reactor/proc/blowout()
 	explosion(get_turf(src), GLOB.MAX_EX_DEVESTATION_RANGE, GLOB.MAX_EX_HEAVY_RANGE, GLOB.MAX_EX_LIGHT_RANGE, GLOB.MAX_EX_FLASH_RANGE)
 	meltdown() //Double kill.
-	relay('sound/effects/reactor/explode.ogg')
+	relay('modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/explode.ogg')
 	SSweather.run_weather("nuclear fallout")
 	for(var/X in GLOB.landmarks_list)
 		if(istype(X, /obj/effect/landmark/nuclear_waste_spawner))
@@ -598,7 +578,7 @@
 	desired_k = 1
 	active = TRUE
 	set_light(10)
-	var/startup_sound = pick('sound/effects/reactor/startup.ogg', 'sound/effects/reactor/startup2.ogg')
+	var/startup_sound = pick('modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/startup.ogg', 'modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/startup2.ogg')
 	playsound(loc, startup_sound, 100)
 	update_parents() // double-check all the pipes are connected on startup
 
@@ -700,8 +680,8 @@
 			var/obj/item/fuel_rod/rod = reactor.fuel_rods[rod_index]
 			if(!rod)
 				return
-			playsound(src, pick('sound/effects/reactor/switch.ogg','sound/effects/reactor/switch2.ogg','sound/effects/reactor/switch3.ogg'), 100, FALSE)
-			playsound(reactor, 'sound/effects/reactor/crane_1.wav', 100, FALSE)
+			playsound(src, pick('modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/switch.ogg','modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/switch2.ogg','modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/switch3.ogg'), 100, FALSE)
+			playsound(reactor, 'modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/crane_1.wav', 100, FALSE)
 			rod.forceMove(get_turf(reactor))
 			reactor.fuel_rods.Remove(rod)
 
@@ -751,7 +731,7 @@
 	return FALSE
 
 /obj/machinery/computer/reactor/proc/link_to_reactor()
-	for(var/obj/machinery/atmospherics/components/trinary/nuclear_reactor/asdf in GLOB.machines)
+	for(var/obj/machinery/atmospherics/components/trinary/nuclear_reactor/asdf in SSmachines.get_machines_by_type_and_subtypes(/obj/machinery/atmospherics/components/trinary/nuclear_reactor))
 		if(asdf.id && asdf.id == id)
 			reactor = asdf
 			return TRUE
@@ -787,7 +767,7 @@
 	. = ..()
 	if(!is_operational)
 		return FALSE
-	playsound(loc, pick('sound/effects/reactor/switch.ogg','sound/effects/reactor/switch2.ogg','sound/effects/reactor/switch3.ogg'), 100, FALSE)
+	playsound(loc, pick('modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/switch.ogg','modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/switch2.ogg','modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/switch3.ogg'), 100, FALSE)
 	visible_message(span_notice("[src]'s switch flips [on ? "off" : "on"]."))
 	on = !on
 	signal(on)
@@ -833,14 +813,6 @@
 	icon_screen = "reactor_moderator"
 	id = "reactor_moderator"
 
-/obj/effect/decal/nuclear_waste
-	name = "plutonium sludge"
-	desc = "A writhing pool of heavily irradiated, spent reactor fuel. You probably shouldn't step through this..."
-	icon = 'icons/obj/machines/reactor_parts.dmi'
-	icon_state = "nuclearwaste"
-	alpha = 150
-	light_color = LIGHT_COLOR_GREEN
-	color = "#ff9eff"
 
 /obj/effect/decal/nuclear_waste/Initialize(mapload)
 	. = ..()
@@ -866,7 +838,6 @@
 	range = 30
 
 /obj/effect/landmark/nuclear_waste_spawner/proc/fire()
-	playsound(loc, 'sound/effects/gib_step.ogg', 100)
 	for(var/turf/open/floor in orange(range, get_turf(src)))
 		if(prob(35)) //Scatter the sludge, don't smear it everywhere
 			new /obj/effect/decal/nuclear_waste (floor)
@@ -882,86 +853,15 @@
 			return
 	. = ..()
 
-/datum/weather/nuclear_fallout
-	name = "nuclear fallout"
-	desc = "Irradiated dust falls down everywhere."
-	telegraph_duration = 50
-	telegraph_message = "<span class='boldwarning'>The air suddenly becomes dusty..</span>"
-	weather_message = "<span class='userdanger'><i>You feel a wave of hot ash fall down on you.</i></span>"
-	weather_overlay = "light_ash"
-	telegraph_overlay = "light_snow"
-	weather_duration_lower = 600
-	weather_duration_upper = 1500
-	weather_color = "green"
-	telegraph_sound = null
-	weather_sound = 'sound/effects/reactor/falloutwind.ogg'
-	end_duration = 100
-	area_type = /area
-	protected_areas = list(/area/maintenance, /area/ai_monitored/turret_protected/ai_upload, /area/ai_monitored/turret_protected/ai_upload_foyer,
-	/area/ai_monitored/turret_protected/ai, /area/shuttle)
-	target_trait = ZTRAIT_STATION
-	end_message = "<span class='notice'>The ash stops falling.</span>"
-	immunity_type = TRAIT_RADSTORM_IMMUNE
-	var/mutate_chance = 40
-
-/datum/weather/nuclear_fallout/weather_act(mob/living/L)
-	if(!prob(mutate_chance))
-		return
-
-	if(!ishuman(L))
-		return
-
-	var/mob/living/carbon/human/H = L
-	if(!H.can_mutate() || H.status_flags & GODMODE)
-		return
-
-	if(HAS_TRAIT(H, TRAIT_RADIMMUNE))
-		return
-
-	if (SSradiation.wearing_rad_protected_clothing(H))
-		return
-
-	H.random_mutate_unique_identity()
-	H.random_mutate_unique_features()
-
-	if(prob(50))
-		radiation_pulse(L, 1, 100, 100, 1)
-
-
-/datum/weather/nuclear_fallout/telegraph()
-	..()
-	status_alarm(TRUE)
-
-/datum/weather/nuclear_fallout/proc/status_alarm(active)	//Makes the status displays show the radiation warning for those who missed the announcement.
-	var/datum/radio_frequency/frequency = SSradio.return_frequency(FREQ_STATUS_DISPLAYS)
-	if(!frequency)
-		return
-
-	var/datum/signal/signal = new
-	if (active)
-		signal.data["command"] = "alert"
-		signal.data["picture_state"] = "radiation"
-	else
-		signal.data["command"] = "shuttle"
-
-	var/atom/movable/virtualspeaker/virt = new(null)
-	frequency.post_signal(virt, signal)
-
-/datum/weather/nuclear_fallout/end()
-	if(..())
-		return
-	status_alarm(FALSE)
-
-/obj/item/sealant
-	name = "Flexi seal"
-	desc = "A neat spray can that can repair torn inflatable segments, and more!"
-	icon = 'icons/obj/inflatable.dmi'
-	icon_state = "sealant"
-	w_class = WEIGHT_CLASS_TINY
-
 /area/engineering/main/reactor_core
 	name = "Nuclear Reactor Core"
 
 /area/engineering/main/reactor_control
 	name = "Reactor Control Room"
 
+/obj/item/sealant
+	name = "Flexi seal"
+	desc = "A neat spray can that can repair torn inflatable segments, and more!"
+	icon = 'icons/obj/maintenance_loot.dmi'
+	icon_state = "lead_pipe"
+	w_class = WEIGHT_CLASS_TINY
