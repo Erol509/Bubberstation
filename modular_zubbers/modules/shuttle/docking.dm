@@ -6,7 +6,7 @@
 //    even if the loop can't trigger the bug (such as if it lacks a proc call or try block).
 
 /// This is the main proc. It instantly moves our mobile port to stationary port `new_dock`.
-/obj/docking_port/mobile/proc/initiate_docking(obj/docking_port/stationary/new_dock, movement_direction, force=FALSE)
+/obj/docking_port/mobile/initiate_docking(obj/docking_port/stationary/new_dock, movement_direction, force=FALSE)
 	// Crashing this ship with NO SURVIVORS
 	if(new_dock.docked == src)
 		remove_ripples()
@@ -88,7 +88,7 @@
 
 	// remove any stragglers just in case, and clear the list
 	remove_ripples()
-
+	var/launch_sound = 'sound/vehicles/rocketlaunch.ogg'
 	play_engine_sound(src, launch_sound)
 	play_engine_sound(old_dock, launch_sound)
 	return DOCKING_SUCCESS
@@ -106,7 +106,7 @@
 /obj/docking_port/mobile/proc/throw_exception(exception/e)
 	throw e
 
-/obj/docking_port/mobile/proc/preflight_check(list/old_turfs, list/new_turfs, list/areas_to_move, rotation)
+/obj/docking_port/mobile/preflight_check(list/old_turfs, list/new_turfs, list/areas_to_move, rotation)
 	var/list/exceptions_list = list()
 	// Recount turfs since we've got them all anyways
 	var/new_turf_count = 0
@@ -161,7 +161,7 @@
 		CHECK_TICK
 		throw_exception(e3)
 
-/obj/docking_port/mobile/proc/takeoff(list/old_turfs, list/new_turfs, list/moved_atoms, rotation, movement_direction, obj/docking_port/stationary/old_dock, obj/docking_port/stationary/new_dock, area/underlying_old_area, list/all_towed_shuttles)
+/obj/docking_port/mobile/takeoff(list/old_turfs, list/new_turfs, list/moved_atoms, rotation, movement_direction, obj/docking_port/stationary/old_dock, obj/docking_port/stationary/new_dock, area/underlying_old_area, list/all_towed_shuttles)
 	var/list/exceptions_list = list()
 	//Keep track of what shuttles we're landing on in case we're relanding on a shuttle we were on.
 	var/list/parent_shuttles = list()
@@ -199,7 +199,7 @@
 			var/turf/newT = new_turfs[i]
 			var/move_mode = old_turfs[oldT]
 			if(move_mode & MOVE_TURF)
-				var/area/ship/A = oldT.loc
+				var/area/shuttle/A = oldT.loc
 				var/obj/docking_port/mobile/top_shuttle = A?.mobile_port
 				var/obj/docking_port/mobile/M = A.mobile_port
 				//Initial value offsets shuttles with missing skipover baseturfs being counted.
@@ -227,9 +227,9 @@
 			var/turf/newT = new_turfs[i]
 			var/move_mode = old_turfs[oldT]
 			if(move_mode & MOVE_AREA)
-				var/area/ship/shuttle_area = oldT.loc //The area on the shuttle, typecasted for the checks further down
-				var/area/ship/target_area = newT.loc //The area we're landing on
-				var/area/ship/new_area //The area that we leave behind
+				var/area/shuttle/shuttle_area = oldT.loc //The area on the shuttle, typecasted for the checks further down
+				var/area/shuttle/target_area = newT.loc //The area we're landing on
+				var/area/shuttle/new_area //The area that we leave behind
 
 				//Find the new area, and update the underlying_turf_area of all towed shuttles
 				var/obj/docking_port/mobile/M
@@ -273,7 +273,7 @@
 		CHECK_TICK
 		throw_exception(e4)
 
-/obj/docking_port/mobile/proc/cleanup_runway(obj/docking_port/stationary/new_dock, list/old_turfs, list/new_turfs, list/areas_to_move, list/moved_atoms, rotation, movement_direction, area/underlying_old_area, list/all_towed_shuttles)
+/obj/docking_port/mobile/cleanup_runway(obj/docking_port/stationary/new_dock, list/old_turfs, list/new_turfs, list/areas_to_move, list/moved_atoms, rotation, movement_direction, area/underlying_old_area, list/all_towed_shuttles)
 	var/list/exceptions_list = list()
 	for(var/area/A1 in underlying_old_area)
 		try
@@ -374,4 +374,4 @@
 	for(var/i = 1, i <= length(turfs), i++)
 		var/turf/open/T = turfs[i]
 		if(istype(T))
-			T.air.copy_from_turf(T)
+			T.air.initial_gas_mix(T)

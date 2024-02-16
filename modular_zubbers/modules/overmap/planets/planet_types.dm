@@ -18,13 +18,13 @@
 	planet = DYNAMIC_WORLD_LAVA
 	icon_state = "globe_2"
 	color = COLOR_ORANGE
-	mapgen = /datum/map_generator/planet_generator/lava
-	default_baseturf = /turf/open/floor/plating/asteroid/basalt/lava
+	//mapgen = /datum/map_generator/planet_generator/lava
+	//default_baseturf = /turf/open/floor/plating/asteroid/basalt/lava
 	weather_controller_type = /datum/weather_controller/lavaland
-	ruin_type = RUINTYPE_LAVA
-	landing_sound = 'sound/effects/planet_landing_2.ogg'
+	//ruin_type = RUINTYPE_LAVA
+	//landing_sound = 'sound/effects/planet_landing_2.ogg'
 
-
+/*
 /datum/planet_type/ice
 	name = "frozen planet"
 	desc = "A frozen planet covered in thick snow, thicker ice, and dangerous predators."
@@ -160,3 +160,4 @@
 	icon_state = "globe"
 	preserve_level = TRUE
 	landing_sound = 'sound/effects/planet_landing_1.ogg'
+*/

@@ -40,7 +40,7 @@
 	var/registered = FALSE
 
 ///register to SSshuttles
-/obj/docking_port/proc/register()
+/obj/docking_port/register()
 	if(registered)
 		WARNING("docking_port registered multiple times")
 		unregister()
@@ -83,7 +83,7 @@
 	return //we don't rotate with shuttles via this code.
 
 ///returns a list(x0,y0, x1,y1) where points 0 and 1 are bounding corners of the projected rectangle
-/obj/docking_port/proc/return_coords(_x, _y, _dir)
+/obj/docking_port/return_coords(_x, _y, _dir)
 	if(_dir == null)
 		_dir = dir
 	if(_x == null)
@@ -113,7 +113,7 @@
 	)
 
 ///returns turfs within our projected rectangle in no particular order
-/obj/docking_port/proc/return_turfs()
+/obj/docking_port/return_turfs()
 	var/list/L = return_coords()
 	var/turf/T0 = locate(L[1],L[2],z)
 	var/turf/T1 = locate(L[3],L[4],z)
@@ -176,7 +176,7 @@
 		return P.shuttle_id
 
 // Say that A in the absolute (rectangular) bounds of this shuttle or no.
-/obj/docking_port/proc/is_in_shuttle_bounds(atom/A)
+/obj/docking_port/is_in_shuttle_bounds(atom/A)
 	var/turf/T = get_turf(A)
 	if(T.z != z)
 		return FALSE
@@ -194,12 +194,8 @@
 /obj/docking_port/stationary
 	name = "dock"
 
-	var/last_dock_time
-
 	/// Map template to load when the dock is loaded
 	var/datum/map_template/shuttle/roundstart_template
-	/// Used to check if the shuttle template is enabled in the config file
-	var/json_key
 	///If true, the shuttle can always dock at this docking port, despite its area checks, or if something is already docked
 	var/override_can_dock_checks = FALSE
 

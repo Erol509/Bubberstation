@@ -1,12 +1,13 @@
 /*
 All ShuttleMove procs go here
 */
-
+#define LANDING_PROOF (1<<8)
+#define COMSIG_TURF_AFTER_SHUTTLE_MOVE "turf_after_shuttle_move"
 /************************************Base procs************************************/
 
 // Called on every turf in the shuttle region, returns a bitflag for allowed movements of that turf
 // returns the new move_mode (based on the old)
-/turf/proc/fromShuttleMove(turf/newT, move_mode)
+/turf/fromShuttleMove(turf/newT, move_mode)
 	if(!(move_mode & MOVE_AREA) || !isshuttleturf(src))
 		return move_mode
 
@@ -15,7 +16,7 @@ All ShuttleMove procs go here
 // Called from the new turf before anything has been moved
 // Only gets called if fromShuttleMove returns true first
 // returns the new move_mode (based on the old)
-/turf/proc/toShuttleMove(turf/oldT, move_mode, obj/docking_port/mobile/shuttle)
+/turf/toShuttleMove(turf/oldT, move_mode, obj/docking_port/mobile/shuttle)
 	. = move_mode
 	if(!(. & MOVE_TURF))
 		return
@@ -48,7 +49,7 @@ All ShuttleMove procs go here
 			qdel(thing)
 
 // Called on the old turf to move the turf data
-/turf/proc/onShuttleMove(turf/newT, list/movement_force, move_dir, shuttle_layers)
+/turf/onShuttleMove(turf/newT, list/movement_force, move_dir, shuttle_layers)
 	if(newT == src) // In case of in place shuttle rotation shenanigans.
 		return
 	//Destination turf changes
@@ -67,7 +68,7 @@ All ShuttleMove procs go here
 	//The current type is added to the old baseturfs with CopyOnTop, so the next index after the old turf would be 2 more than the current baseturfs length.
 	var/inject_index = islist(newT.baseturfs) ? newT.baseturfs.len + 2 : 3
 	newT.CopyOnTop(src, 1, depth, TRUE, CHANGETURF_DEFER_CHANGE)
-	var/area/ship/new_loc = get_area(newT)
+	var/area/shuttle/new_loc = get_area(newT)
 	if(istype(new_loc) && new_loc.mobile_port) //Keep track of hull breached shuttles
 		for(var/i in 0 to new_loc.get_missing_shuttles(newT)) //Start at 0 because get_missing_shuttles() will report 1 less missing shuttle because of the CopyOnTop()
 			newT.baseturfs.Insert(inject_index, /turf/baseturf_skipover/shuttle)
@@ -75,7 +76,7 @@ All ShuttleMove procs go here
 	return TRUE
 
 // Called on the new turf after everything has been moved
-/turf/proc/afterShuttleMove(turf/oldT, rotation, list/all_towed_shuttles)
+/turf/afterShuttleMove(turf/oldT, rotation, list/all_towed_shuttles)
 	//Dealing with the turf we left behind
 	oldT.TransferComponents(src)
 	SEND_SIGNAL(oldT, COMSIG_TURF_AFTER_SHUTTLE_MOVE, src) //Mostly for decals
@@ -84,7 +85,7 @@ All ShuttleMove procs go here
 		shuttleRotate(rotation) //see shuttle_rotate.dm
 
 	//find the boundary between the shuttle that left and what remains
-	var/area/ship/ship_area = loc
+	var/area/shuttle/ship_area = loc
 	if(!istype(ship_area))
 		return TRUE
 
@@ -113,7 +114,7 @@ All ShuttleMove procs go here
 
 	return TRUE
 
-/turf/proc/lateShuttleMove(turf/oldT)
+/turf/lateShuttleMove(turf/oldT)
 	blocks_air = initial(blocks_air)
 	oldT.blocks_air = initial(oldT.blocks_air)
 	AfterChange()
@@ -125,12 +126,14 @@ All ShuttleMove procs go here
 // Called on every atom in shuttle turf contents before anything has been moved
 // returns the new move_mode (based on the old)
 // WARNING: Do not leave turf contents in beforeShuttleMove or dock() will runtime
-/atom/movable/proc/beforeShuttleMove(turf/newT, rotation, move_mode, obj/docking_port/mobile/moving_dock)
+/atom/movable/beforeShuttleMove(turf/newT, rotation, move_mode, obj/docking_port/mobile/moving_dock)
+	..()
 	SHOULD_CALL_PARENT(TRUE)
 	return move_mode
 
 // Called on atoms to move the atom to the new location
-/atom/movable/proc/onShuttleMove(turf/newT, turf/oldT, list/movement_force, move_dir, obj/docking_port/stationary/old_dock, obj/docking_port/mobile/moving_dock, list/obj/docking_port/mobile/towed_shuttles)
+/atom/movable/onShuttleMove(turf/newT, turf/oldT, list/movement_force, move_dir, obj/docking_port/stationary/old_dock, obj/docking_port/mobile/moving_dock, list/obj/docking_port/mobile/towed_shuttles)
+	..()
 	SHOULD_CALL_PARENT(TRUE)
 	if(newT == oldT) // In case of in place shuttle rotation shenanigans.
 		return
@@ -143,7 +146,8 @@ All ShuttleMove procs go here
 	return TRUE
 
 // Called on atoms after everything has been moved
-/atom/movable/proc/afterShuttleMove(turf/oldT, list/movement_force, shuttle_dir, shuttle_preferred_direction, move_dir, rotation)
+/atom/movable/afterShuttleMove(turf/oldT, list/movement_force, shuttle_dir, shuttle_preferred_direction, move_dir, rotation)
+	..()
 	SHOULD_CALL_PARENT(TRUE)
 	if(light)
 		update_light()
@@ -152,7 +156,8 @@ All ShuttleMove procs go here
 	update_parallax_contents()
 	return TRUE
 
-/atom/movable/proc/lateShuttleMove(turf/oldT, list/movement_force, move_dir)
+/atom/movable/lateShuttleMove(turf/oldT, list/movement_force, move_dir)
+	..()
 	SHOULD_CALL_PARENT(TRUE)
 	if(!movement_force || anchored)
 		return
@@ -169,13 +174,13 @@ All ShuttleMove procs go here
 
 // Called on areas before anything has been moved
 // returns the new move_mode (based on the old)
-/area/proc/beforeShuttleMove(list/shuttle_areas)
+/area/beforeShuttleMove(list/shuttle_areas)
 	if(!shuttle_areas[src])
 		return NONE
 	return MOVE_AREA
 
 // Called on areas to move their turf between areas
-/area/proc/onShuttleMove(turf/oldT, turf/newT, area/underlying_old_area)
+/area/onShuttleMove(turf/oldT, turf/newT, area/underlying_old_area)
 	if(newT == oldT) // In case of in place shuttle rotation shenanigans.
 		return TRUE
 
@@ -193,11 +198,11 @@ All ShuttleMove procs go here
 	return TRUE
 
 // Called on areas after everything has been moved
-/area/proc/afterShuttleMove(new_parallax_dir)
+/area/afterShuttleMove(new_parallax_dir)
 	parallax_movedir = new_parallax_dir
 	return TRUE
 
-/area/proc/lateShuttleMove()
+/area/lateShuttleMove()
 	return
 
 /************************************Turf move procs************************************/
@@ -271,17 +276,17 @@ All ShuttleMove procs go here
 					break
 
 			if(!connected)
-				nullifyNode(i)
+				nullify_node(i)
 
 		if(!nodes[i])
 			missing_nodes = TRUE
 
 	if(missing_nodes)
-		atmosinit()
+		atmos_init()
 		for(var/obj/machinery/atmospherics/A in pipeline_expansion())
-			A.atmosinit()
-			if(A.returnPipenet())
-				A.addMember(src)
+			A.atmos_init()
+			if(A.return_pipenet())
+				A.add_member(src)
 		SSair.add_to_rebuild_queue(src)
 	else
 		// atmosinit() calls update_appearance(), so we don't need to call it

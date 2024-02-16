@@ -70,16 +70,12 @@
 	message_admins("[key_name_admin(usr)] renamed vessel '[oldname]' to '[new_name]'")
 	log_admin("[key_name(src)] has renamed vessel '[oldname]' to '[new_name]'")
 	shuttle_port?.name = new_name
-	ship_account.account_holder = new_name
 	if(shipkey)
 		shipkey.name = "ship key ([new_name])"
-	for(var/area/shuttle_area as anything in shuttle_port?.shuttle_areas)
-		shuttle_area.rename_area("[new_name] [initial(shuttle_area.name)]")
 	if(!force)
 		COOLDOWN_START(src, rename_cooldown, 5 MINUTES)
 		if(shuttle_port?.virtual_z() == null)
 			return TRUE
-		priority_announce("The [oldname] has been renamed to the [new_name].", "Docking Announcement", sender_override = new_name, zlevel = shuttle_port?.virtual_z())
 	return TRUE
 
 /**
@@ -89,9 +85,6 @@
 /datum/overmap/ship/controlled/Initialize(position, datum/map_template/shuttle/creation_template, create_shuttle = TRUE)
 	. = ..()
 	if(creation_template)
-		source_template = creation_template
-		unique_ship_access = source_template.unique_ship_access
-		job_slots = source_template.job_slots?.Copy()
 		if(create_shuttle)
 			shuttle_port = SSshuttle.load_template(creation_template, src)
 			if(!shuttle_port) //Loading failed, if the shuttle is supposed to be created, we need to delete ourselves.
@@ -102,12 +95,9 @@
 				Dock(position, TRUE)
 
 			refresh_engines()
-		ship_account = new(name, source_template.starting_funds)
 
 #ifdef UNIT_TESTS
 	Rename("[source_template]", TRUE)
-#else
-	Rename("[source_template.prefix] [pick_list_replacements(SHIP_NAMES_FILE, pick(source_template.name_categories))]", TRUE)
 #endif
 	SSovermap.controlled_ships += src
 
@@ -116,24 +106,11 @@
 	. = ..()
 	SSovermap.controlled_ships -= src
 	helms.Cut()
-	QDEL_LIST(missions)
 	LAZYCLEARLIST(owner_candidates)
 	if(!QDELETED(shuttle_port))
 		shuttle_port.current_ship = null
 		qdel(shuttle_port, TRUE)
 		shuttle_port = null
-	if(!QDELETED(ship_account))
-		QDEL_NULL(ship_account)
-	if(!QDELETED(shipkey))
-		QDEL_NULL(shipkey)
-	QDEL_LIST(manifest)
-	job_slots.Cut()
-	for(var/a_key in applications)
-		if(isnull(applications[a_key]))
-			continue
-		// it handles removal itself
-		qdel(applications[a_key])
-	LAZYCLEARLIST(applications)
 	// set ourselves to ownerless to unregister signals
 	set_owner_mob(null)
 
@@ -152,7 +129,6 @@
 /datum/overmap/ship/controlled/start_dock(datum/overmap/to_dock, datum/docking_ticket/ticket)
 	log_shuttle("[src] [REF(src)] DOCKING: STARTED REQUEST FOR [to_dock] AT [ticket.target_port]")
 	refresh_engines()
-	priority_announce("Beginning docking procedures. Completion in [dock_time/10] seconds.", "Docking Announcement", sender_override = name, zlevel = shuttle_port.virtual_z())
 	shuttle_port.create_ripples(ticket.target_port, dock_time)
 	shuttle_port.play_engine_sound(shuttle_port, shuttle_port.landing_sound)
 	shuttle_port.play_engine_sound(ticket.target_port, shuttle_port.landing_sound)
@@ -172,9 +148,6 @@
 		if(force)
 			SSshuttle.transit_requesters -= shuttle_port
 			SSshuttle.generate_transit_dock(shuttle_port) // We need a port, NOW.
-
-	priority_announce("Beginning undocking procedures. Completion in [dock_time/10] seconds.", "Docking Announcement", sender_override = name, zlevel = shuttle_port.virtual_z())
-	shuttle_port.play_engine_sound(shuttle_port, shuttle_port.takeoff_sound)
 
 	. = ..()
 	dock_time = dock_time_temp // Set it back to the original value if it was changed
@@ -266,10 +239,6 @@
 /datum/overmap/ship/controlled/proc/is_join_option()
 	return (length(shuttle_port.spawn_points) >= 1) && (length(job_slots) >= 1) && join_mode != SHIP_JOIN_MODE_CLOSED
 
-/datum/overmap/ship/controlled/proc/get_application(mob/applicant)
-	var/index_key = applicant.client?.holder?.fakekey ? applicant.client.holder.fakekey : applicant.key
-	return LAZYACCESS(applications, ckey(index_key))
-
 /**
  * Bastardized version of GLOB.manifest.manifest_inject, but used per ship.
  * Adds the passed-in mob to the list of ship owner candidates, and makes them
@@ -290,57 +259,18 @@
 	)
 	LAZYSET(owner_candidates, H.mind, mind_info)
 	H.mind.original_ship = WEAKREF(src)
-	RegisterSignal(H.mind, COMSIG_PARENT_QDELETING, PROC_REF(crew_mind_deleting))
+	RegisterSignal(H.mind, COMSIG_QDELETING, PROC_REF(crew_mind_deleting))
 	if(!owner_mob)
 		set_owner_mob(H)
 
 /datum/overmap/ship/controlled/proc/set_owner_mob(mob/new_owner)
 	if(owner_mob)
-		// we (hopefully) don't have to hook qdeletion,
-		// because when mobs are qdeleted, they ghostize, which SHOULD transfer the key.
-		// that means they raise the logout signal, so we transfer to the ghost
-		UnregisterSignal(owner_mob, COMSIG_MOB_LOGOUT)
-		UnregisterSignal(owner_mob, COMSIG_MOB_GO_INACTIVE)
-		// testing trace because i am afraid
-		if(owner_mob.mind && owner_mob.mind != owner_mind)
-			// moving minds means moving keys; if this trips, a mind moved without a key move for us to pick up on
-			// when transferring mind from one body to another, source mob's mind is set to null before the transfer. thus the null check
-			// i'm going to be honest i don't have a fucking clue if this code works. mind code is hell
-			stack_trace("[src]'s owner mob [owner_mob] (mind [owner_mob.mind], player [owner_mob.mind.key]) silently changed its mind from [owner_mind] (player [owner_mind.key])!")
-		owner_act.Remove(owner_mob)
-
-	if(!new_owner) // owner mob is being set to null; we're becoming ownerless
 		owner_mob = null
-		owner_mind = null
-		if(owner_act)
-			QDEL_NULL(owner_act)
-		// turns out that timers don't get added to active_timers if the datum is getting qdeleted.
-		// so this timer was sitting around after deletion and clogging up runtime logs. thus, the QDELING() check. oops!
-		if(!owner_check_timer_id && !QDELING(src))
-			owner_check_timer_id = addtimer(CALLBACK(src, PROC_REF(check_owner)), 5 MINUTES, TIMER_STOPPABLE|TIMER_LOOP|TIMER_DELETE_ME)
-		return
-
-	owner_mob = new_owner
-	owner_mind = owner_mob.mind
-	if(owner_check_timer_id) // we know we have an owner since we didn't return up there
-		deltimer(owner_check_timer_id)
-		owner_check_timer_id = null
-
-	// testing trace
-	// not 100% sure this is needed
-	if(!(owner_mind in owner_candidates))
-		stack_trace("[src] tried to set ship owner to [new_owner] despite its mind [new_owner.mind] not being in owner_candidates!")
-
-	RegisterSignal(owner_mob, COMSIG_MOB_LOGOUT, PROC_REF(owner_mob_logout))
-	RegisterSignal(owner_mob, COMSIG_MOB_GO_INACTIVE, PROC_REF(owner_mob_afk))
-	if(!owner_act)
-		owner_act = new(src)
-	owner_act.Grant(owner_mob)
 
 /datum/overmap/ship/controlled/proc/crew_mind_deleting(datum/mind/del_mind)
 	SIGNAL_HANDLER
 
-	UnregisterSignal(del_mind, COMSIG_PARENT_QDELETING)
+	UnregisterSignal(del_mind, COMSIG_QDELETING)
 	LAZYREMOVE(owner_candidates, del_mind)
 	if(owner_mind == del_mind)
 		set_owner_mob(get_best_owner_mob())

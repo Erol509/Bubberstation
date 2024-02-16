@@ -160,49 +160,6 @@ SUBSYSTEM_DEF(mapping)
 		if(islist(data["tags"]))
 			S.tags = data["tags"]
 
-		S.job_slots = list()
-		var/list/job_slot_list = data["job_slots"]
-		for(var/job in job_slot_list)
-			var/datum/job/job_slot
-			var/value = job_slot_list[job]
-			var/slots
-			if(isnum(value))
-				job_slot = GLOB.name_occupations[job]
-				slots = value
-			else if(islist(value))
-				var/datum/outfit/job_outfit = text2path(value["outfit"])
-				if(isnull(job_outfit))
-					stack_trace("Invalid job outfit! [value["outfit"]] on [S.name]'s config! Defaulting to assistant clothing.")
-					job_outfit = /datum/outfit/job/assistant
-				job_slot = new /datum/job(job, job_outfit)
-				job_slot.display_order = length(S.job_slots)
-				job_slot.wiki_page = value["wiki_page"]
-				job_slot.officer = value["officer"]
-				slots = value["slots"]
-
-			if(!job_slot || !slots)
-				stack_trace("Invalid job slot entry! [job]: [value] on [S.name]'s config! Excluding job.")
-				continue
-
-			S.job_slots[job_slot] = slots
-		if(isnum(data["limit"]))
-			S.limit = data["limit"]
-		if(isnum(data["spawn_time_coeff"]))
-			S.spawn_time_coeff = data["spawn_time_coeff"]
-		if(isnum(data["officer_time_coeff"]))
-			S.officer_time_coeff = data["officer_time_coeff"]
-
-		if(isnum(data["starting_funds"]))
-			S.starting_funds = data["starting_funds"]
-
-		if(isnum(data["enabled"]) && data["enabled"])
-			S.enabled = TRUE
-			ship_purchase_list[S.name] = S
-		if(isnum(data["roundstart"]) && data["roundstart"])
-			maplist[S.name] = S
-		if(isnum(data["space_spawn"]) && data["space_spawn"])
-			S.space_spawn = TRUE
-
 		shuttle_templates[S.file_name] = S
 		map_templates[S.file_name] = S
 #undef CHECK_STRING_EXISTS
@@ -240,18 +197,13 @@ SUBSYSTEM_DEF(mapping)
 	add_new_zlevel("Quadrant Allocation Level", allocation_type = ALLOCATION_QUADRANT)
 	CHECK_TICK
 
-/datum/controller/subsystem/mapping/proc/preloadOutpostTemplates()
-	for(var/datum/map_template/outpost/outpost_type as anything in subtypesof(/datum/map_template/outpost))
-		var/datum/map_template/outpost/outpost_template = new outpost_type()
-		outpost_templates[outpost_template.type] = outpost_template
-		map_templates[outpost_template.name] = outpost_template
 
 //////////////////
 // RESERVATIONS //
 //////////////////
 
 
-/datum/controller/subsystem/mapping/proc/safety_clear_transit_dock(obj/docking_port/stationary/transit/T, obj/docking_port/mobile/M, list/returning)
+/datum/controller/subsystem/mapping/safety_clear_transit_dock(obj/docking_port/stationary/transit/T, obj/docking_port/mobile/M, list/returning)
 	M.setTimer(0)
 	var/error = M.initiate_docking(M.destination, M.preferred_direction)
 	if(!error)

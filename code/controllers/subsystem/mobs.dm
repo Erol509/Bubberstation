@@ -12,6 +12,12 @@ SUBSYSTEM_DEF(mobs)
 	var/static/list/cubemonkeys = list()
 	var/static/list/cheeserats = list()
 
+		/// List of player mobs by their stringified virtual z-level
+	var/static/list/list/players_by_virtual_z = list()
+
+	/// List of all dead player mobs by virtual z-level
+	var/static/list/list/dead_players_by_virtual_z = list()
+
 /datum/controller/subsystem/mobs/stat_entry(msg)
 	msg = "P:[length(GLOB.mob_living_list)]"
 	return ..()

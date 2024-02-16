@@ -443,7 +443,7 @@ SUBSYSTEM_DEF(overmap)
  */
 /datum/controller/subsystem/overmap/proc/get_overmap_object_by_location(atom/source)
 	var/turf/T = get_turf(source)
-	var/area/ship/A = get_area(source)
+	var/area/shuttle/A = get_area(source)
 	while(istype(A) && A.mobile_port)
 		if(A.mobile_port.current_ship)
 			return A.mobile_port.current_ship

@@ -1,6 +1,7 @@
 //use this define to highlight docking port bounding boxes (ONLY FOR DEBUG USE)
 #ifdef TESTING
 #define DOCKING_PORT_HIGHLIGHT
+#define LANDING_PROOF (1<<8)
 #endif
 
 //NORTH default dir
@@ -120,8 +121,6 @@
 	var/turf/T0 = locate(L[1],L[2],z)
 	var/turf/T1 = locate(L[3],L[4],z)
 	return block(T0,T1)
-
-
 
 	for(var/dx in 0 to width-1)
 		var/compX = dx-dwidth
@@ -506,15 +505,15 @@
 		qdel(shuttle, TRUE)
 	towed_shuttles.Cut()
 
-/obj/docking_port/mobile/proc/create_ripples(obj/docking_port/stationary/S1, animate_time)
+/obj/docking_port/mobile/create_ripples(obj/docking_port/stationary/S1, animate_time)
 	var/list/turfs = ripple_area(S1)
 	for(var/t in turfs)
 		ripples += new /obj/effect/abstract/ripple(t, animate_time)
 
-/obj/docking_port/mobile/proc/remove_ripples()
+/obj/docking_port/mobile/remove_ripples()
 	QDEL_LIST(ripples)
 
-/obj/docking_port/mobile/proc/ripple_area(obj/docking_port/stationary/S1)
+/obj/docking_port/mobile/ripple_area(obj/docking_port/stationary/S1)
 	var/list/L0 = return_ordered_turfs(x, y, z, dir)
 	var/list/L1 = return_ordered_turfs(S1.x, S1.y, S1.z, S1.dir)
 
@@ -540,7 +539,7 @@
 
 
 
-/obj/docking_port/mobile/proc/getDbgStatusText()
+/obj/docking_port/mobile/getDbgStatusText()
 	var/obj/docking_port/stationary/dockedAt = docked
 	. = (dockedAt && dockedAt.name) ? dockedAt.name : "unknown"
 	if(istype(dockedAt, /obj/docking_port/stationary/transit))
@@ -567,7 +566,7 @@
 			continue
 		. += real_engine
 
-/obj/docking_port/mobile/proc/hyperspace_sound(phase, list/areas)
+/obj/docking_port/mobile/hyperspace_sound(phase, list/areas)
 	var/selected_sound
 	switch(phase)
 		if(HYPERSPACE_WARMUP)

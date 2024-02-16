@@ -137,7 +137,7 @@
 	chance_to_affect = 15
 	spread_chance = 30
 	chain_rate = 3
-	var/zap_flag = ZAP_STORM_FLAGS
+	///zap_flag = ZAP_STORM_FLAGS
 	var/max_damage = 15
 	var/min_damage = 5
 
@@ -148,6 +148,7 @@
 	token.light_color = "#e8e85c"
 	token.update_appearance()
 
+/*
 /datum/overmap/event/electric/affect_ship(datum/overmap/ship/controlled/S)
 	var/datum/virtual_level/ship_vlevel = S.shuttle_port.get_virtual_level()
 	var/turf/source = ship_vlevel.get_side_turf(pick(GLOB.cardinals))
@@ -156,6 +157,7 @@
 		if(S.shuttle_port.is_in_shuttle_bounds(M))
 			M.playsound_local(source, 'sound/magic/lightningshock.ogg', rand(min_damage / 10, max_damage / 10))
 
+*/
 /datum/overmap/event/electric/minor
 	name = "electrical storm (minor)"
 	spread_chance = 40
@@ -169,7 +171,7 @@
 	chain_rate = 6
 	max_damage = 20
 	min_damage = 10
-	zap_flag = ZAP_TESLA_FLAGS
+	//zap_flag = ZAP_TESLA_FLAGS
 
 /datum/overmap/event/nebula
 	name = "nebula"
@@ -255,7 +257,7 @@
 	safe_speed = 2
 	meteor_types = list(
 		/obj/effect/meteor/carp=16,
-		/obj/effect/meteor/carp/big=1, //numbers I pulled out of my ass
+		///obj/effect/meteor/carp/big=1, //numbers I pulled out of my ass
 	)
 
 /datum/overmap/event/meteor/carp/Initialize(position, ...)
@@ -285,7 +287,7 @@
 	chain_rate = 4
 	meteor_types = list(
 		/obj/effect/meteor/carp=7,
-		/obj/effect/meteor/carp/big=1,
+		///obj/effect/meteor/carp/big=1,
 	)
 
 // dust clouds throw dust if you go Way Fast
@@ -324,6 +326,7 @@
 	token.light_color = "#c46a24"
 	token.update_icon()
 
+/*
 /datum/overmap/event/anomaly/affect_ship(datum/overmap/ship/controlled/S)
 	var/area/source_area = pick(S.shuttle_port.shuttle_areas)
 	var/source_object = pick(source_area.contents)
@@ -331,7 +334,7 @@
 	for(var/mob/M as anything in GLOB.player_list)
 		if(S.shuttle_port.is_in_shuttle_bounds(M))
 			M.playsound_local(S.shuttle_port, 'sound/effects/bamf.ogg', 100)
-
+*/
 GLOBAL_LIST_INIT(overmap_event_pick_list, list(
 	/datum/overmap/event/wormhole = 10,
 	/datum/overmap/event/nebula = 60,
