@@ -63,7 +63,7 @@ export const ReactorStatsSection = (props, context) => {
   const tempOutputData = data.tempOutputData.map((value, i) => [i, value]);
   return (
     <Box height="100%">
-      <Section title="Legend:">
+      <Section title="Stats:">
         Integrity:
         <ProgressBar
           value={data.integrity / 100}

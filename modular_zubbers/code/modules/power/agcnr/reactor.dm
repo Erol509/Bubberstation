@@ -17,7 +17,6 @@
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
 	light_color = LIGHT_COLOR_CYAN
 	dir = 2 //Less headache inducing
-	//volume =  600 // 3x base
 	var/id = null //Change me mappers
 	//Variables essential to operation
 	var/active = FALSE
@@ -31,6 +30,7 @@
 	var/power_modifier = 1 //Upgrade me with parts, science! Flat out increase to physical power output when loaded with plasma.
 	var/list/fuel_rods = list()
 	//Secondary variables.
+	var/counter = 0 // Base ID starting point
 	var/gas_absorption_effectiveness = 0.5
 	var/gas_absorption_constant = 0.5 //We refer to this one as it's set on init, randomized.
 	var/minimum_coolant_level = MINIMUM_MOLE_COUNT
@@ -50,6 +50,7 @@
 	//Which channels should it broadcast to?
 	var/engi_channel = RADIO_CHANNEL_ENGINEERING
 	var/crew_channel = RADIO_CHANNEL_COMMON
+	initialize_directions = NORTH|WEST|SOUTH
 
 	var/has_hit_emergency = FALSE
 	var/evacuation_procedures = FALSE
@@ -67,18 +68,11 @@
 /obj/machinery/atmospherics/components/trinary/nuclear_reactor/preset
 	id = "default_reactor_for_lazy_mappers"
 
-/obj/machinery/atmospherics/components/trinary/nuclear_reactor/syndie_base
-	id = "syndie_base_reactor"
-	// uses syndicate comms
-	engi_channel = RADIO_CHANNEL_SYNDICATE
-	crew_channel = RADIO_CHANNEL_SYNDICATE
-	key_type = /obj/item/encryptionkey/syndicate
-
-GLOBAL_VAR_INIT(counter, 0)
 /// Return a unique ID
 /proc/getnewid()
-	GLOB.counter += 1
-	return GLOB.counter
+	var/counter = 0
+	counter += 1
+	return counter
 
 /obj/machinery/atmospherics/components/trinary/nuclear_reactor/New()
 	. = ..()
@@ -112,102 +106,6 @@ GLOBAL_VAR_INIT(counter, 0)
 				msg = span_notice("[src]'s seals look factory new, and the reactor's in excellent shape.")
 		. += msg
 
-/obj/machinery/atmospherics/components/trinary/nuclear_reactor/attackby(obj/item/W, mob/user, params)
-	if(istype(W, /obj/item/fuel_rod))
-		return try_insert_fuel(W, user)
-	if(istype(W, /obj/item/sealant))
-		if(slagged)
-			to_chat(user, span_warning("The reactor has been critically damaged!"))
-			return FALSE
-		if(temperature > REACTOR_TEMPERATURE_MINIMUM)
-			to_chat(user, span_warning("You cannot repair [src] while the core temperature is above [REACTOR_TEMPERATURE_MINIMUM] kelvin."))
-			return FALSE
-		if(vessel_integrity >= 350)
-			to_chat(user, span_warning("[src]'s seals are already in-tact, repairing them further would require a new set of seals."))
-			return FALSE
-		if(get_integrity() <= 50) //Heavily damaged.
-			to_chat(user, span_warning("[src]'s reactor vessel is cracked and worn, you need to repair the cracks with a welder before you can repair the seals."))
-			return FALSE
-		while(do_after(user, 1 SECONDS, target=src))
-			playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
-			vessel_integrity += 10
-			vessel_integrity = clamp(vessel_integrity, 0, initial(vessel_integrity))
-			if(vessel_integrity >= 350) // Check if it's done
-				to_chat(user, span_warning("[src]'s seals are already in-tact, repairing them further would require a new set of seals."))
-				return FALSE
-			user.visible_message(span_warning("[user] applies sealant to some of [src]'s worn out seals."), span_notice("You apply sealant to some of [src]'s worn out seals."))
-		return TRUE
-	return ..()
-
-/obj/machinery/atmospherics/components/trinary/nuclear_reactor/proc/try_insert_fuel(obj/item/fuel_rod/rod, mob/user)
-	if(!istype(rod))
-		return FALSE
-	if(slagged)
-		to_chat(user, span_warning("The reactor has been critically damaged"))
-		return FALSE
-	if(temperature > REACTOR_TEMPERATURE_MINIMUM)
-		to_chat(user, span_warning("You cannot insert fuel into [src] with the core temperature above [REACTOR_TEMPERATURE_MINIMUM] kelvin."))
-		return FALSE
-	if(fuel_rods.len >= REACTOR_MAX_FUEL_RODS)
-		to_chat(user, span_warning("[src] is already at maximum fuel load."))
-		return FALSE
-	to_chat(user, span_notice("You start to insert [rod] into [src]..."))
-	radiation_pulse(src, temperature)
-	if(do_after(user, 2 SECONDS, target=src))
-		fuel_rods += rod
-		rod.forceMove(src)
-		radiation_pulse(src, temperature) //Wear protective equipment when even breathing near a reactor!
-		investigate_log("Rod added to reactor by [key_name(user)] at [AREACOORD(src)]", INVESTIGATE_REACTOR)
-	return TRUE
-
-/obj/machinery/atmospherics/components/trinary/nuclear_reactor/crowbar_act(mob/living/user, obj/item/I)
-	if(slagged)
-		to_chat(user, span_warning("The fuel rods have melted into a radioactive lump."))
-	var/removal_time = 5 SECONDS
-	if(temperature > REACTOR_TEMPERATURE_MINIMUM)
-		if(istype(I, /obj/item/crowbar/power)) // Snatch the reactor from the jaws of death!
-			removal_time *= 2
-		else
-			to_chat(user, span_warning("You can't remove fuel rods while the reactor is operating above [REACTOR_TEMPERATURE_MINIMUM] kelvin!"))
-			return TRUE
-	if(!has_fuel())
-		to_chat(user, span_notice("The reactor has no fuel rods!"))
-		return TRUE
-	var/obj/item/fuel_rod/rod = tgui_input_list(usr, "Select a fuel rod to remove", "Fuel Rods", fuel_rods)
-	if(rod && istype(rod) && I.use_tool(src, user, removal_time))
-		if(temperature > REACTOR_TEMPERATURE_MINIMUM)
-			var/turf/T = get_turf(src)
-			T.atmos_spawn_air("water_vapor=[pressure/100];TEMP=[temperature]")
-		fuel_rods.Remove(rod)
-		if(!user.put_in_hands(rod))
-			rod.forceMove(user.loc)
-	return TRUE
-
-/obj/machinery/atmospherics/components/trinary/nuclear_reactor/welder_act(mob/living/user, obj/item/I)
-	if(slagged)
-		to_chat(user, span_warning("The reactor has been critically damaged"))
-		return TRUE
-	if(temperature > REACTOR_TEMPERATURE_MINIMUM)
-		to_chat(user, span_warning("You can't repair [src] while it is running at above [REACTOR_TEMPERATURE_MINIMUM] kelvin."))
-		return TRUE
-	if(get_integrity() > 50)
-		to_chat(user, span_warning("[src] is free from cracks. Further repairs must be carried out with flexi-seal sealant."))
-		return TRUE
-	while(I.use_tool(src, user, 1 SECONDS, volume=40))
-		vessel_integrity += 20
-		if(get_integrity() > 50)
-			to_chat(user, span_warning("[src] is free from cracks. Further repairs must be carried out with flexi-seal sealant."))
-			return TRUE
-		to_chat(user, span_notice("You weld together some of [src]'s cracks. This'll do for now."))
-	return TRUE
-
-/obj/machinery/atmospherics/components/trinary/nuclear_reactor/multitool_act(mob/living/user, obj/item/multitool/tool)
-	if(istype(tool))
-		to_chat(user, "<span class='notice'>You add \the [src]'s ID into the multitool's buffer.</span>")
-		var/obj/item/multitool/multitool = tool
-		multitool.set_buffer(src)
-		return TRUE
-
 //Admin procs to mess with the reaction environment.
 
 /obj/machinery/atmospherics/components/trinary/nuclear_reactor/proc/lazy_startup()
@@ -236,14 +134,22 @@ GLOBAL_VAR_INIT(counter, 0)
 	STOP_PROCESSING(SSmachines, src) //We'll handle this one ourselves.
 
 /obj/machinery/atmospherics/components/trinary/nuclear_reactor/process()
-	powercable.add_avail(last_power_produced)
-	..()
+	var/turf/T = get_turf(src)
+	var/obj/structure/cable/C = T.get_cable_node()
+	if(!C || !C.powernet)
+		return
+	else
+		C.powernet.newavail += last_power_produced
 
 /obj/machinery/atmospherics/components/trinary/nuclear_reactor/process_atmos(delta_time)
 	//Let's get our gasses sorted out.
 	var/datum/gas_mixture/coolant_input = airs[COOLANT_INPUT_GATE]
 	var/datum/gas_mixture/moderator_input = airs[MODERATOR_INPUT_GATE]
 	var/datum/gas_mixture/coolant_output = airs[COOLANT_OUTPUT_GATE]
+
+	coolant_input.volume = 600
+	moderator_input.volume = 600
+	coolant_output.volume = 600
 
 	var/power_produced = 0 // How much power we're producing from the moderator
 	var/radioactivity_spice_multiplier = 1 + get_fuel_power() //Some gasses make the reactor a bit spicy.
@@ -259,14 +165,14 @@ GLOBAL_VAR_INIT(counter, 0)
 		// Fuel types: increases power and K
 
 		var/total_fuel_moles = 0
-		total_fuel_moles += moderator_input.total_moles(/datum/gas/plasma) * PLASMA_FUEL_POWER
-		total_fuel_moles += moderator_input.total_moles(/datum/gas/tritium) * TRITIUM_FUEL_POWER
-		total_fuel_moles += moderator_input.total_moles(/datum/gas/antinoblium) * ANTINOBLIUM_FUEL_POWER
+		total_fuel_moles += moderator_input.gases[/datum/gas/plasma][MOLES] * PLASMA_FUEL_POWER
+		total_fuel_moles += moderator_input.gases[/datum/gas/tritium][MOLES] * TRITIUM_FUEL_POWER
+		total_fuel_moles += moderator_input.gases[/datum/gas/antinoblium][MOLES] * ANTINOBLIUM_FUEL_POWER
 
 		// Power modifier types: increases fuel effectiveness
 		var/power_mod_moles = 0
-		power_mod_moles += moderator_input.total_moles(/datum/gas/oxygen) * OXYGEN_POWER_MOD
-		power_mod_moles += moderator_input.total_moles(/datum/gas/hydrogen) * HYDROGEN_POWER_MOD
+		power_mod_moles += moderator_input.gases[/datum/gas/oxygen][MOLES] * OXYGEN_POWER_MOD
+		power_mod_moles += moderator_input.gases[/datum/gas/hydrogen][MOLES] * HYDROGEN_POWER_MOD
 
 		// Now make some actual power!
 		if(total_fuel_moles >= minimum_coolant_level) //You at least need SOME fuel.
@@ -278,30 +184,30 @@ GLOBAL_VAR_INIT(counter, 0)
 
 		// Control types: increases control of K
 		var/total_control_moles = 0
-		total_control_moles += moderator_input.total_moles(/datum/gas/nitrogen) * NITROGEN_CONTROL_MOD
-		total_control_moles += moderator_input.total_moles(/datum/gas/carbon_dioxide) * CARBON_CONTROL_MOD
-		total_control_moles += moderator_input.total_moles(/datum/gas/pluoxium) * PLUOXIUM_CONTROL_MOD
+		total_control_moles += moderator_input.gases[/datum/gas/nitrogen][MOLES] * NITROGEN_CONTROL_MOD
+		total_control_moles += moderator_input.gases[/datum/gas/carbon_dioxide][MOLES]  * CARBON_CONTROL_MOD
+		total_control_moles += moderator_input.gases[/datum/gas/pluoxium][MOLES]  * PLUOXIUM_CONTROL_MOD
 		if(total_control_moles >= minimum_coolant_level)
 			var/control_bonus = total_control_moles / REACTOR_CONTROL_FACTOR //1 mol of n2 -> 0.002 bonus control rod effectiveness, if you want a super controlled reaction, you'll have to sacrifice some power.
 			control_rod_effectiveness = initial(control_rod_effectiveness) + control_bonus
 
 		// Permeability types: increases cooling efficiency
 		var/total_permeability_moles = 0
-		total_permeability_moles += moderator_input.total_moles(/datum/gas/bz) * BZ_PERMEABILITY_MOD
-		total_permeability_moles += moderator_input.total_moles(/datum/gas/water_vapor) * WATER_PERMEABILITY_MOD
-		total_permeability_moles += moderator_input.total_moles(/datum/gas/hypernoblium) * NOBLIUM_PERMEABILITY_MOD
+		total_permeability_moles += moderator_input.gases[/datum/gas/bz][MOLES] * BZ_PERMEABILITY_MOD
+		total_permeability_moles += moderator_input.gases[/datum/gas/water_vapor][MOLES] * WATER_PERMEABILITY_MOD
+		total_permeability_moles += moderator_input.gases[/datum/gas/hypernoblium][MOLES] * NOBLIUM_PERMEABILITY_MOD
 		if(total_permeability_moles >= minimum_coolant_level)
 			gas_absorption_effectiveness = clamp(gas_absorption_constant + (total_permeability_moles / REACTOR_PERMEABILITY_FACTOR), 0, 1)
 
 		// Radiation types: increases radiation
-		radioactivity_spice_multiplier += moderator_input.total_moles(/datum/gas/nitrogen) * NITROGEN_RAD_MOD //An example setup of 50 moles of n2 (for dealing with spent fuel) leaves us with a radioactivity spice multiplier of 3.
-		radioactivity_spice_multiplier += moderator_input.total_moles(/datum/gas/carbon_dioxide) * CARBON_RAD_MOD
-		radioactivity_spice_multiplier += moderator_input.total_moles(/datum/gas/hydrogen) * HYDROGEN_RAD_MOD
-		radioactivity_spice_multiplier += moderator_input.total_moles(/datum/gas/tritium) * TRITIUM_RAD_MOD
-		radioactivity_spice_multiplier += moderator_input.total_moles(/datum/gas/antinoblium) * ANTINOBLIUM_RAD_MOD
+		radioactivity_spice_multiplier += moderator_input.gases[/datum/gas/nitrogen][MOLES] * NITROGEN_RAD_MOD //An example setup of 50 moles of n2 (for dealing with spent fuel) leaves us with a radioactivity spice multiplier of 3.
+		radioactivity_spice_multiplier += moderator_input.gases[/datum/gas/carbon_dioxide][MOLES] * CARBON_RAD_MOD
+		radioactivity_spice_multiplier += moderator_input.gases[/datum/gas/hydrogen][MOLES] * HYDROGEN_RAD_MOD
+		radioactivity_spice_multiplier += moderator_input.gases[/datum/gas/tritium][MOLES] * TRITIUM_RAD_MOD
+		radioactivity_spice_multiplier += moderator_input.gases[/datum/gas/antinoblium][MOLES] * ANTINOBLIUM_RAD_MOD
 
 		// Degradation types: degrades the fuel rods
-		var/total_degradation_moles = moderator_input.total_moles(/datum/gas/pluoxium) //Because it's quite hard to get.
+		var/total_degradation_moles = moderator_input.gases[/datum/gas/miasma][MOLES] //Because it's quite hard to get.
 		if(total_degradation_moles >= minimum_coolant_level) //I'll be nice.
 			depletion_modifier += total_degradation_moles / 15 //Oops! All depletion. This causes your fuel rods to get SPICY.
 			if(prob(total_degradation_moles)) // don't spam the sound so much please
@@ -311,7 +217,7 @@ GLOBAL_VAR_INIT(counter, 0)
 		moderator_input.remove_ratio(REACTOR_MODERATOR_DECAY_RATE) //Remove about 10% of the gases
 		K += total_fuel_moles / 1000
 	else // if there's not enough to do anything, just clear it
-		moderator_input.remove()
+		moderator_input.garbage_collect()
 
 	var/fuel_power = 0 //So that you can't magically generate K with your control rods.
 	if(active)
@@ -366,12 +272,12 @@ GLOBAL_VAR_INIT(counter, 0)
 		temperature += heat_delta * coolant_heat_factor
 		coolant_input.return_temperature(last_coolant_temperature - (heat_delta * (1 - coolant_heat_factor))) //Heat the coolant output gas that we just had pass through us.
 		coolant_output.merge(coolant_input) //And now, shove the input into the output.
-		coolant_input.remove() //Clear out anything left in the input gate.
+		coolant_input.garbage_collect() //Clear out anything left in the input gate.
 		color = null
 
 	// And finally, set our pressure.
-	last_output_temperature = coolant_output.return_temperature()
-	pressure = coolant_output.return_pressure()
+	last_output_temperature = coolant_output.temperature()
+	pressure = coolant_output.temperature()
 	power = ((temperature / REACTOR_TEMPERATURE_CRITICAL)**3) * 100
 
 	// Make some power!
@@ -523,7 +429,7 @@ GLOBAL_VAR_INIT(counter, 0)
 	relay('modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/meltdown.ogg', "<span class='userdanger'>You hear a horrible metallic hissing.</span>")
 	stop_relay(RADIO_CHANNEL_ENGINEERING)
 	NSW.fire() //This will take out engineering for a decent amount of time as they have to clean up the sludge.
-	for(var/obj/machinery/power/apc/apc in SSmachines.get_machines_by_type_and_subtypes(/obj/machinery/power/apc))
+	for(var/obj/machinery/power/apc/apc in SSmachines.get_machines_by_type(/obj/machinery/power/apc))
 		if((apc.z == z) && prob(70))
 			apc.overload_lighting()
 	var/datum/gas_mixture/coolant_input = airs[COOLANT_INPUT_GATE]
@@ -569,7 +475,6 @@ GLOBAL_VAR_INIT(counter, 0)
 		icon_state = "reactor_off"
 	if(slagged)
 		icon_state = "reactor_slagged"
-
 
 //Startup, shutdown
 
@@ -645,233 +550,4 @@ GLOBAL_VAR_INIT(counter, 0)
 	icon_state = "lead_pipe"
 	w_class = WEIGHT_CLASS_TINY
 
-//Controlling the reactor.
 
-/obj/machinery/computer/reactor
-	name = "reactor control console"
-	desc = "A computer which monitors and controls a reactor"
-	light_color = "#55BA55"
-	light_power = 1
-	light_range = 3
-	icon_state = "oldcomp"
-	icon_screen = "oldcomp_broken"
-	icon_keyboard = null
-	circuit = /obj/item/circuitboard/computer/reactor // we have the technology
-	var/obj/machinery/atmospherics/components/trinary/nuclear_reactor/reactor = null
-	var/id = null
-	var/next_stat_interval = 0
-
-/obj/machinery/computer/reactor/multitool_act(mob/living/user, obj/item/multitool/I)
-	if(isnull(id) || isnum(id))
-		var/obj/machinery/atmospherics/components/trinary/nuclear_reactor/N = I.buffer
-		if(!istype(N))
-			user.balloon_alert(user, "invalid reactor ID!")
-			return TRUE
-		reactor = N
-		id = N.id
-		user.balloon_alert(user, "linked!")
-		return TRUE
-	return ..()
-
-/obj/machinery/computer/reactor/preset
-	id = "default_reactor_for_lazy_mappers"
-
-/obj/machinery/computer/reactor/syndie_base
-	id = "syndie_base_reactor"
-
-/obj/item/circuitboard/computer/reactor
-	name = "Reactor Control (Computer Board)"
-	icon_state = "engineering"
-	build_path = /obj/machinery/computer/reactor
-
-/obj/machinery/computer/reactor/Initialize(mapload, obj/item/circuitboard/C)
-	. = ..()
-	return INITIALIZE_HINT_LATELOAD
-
-/obj/machinery/computer/reactor/LateInitialize()
-	. = ..()
-	link_to_reactor()
-
-/obj/machinery/computer/reactor/attack_hand(mob/living/user)
-	. = ..()
-	ui_interact(user)
-
-/obj/machinery/computer/reactor/ui_interact(mob/user, datum/tgui/ui)
-	..()
-	ui = SStgui.try_update_ui(user, src, ui)
-	if(!ui)
-		ui = new(user, src, "ReactorComputer")
-		ui.open()
-		ui.set_autoupdate(TRUE)
-
-/obj/machinery/computer/reactor/ui_act(action, params)
-	if(..())
-		return
-	if(!reactor)
-		return
-	switch(action)
-		if("power")
-			if(reactor.active)
-				if(reactor.K <= 0 && reactor.temperature <= REACTOR_TEMPERATURE_MINIMUM)
-					reactor.shut_down()
-			else if(reactor.fuel_rods.len)
-				reactor.start_up()
-				message_admins("Reactor started up by [ADMIN_LOOKUPFLW(usr)] in [ADMIN_VERBOSEJMP(src)]")
-				investigate_log("Reactor started by [key_name(usr)] at [AREACOORD(src)]", INVESTIGATE_REACTOR)
-		if("input")
-			var/input = text2num(params["target"])
-			reactor.last_user = usr
-			reactor.desired_k = reactor.active ? clamp(input, 0, REACTOR_MAX_CRITICALITY) : 0
-		if("eject")
-			if(reactor?.temperature > REACTOR_TEMPERATURE_MINIMUM)
-				return
-			if(reactor?.slagged)
-				return
-			var/rod_index = text2num(params["rod_index"])
-			if(rod_index < 1 || rod_index > reactor.fuel_rods.len)
-				return
-			var/obj/item/fuel_rod/rod = reactor.fuel_rods[rod_index]
-			if(!rod)
-				return
-			playsound(src, pick('modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/switch.ogg','modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/switch2.ogg','modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/switch3.ogg'), 100, FALSE)
-			playsound(reactor, 'modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/crane_1.wav', 100, FALSE)
-			rod.forceMove(get_turf(reactor))
-			reactor.fuel_rods.Remove(rod)
-
-/obj/machinery/computer/reactor/ui_data(mob/user)
-	var/list/data = list()
-	data["control_rods"] = 0
-	data["k"] = 0
-	data["desiredK"] = 0
-	if(reactor)
-		data["k"] = reactor.K
-		data["desiredK"] = reactor.desired_k
-		data["control_rods"] = 100 - (100 * reactor.desired_k / REACTOR_MAX_CRITICALITY) //Rod insertion is extrapolated as a function of the percentage of K
-		data["integrity"] = reactor.get_integrity()
-	data["powerData"] = reactor ? reactor.powerData : list()
-	data["kpaData"] = reactor ? reactor.kpaData : list()
-	data["tempCoreData"] = reactor ? reactor.tempCoreData : list()
-	data["tempInputData"] = reactor ? reactor.tempInputData : list()
-	data["tempOutputData"] = reactor ? reactor.tempOutputData : list()
-	data["coreTemp"] = reactor ? round(reactor.temperature) : 0
-	data["coolantInput"] = reactor ? round(reactor.last_coolant_temperature) : T20C
-	data["coolantOutput"] = reactor ? round(reactor.last_output_temperature) : T20C
-	data["power"] = reactor ? reactor.last_power_produced : 0
-	data["kpa"] = reactor ? reactor.pressure : 0
-	data["active"] = reactor ? reactor.active : FALSE
-	data["shutdownTemp"] = REACTOR_TEMPERATURE_MINIMUM
-	var/list/rod_data = list()
-	if(reactor)
-		var/cur_index = 0
-		for(var/obj/item/fuel_rod/rod in reactor.fuel_rods)
-			cur_index++
-			rod_data.Add(
-				list(
-					"name" = rod.name,
-					"depletion" = rod.depletion,
-					"rod_index" = cur_index
-				)
-			)
-	data["rods"] = rod_data
-	return data
-
-/obj/machinery/computer/reactor/wrench_act(mob/living/user, obj/item/I)
-	to_chat(user, span_notice("You start [anchored ? "un" : ""]securing [name]..."))
-	if(I.use_tool(src, user, 40, volume=75))
-		to_chat(user, span_notice("You [anchored ? "un" : ""]secure [name]."))
-		set_anchored(!anchored)
-		return TRUE
-	return FALSE
-
-/obj/machinery/computer/reactor/proc/link_to_reactor()
-	for(var/obj/machinery/atmospherics/components/trinary/nuclear_reactor/asdf in SSmachines.get_all_machines())
-		if(asdf.id && asdf.id == id)
-			reactor = asdf
-			return TRUE
-	return FALSE
-
-#define FREQ_REACTOR_CONTROL 1439.69
-
-//Preset pumps for mappers. You can also set the id tags yourself.
-/obj/machinery/atmospherics/components/binary/pump/reactor_input
-	id_tag = "reactor_input"
-
-/obj/machinery/atmospherics/components/binary/pump/reactor_output
-	id_tag = "reactor_output"
-
-/obj/machinery/atmospherics/components/binary/pump/reactor_moderator
-	id_tag = "reactor_moderator"
-
-/obj/machinery/computer/reactor/pump
-	name = "Reactor inlet valve computer"
-	desc = "A computer which controls valve settings on an advanced gas cooled reactor. Alt click it to remotely set pump pressure."
-	icon_screen = "reactor_input"
-	id = "reactor_input"
-	var/datum/radio_frequency/radio_connection
-	var/on = FALSE
-
-/obj/machinery/computer/reactor/pump/AltClick(mob/user)
-	. = ..()
-	var/newPressure = input(user, "Set new output pressure (kPa)", "Remote pump control", null) as num
-	if(!newPressure)
-		return
-	newPressure = clamp(newPressure, 0, MAX_OUTPUT_PRESSURE) //Number sanitization is not handled in the pumps themselves, only during their ui_act which this doesn't use.
-	signal(on, newPressure)
-
-/obj/machinery/computer/reactor/attack_robot(mob/user)
-	. = ..()
-	attack_hand(user)
-
-/obj/machinery/computer/reactor/attack_ai(mob/user)
-	. = ..()
-	attack_hand(user)
-
-/obj/machinery/computer/reactor/pump/attack_hand(mob/living/user)
-	. = ..()
-	if(!is_operational)
-		return FALSE
-	playsound(loc, pick('modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/switch.ogg','modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/switch2.ogg','modular_zubbers/code/modules/power/agcnr/sounds/effects/reactor/switch3.ogg'), 100, FALSE)
-	visible_message(span_notice("[src]'s switch flips [on ? "off" : "on"]."))
-	on = !on
-	signal(on)
-
-/obj/machinery/computer/reactor/pump/Initialize(mapload, obj/item/circuitboard/C)
-	. = ..()
-	radio_connection = SSradio.add_object(src, FREQ_REACTOR_CONTROL,filter=RADIO_CHANNEL_ENGINEERING)
-
-/obj/machinery/computer/reactor/pump/proc/signal(power, set_output_pressure=null)
-	var/datum/signal/signal
-	if(!set_output_pressure) //Yes this is stupid, but technically if you pass through "set_output_pressure" onto the signal, it'll always try and set its output pressure and yeahhh...
-		signal = new(list(
-			"tag" = id,
-			"frequency" = FREQ_REACTOR_CONTROL,
-			"timestamp" = world.time,
-			"power" = power,
-			"sigtype" = "command"
-		))
-	else
-		signal = new(list(
-			"tag" = id,
-			"frequency" = FREQ_REACTOR_CONTROL,
-			"timestamp" = world.time,
-			"power" = power,
-			"set_output_pressure" = set_output_pressure,
-			"sigtype" = "command"
-		))
-	radio_connection.post_signal(src, signal, filter=RADIO_CHANNEL_ENGINEERING)
-
-//Preset subtypes for mappers
-/obj/machinery/computer/reactor/pump/reactor_input
-	name = "Reactor inlet valve computer"
-	icon_screen = "reactor_input"
-	id = "reactor_input"
-
-/obj/machinery/computer/reactor/pump/reactor_output
-	name = "Reactor output valve computer"
-	icon_screen = "reactor_output"
-	id = "reactor_output"
-
-/obj/machinery/computer/reactor/pump/reactor_moderator
-	name = "Reactor moderator valve computer"
-	icon_screen = "reactor_moderator"
-	id = "reactor_moderator"
