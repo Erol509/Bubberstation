@@ -276,8 +276,8 @@
 		color = null
 
 	// And finally, set our pressure.
-	last_output_temperature = coolant_output.temperature()
-	pressure = coolant_output.temperature()
+	last_output_temperature = coolant_output.temperature
+	pressure = coolant_output.temperature
 	power = ((temperature / REACTOR_TEMPERATURE_CRITICAL)**3) * 100
 
 	// Make some power!

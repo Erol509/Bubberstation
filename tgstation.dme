@@ -8346,6 +8346,8 @@
 #include "modular_zubbers\code\modules\paperwork\stamps.dm"
 #include "modular_zubbers\code\modules\power\agcnr\fuel_rods.dm"
 #include "modular_zubbers\code\modules\power\agcnr\reactor.dm"
+#include "modular_zubbers\code\modules\power\agcnr\reactor_acts.dm"
+#include "modular_zubbers\code\modules\power\agcnr\reactor_console.dm"
 #include "modular_zubbers\code\modules\power\agcnr\reactor_frame.dm"
 #include "modular_zubbers\code\modules\power\supermatter\supermatter_gas.dm"
 #include "modular_zubbers\code\modules\projectiles\ammunition\ballistic\smg.dm"
@@ -8486,6 +8488,4 @@
 #include "modular_zubbers\modules\vetted\examine.dm"
 #include "modular_zubbers\modules\vetted\vetted.dm"
 #include "modular_zubbers\modules\vetted\overrides\erp_preferences.dm"
-#include "modular_zubbers\code\modules\power\agcnr\reactor_acts.dm"
-#include "modular_zubbers\code\modules\power\agcnr\reactor_console.dm"
 // END_INCLUDE
