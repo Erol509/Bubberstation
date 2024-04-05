@@ -8677,4 +8677,5 @@
 #include "modular_zubbers\modules\voting\_votes.dm"
 #include "modular_zubbers\modules\voting\spawners.dm"
 #include "modular_zubbers\modules\voting\vote_overrides.dm"
+#include "modular_zubbers\modules\admin\bubber_verbs\command_report.dm"
 // END_INCLUDE
