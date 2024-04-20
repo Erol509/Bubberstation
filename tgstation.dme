@@ -8702,4 +8702,7 @@
 #include "modular_zubbers\modules\voting\_votes.dm"
 #include "modular_zubbers\modules\voting\spawners.dm"
 #include "modular_zubbers\modules\voting\vote_overrides.dm"
+#include "modular_zubbers\modules\mining\asteroid_magnet.dm"
+#include "modular_zubbers\modules\mining\magnet_upgrades.dm"
+#include "modular_zubbers\modules\mining\asteroids.dm"
 // END_INCLUDE
