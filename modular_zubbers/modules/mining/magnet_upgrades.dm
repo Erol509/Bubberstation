@@ -1,7 +1,7 @@
 /obj/item/deepcore_upgrade
 	name = "Polytrinic non magnetic asteroid arrestor upgrade"
 	desc = "A component which, when slotted into an asteroid magnet computer, will allow it to capture increasingly valuable asteroids."
-	icon = 'modular_zubbers/icons/obj/machines/computers.dmi'
+	icon = 'modular_zubbers/icons/obj/machines/scanners.dmi'
 	icon_state = "minescanner_upgrade"
 	var/tier = 2
 
@@ -13,7 +13,7 @@
 /obj/item/mining_sensor_upgrade
 	name = "Dradis mineral sensor upgrade (tier II)"
 	desc = "A component which, when slotted into an asteroid magnet computer, will allow it to capture increasingly valuable asteroids."
-	icon = 'modular_zubbers/icons/obj/machines/computers.dmi'
+	icon = 'modular_zubbers/icons/obj/machines/scanners.dmi'
 	icon_state = "minesensor"
 	var/tier = 2
 

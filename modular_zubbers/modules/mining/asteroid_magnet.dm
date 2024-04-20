@@ -13,13 +13,13 @@ GLOBAL_LIST_EMPTY(asteroid_spawn_markers)
 	var/tier = 1 //Upgrade via science
 	var/turf_type = /turf/open/space/basic
 
-/obj/machinery/computer/ship/mineral_magnet/LateInitialize()
+/obj/machinery/computer/mineral_magnet/LateInitialize()
 	. = ..()
 	//Find our ship's asteroid marker. This allows multi-ship mining.
 	for(var/obj/effect/landmark/L in GLOB.asteroid_spawn_markers)
 		target_location = get_turf(L)
 
-/obj/machinery/computer/ship/mineral_magnet/attackby(obj/item/I, mob/user)
+/obj/machinery/computer/mineral_magnet/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/deepcore_upgrade))
 		var/obj/item/deepcore_upgrade/DU = I
 		if(DU.tier > tier)
@@ -31,7 +31,7 @@ GLOBAL_LIST_EMPTY(asteroid_spawn_markers)
 			return TRUE
 	return ..()
 
-/obj/machinery/computer/ship/mineral_magnet/Topic(href, href_list)
+/obj/machinery/computer/mineral_magnet/Topic(href, href_list)
 	if(!in_range(src, usr))
 		return
 	if(href_list["pull_asteroid"])
@@ -40,7 +40,7 @@ GLOBAL_LIST_EMPTY(asteroid_spawn_markers)
 		if(alert(usr, "Are you sure you want to release the currently held asteroid?",name,"Yes","No") == "Yes" && Adjacent(usr))
 			start_push()
 
-/obj/machinery/computer/ship/mineral_magnet/attack_hand(mob/user)
+/obj/machinery/computer/mineral_magnet/attack_hand(mob/user)
 	if(!target_location)
 		return
 	var/dat
@@ -107,7 +107,7 @@ GLOBAL_LIST_EMPTY(asteroid_spawn_markers)
 	GLOB.asteroid_spawn_markers -= src
 	return ..()
 
-/obj/machinery/computer/ship/mineral_magnet/Topic(href, href_list)
+/obj/machinery/computer/mineral_magnet/Topic(href, href_list)
 	if(!in_range(src, usr))
 		return
 	if(href_list["pull_asteroid"])
@@ -118,18 +118,13 @@ GLOBAL_LIST_EMPTY(asteroid_spawn_markers)
 
 	attack_hand(usr) //Refresh window
 
-/obj/machinery/computer/ship/mineral_magnet/proc/pull_in_asteroid(mob/user)
+/obj/machinery/computer/mineral_magnet/proc/pull_in_asteroid(mob/user)
 	if(cooldown)
 		say("ERROR: Magnetisation circuits recharging...")
 		return FALSE
 	var/list/asteroids = list()
-	for(var/obj/structure/asteroid/AS in orange(5, linked))
-		if(AS.required_tier <= tier)
-			asteroids += AS
 	if(!length(asteroids))
-		//var/sound = pick('nsv13/sound/effects/computer/error.ogg','nsv13/sound/effects/computer/error2.ogg','nsv13/sound/effects/computer/error3.ogg')
-		//playsound(src, sound, 100, 1)
-		to_chat(user, "<span class='notice'>Cannot lock on to any asteroids near [linked]</span>")
+		to_chat(user, "<span class='notice'>Cannot lock on to any asteroids near</span>")
 		return FALSE
 	var/obj/structure/asteroid/AS = input(usr, "Select target:", "Target") as null|anything in asteroids
 	if(!AS || !length(AS.core_composition))
@@ -137,19 +132,15 @@ GLOBAL_LIST_EMPTY(asteroid_spawn_markers)
 	// "<span class='warning'>DANGER: Magnet has locked on to an asteroid. Vacate the asteroid cage immediately.</span>")
 	cooldown = TRUE
 	addtimer(VARSET_CALLBACK(src, cooldown, FALSE), 1 MINUTES)
-	if(prob(20))
-		var/list/potential_ruins = flist("_maps/map_files/Mining/nsv13/ruins/")
-		current_asteroid = new /datum/map_template/asteroid("_maps/map_files/Mining/nsv13/ruins/[pick(potential_ruins)]", null, FALSE, AS.core_composition) //Set up an asteroid
-	else //80% chance to get an actual asteroid
-		var/list/potential_asteroids = flist("_maps/map_files/Mining/nsv13/asteroids/")
-		current_asteroid = new /datum/map_template/asteroid("_maps/map_files/Mining/nsv13/asteroids/[pick(potential_asteroids)]", null, FALSE, AS.core_composition) //Set up an asteroid
+	var/list/potential_asteroids = flist("_maps/map_files/Mining/nsv13/asteroids/")
+	current_asteroid = new /datum/map_template/asteroid("_maps/map_files/Mining/nsv13/asteroids/[pick(potential_asteroids)]", null, FALSE, AS.core_composition) //Set up an asteroid
 	addtimer(CALLBACK(src, PROC_REF(load_asteroid)), 10 SECONDS)
 	qdel(AS)
 
-/obj/machinery/computer/ship/mineral_magnet/proc/load_asteroid()
+/obj/machinery/computer/mineral_magnet/proc/load_asteroid()
 	current_asteroid.load(target_location, FALSE, TRUE)
 
-/obj/machinery/computer/ship/mineral_magnet/proc/start_push()
+/obj/machinery/computer/mineral_magnet/proc/start_push()
 	if(cooldown)
 		say("ERROR: Magnetisation circuits recharging...")
 		return
@@ -158,7 +149,7 @@ GLOBAL_LIST_EMPTY(asteroid_spawn_markers)
 	//linked.relay('nsv13/sound/effects/ship/general_quarters.ogg', "<span class='warning'>DANGER: An asteroid is now being detached from [linked]. Vacate the asteroid cage immediately.</span>")
 	addtimer(CALLBACK(src, PROC_REF(push_away_asteroid)), 30 SECONDS)
 
-/obj/machinery/computer/ship/mineral_magnet/proc/push_away_asteroid()
+/obj/machinery/computer/mineral_magnet/proc/push_away_asteroid()
 	for(var/turf/T as() in current_asteroid.get_affected_turfs(target_location, FALSE)) //nuke
 		for(var/atom/A as() in T.contents)
 			if(!ismob(A) && !istype(A, /obj/effect/landmark/asteroid_spawn))
