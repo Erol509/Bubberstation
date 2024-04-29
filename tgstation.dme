@@ -8801,4 +8801,6 @@
 #include "modular_zubbers\modules\voting\_votes.dm"
 #include "modular_zubbers\modules\voting\spawners.dm"
 #include "modular_zubbers\modules\voting\vote_overrides.dm"
+#include "modular_zubbers\modules\customization\modules\mob\living\carbon\human\species\protean\protean.dm"
+#include "modular_zubbers\modules\customization\modules\mob\living\carbon\human\species\protean\nano.dm"
 // END_INCLUDE
