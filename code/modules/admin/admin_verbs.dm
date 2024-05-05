@@ -109,6 +109,7 @@ GLOBAL_PROTECT(admin_verbs_admin)
 	/client/proc/request_help,						/*SKYRAT EDIT ADDITION*/
 	/client/proc/view_opfors,						/*OPFOR - SKYRAT EDIT ADDITION*/
 	/client/proc/lorecaster_story_manager,          /* SKYRAT EDIT ADDITION */
+	/client/proc/create_command_shift_report,     /* Bubber EDIT ADDITION */
 	)
 GLOBAL_LIST_INIT(admin_verbs_ban, list(/client/proc/unban_panel, /client/proc/ban_panel, /client/proc/stickybanpanel, /client/proc/library_control))
 GLOBAL_PROTECT(admin_verbs_ban)

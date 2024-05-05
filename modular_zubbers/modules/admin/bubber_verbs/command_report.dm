@@ -5,11 +5,20 @@
 
 	if(!holder || !check_rights(R_FUN))
 		return
+	var/created_report = 0
 
-	SSdynamic.send_trait_report()
+	if(created_report == 1)
+		message_admins("Station goal and report was already issued!")
+		return
+	if(created_report == 0)
+		var/datum/command_report/report = new /datum/command_report
+		report.send_trait_report()
+		message_admins("[key_name_admin(holder)] created Roundstart Command Report")
+		log_admin("[key_name_admin(holder)] created Roundstart Command Report")
+		created_report = 1
+		return created_report
 
-
-/datum/controller/subsystem/dynamic/proc/send_trait_report()
+/datum/command_report/proc/send_trait_report()
 	. = "<b><i>Central Command Status Summary</i></b><hr>"
 
 	SSstation.generate_station_goals()
@@ -34,7 +43,7 @@
  *
  * Returns a formatted string all station goals that are available to the station.
  */
-/datum/controller/subsystem/dynamic/proc/generate_station_goal_report()
+/datum/command_report/proc/generate_station_goal_report()
 	if(!length(SSstation.get_station_goals()))
 		return
 	. = "<hr><b>Special Orders for [station_name()]:</b><BR>"
@@ -51,7 +60,7 @@
  *
  * Returns a formatted string of all station traits (that are shown) affecting the station.
  */
-/datum/controller/subsystem/dynamic/proc/generate_station_trait_report()
+/datum/command_report/proc/generate_station_trait_report()
 	var/trait_list_string = ""
 	for(var/datum/station_trait/station_trait as anything in SSstation.station_traits)
 		if(!station_trait.show_in_report)
