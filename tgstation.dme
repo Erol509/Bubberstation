@@ -8743,6 +8743,9 @@
 #include "modular_zubbers\modules\customization\modules\mob\living\carbon\human\species\akula.dm"
 #include "modular_zubbers\modules\customization\modules\mob\living\carbon\human\species\tajaran.dm"
 #include "modular_zubbers\modules\customization\modules\mob\living\carbon\human\species\xeno.dm"
+#include "modular_zubbers\modules\customization\modules\mob\living\carbon\human\species\protean\nano.dm"
+#include "modular_zubbers\modules\customization\modules\mob\living\carbon\human\species\protean\protean.dm"
+#include "modular_zubbers\modules\customization\modules\mob\living\carbon\human\species\protean\protean_blob.dm"
 #include "modular_zubbers\modules\emotes\code\emotes.dm"
 #include "modular_zubbers\modules\emotes\code\synth_emotes.dm"
 #include "modular_zubbers\modules\examine\examine_tgui.dm"
@@ -8801,6 +8804,4 @@
 #include "modular_zubbers\modules\voting\_votes.dm"
 #include "modular_zubbers\modules\voting\spawners.dm"
 #include "modular_zubbers\modules\voting\vote_overrides.dm"
-#include "modular_zubbers\modules\customization\modules\mob\living\carbon\human\species\protean\protean.dm"
-#include "modular_zubbers\modules\customization\modules\mob\living\carbon\human\species\protean\nano.dm"
 // END_INCLUDE
