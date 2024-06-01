@@ -4,11 +4,13 @@
 	bodytype = BODYTYPE_ROBOTIC
 	name = "Protean Chest"
 	limb_id = SPECIES_PROTEAN
+	icon_state = "default_human_chest"
 
 /obj/item/bodypart/head/protean
 	bodytype = BODYTYPE_ROBOTIC
 	name = "Protean Head"
 	limb_id = SPECIES_PROTEAN
+	icon_state = "default_human_head"
 
 // ARMS
 
@@ -16,11 +18,13 @@
 	bodytype = BODYTYPE_ROBOTIC
 	name = "Protean Left Arm"
 	limb_id = SPECIES_PROTEAN
+	icon_state = "default_human_l_arm"
 
 /obj/item/bodypart/arm/right/protean
 	bodytype = BODYTYPE_ROBOTIC
 	name = "Protean Right Arm"
 	limb_id = SPECIES_PROTEAN
+	icon_state = "default_human_r_arm"
 
 // LEGS
 //
@@ -28,11 +32,13 @@
 	bodytype = BODYTYPE_ROBOTIC
 	name = "Protean Left Leg"
 	limb_id = SPECIES_PROTEAN
+	icon_state = "default_human_l_leg"
 
 /obj/item/bodypart/leg/right/protean
 	bodytype = BODYTYPE_ROBOTIC
 	name = "Protean Right Leg"
 	limb_id = SPECIES_PROTEAN
+	icon_state = "default_human_r_leg"
 
 // Internal Organs
 
