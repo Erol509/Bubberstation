@@ -1,5 +1,5 @@
 /// How many jobs have bounties, minus the random civ bounties. PLEASE INCREASE THIS NUMBER AS MORE DEPTS ARE ADDED TO BOUNTIES.
-#define MAXIMUM_BOUNTY_JOBS 13
+#define MAXIMUM_BOUNTY_JOBS 14
 
 /datum/bounty
 	var/name
@@ -77,9 +77,13 @@
 				chosen_type = pick(subtypesof(/datum/bounty/item/botany))
 			if(CIV_JOB_ATMOS)
 				chosen_type = pick(subtypesof(/datum/bounty/item/atmospherics))
+			if(CIV_JOB_BITRUN)
+				chosen_type = pick(subtypesof(/datum/bounty/item/bitrunning))
 			//BUBBER EDIT START
 			if(CIV_JOB_SMITH)
 				chosen_type = pick(subtypesof(/datum/bounty/item/blacksmith))
+			if(CIV_JOB_PRISONER)
+				chosen_type = pick(subtypesof(/datum/bounty/item/prisoner))
 			//BUBBER EDIT END
 		bounty_ref = new chosen_type
 		if(bounty_ref.can_get())

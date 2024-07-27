@@ -43,7 +43,7 @@ WALK_DELAY 4
 ##MULTIPLICATIVE_MOVESPEED /mob/living/carbon/human 0
 ##MULTIPLICATIVE_MOVESPEED /mob/living/silicon/robot 0
 ##MULTIPLICATIVE_MOVESPEED /mob/living/carbon/alien 0
-##MULTIPLICATIVE_MOVESPEED /mob/living/simple_animal/slime 0
+##MULTIPLICATIVE_MOVESPEED /mob/living/basic/slime 0
 MULTIPLICATIVE_MOVESPEED /mob/living/simple_animal 0
 MULTIPLICATIVE_MOVESPEED /mob/living/basic 0
 
@@ -141,12 +141,19 @@ ALLOW_RANDOM_EVENTS
 
 ## Multiplier for earliest start time of dangerous events.
 ## Set to 0 to make dangerous events avaliable from round start.
-EVENTS_MIN_TIME_MUL 5
+EVENTS_MIN_TIME_MUL 1
 
 ## Multiplier for minimal player count (players = alive non-AFK humans) for dangerous events to start.
 ## Set to 0 to make dangerous events avaliable for all populations.
 EVENTS_MIN_PLAYERS_MUL 1
 
+## The lower bound, in deciseconds, for how soon another random event can be scheduled.
+## Defaults to 1500 deciseconds or 2.5 minutes
+EVENTS_FREQUENCY_LOWER 1500
+
+## The upper bound, in deciseconds, for how soon another random event can be scheduled.
+## Defaults to 4200 deciseconds or 7 minutes
+EVENTS_FREQUENCY_UPPER 4200
 
 ## AI ###
 
@@ -162,7 +169,7 @@ ALLOW_AI_MULTICAM
 
 ## Peacekeeper Borg ###
 ## Uncomment to prevent the peacekeeper cyborg model from being chosen
-DISABLE_PEACEBORG
+#DISABLE_PEACEBORG
 
 ## AWAY MISSIONS ###
 
@@ -268,7 +275,7 @@ RANDOM_LAWS dagothbot
 #RANDOM_LAWS reporter
 #RANDOM_LAWS hulkamania
 #RANDOM_LAWS ten_commandments
-#RANDOM_LAWS texas
+#RANDOM_LAWS yesman
 
 ## Bad idea laws. Probably shouldn't enable these
 #RANDOM_LAWS syndie
@@ -364,43 +371,16 @@ ROUNDSTART_RACES snail
 ROUNDSTART_RACES ethereal
 #ROUNDSTART_RACES jelly
 #ROUNDSTART_RACES abductor
-#ROUNDSTART_RACES synth
-
-## Including all the various golem subtypes that are better than humans in some ways, but worse in others
-#ROUNDSTART_RACES iron_golem
-#ROUNDSTART_RACES adamantine_golem
-#ROUNDSTART_RACES plasma_golem
-#ROUNDSTART_RACES diamond_golem
-#ROUNDSTART_RACES gold_golem
-#ROUNDSTART_RACES silver_golem
-#ROUNDSTART_RACES uranium_golem
-#ROUNDSTART_RACES plasteel_golem
-#ROUNDSTART_RACES titanium_golem
-#ROUNDSTART_RACES plastitanium_golem
-#ROUNDSTART_RACES alloy_golem
-#ROUNDSTART_RACES wood_golem
-#ROUNDSTART_RACES sand_golem
-#ROUNDSTART_RACES glass_golem
-#ROUNDSTART_RACES bluespace_golem
-#ROUNDSTART_RACES bananium_golem
-#ROUNDSTART_RACES runic_golem
-#ROUNDSTART_RACES cloth_golem
-#ROUNDSTART_RACES plastic_golem
-#ROUNDSTART_RACES bronze_golem
-#ROUNDSTART_RACES cardboard_golem
-#ROUNDSTART_RACES leather_golem
-#ROUNDSTART_RACES durathread_golem
-#ROUNDSTART_RACES bone_golem
-#ROUNDSTART_RACES snow_golem
-#ROUNDSTART_RACES metallic_hydrogen_golem
+#ROUNDSTART_RACES snail
 
 ## Races that are straight upgrades. If these are on expect powergamers to always pick them
 #ROUNDSTART_RACES skeleton
 #ROUNDSTART_RACES zombie
-#ROUNDSTART_RACES slime
 #ROUNDSTART_RACES pod
-#ROUNDSTART_RACES military_synth
-#ROUNDSTART_RACES agent
+
+## Races that are radical departures to what a species is, so while they technically can be roundstart - it's probably not wise
+#ROUNDSTART_RACES android
+#ROUNDSTART_RACES golem
 
 ## SKYRAT RACES DOWN THERE
 ROUNDSTART_RACES mammal
@@ -421,6 +401,10 @@ ROUNDSTART_RACES insect
 ROUNDSTART_RACES synth
 ROUNDSTART_RACES ghoul
 ROUNDSTART_RACES shadekin
+
+## BUBBER RACES DOWN HERE
+ROUNDSTART_RACES lesser_abductor
+ROUNDSTART_RACES zombie
 
 ##-------------------------------------------------------------------------------------------
 
@@ -569,29 +553,83 @@ DISALLOW_TITLE_MUSIC
 ## don't need (or want) this.
 #GIVE_TUTORIALS_WITHOUT_DB
 
-## BUBBER EDIT START
+## Configuration for station traits of each type.
+## The first value (key) is the budget, or the space available to use for station traits of that type. Some take more space than others.
+## The second value (assoc) is the weight associated with said budget compared to the rest for that type.
+POSITIVE_STATION_TRAITS 0 8
+POSITIVE_STATION_TRAITS 1 4
+POSITIVE_STATION_TRAITS 2 2
+POSITIVE_STATION_TRAITS 3 1
 
-## Overmap Settings ##
+NEUTRAL_STATION_TRAITS 0 10
+NEUTRAL_STATION_TRAITS 1 10
+NEUTRAL_STATION_TRAITS 2 3
+NEUTRAL_STATION_TRAITS 2.5 1
 
-## Put max amount of different event clusters you want to spawn here
-MAX_OVERMAP_EVENT_CLUSTERS 6
+NEGATIVE_STATION_TRAITS 0 8
+NEGATIVE_STATION_TRAITS 1 4
+NEGATIVE_STATION_TRAITS 2 2
+NEGATIVE_STATION_TRAITS 3 1
 
-## Put the maximum amount of overmap events here
-MAX_OVERMAP_EVENTS 50
+# Uncomment to disable Quirk point balancing for the server and clients.
+# If enabled, players will be able to select positive quirks without first selecting negative quirks.
+# If enabled, randomized Quirks will still use points internally, in order to maintain balance.
+#DISABLE_QUIRK_POINTS
 
-## Put the maximum amount of dynamic overmap locations here
-MAX_OVERMAP_DYNAMIC_EVENTS 10
+# The maximum amount of positive quirks one character can have at roundstart.
+# If set to -1, then players will be able to select any quantity of positive quirks.
+# If set to 0, then players won't be able to select any positive quirks.
+# If commented-out or undefined, the maximum default is 6.
+MAX_POSITIVE_QUIRKS 6
 
-## Size of the overmap squared
-OVERMAP_SIZE 12
+# A config that skews with the random spawners weights
+# If the value is lower than 1, it'll tend to even out the odds
+# If higher than 1, it'll lean toward common spawns even more.
+RANDOM_LOOT_WEIGHT_MODIFIER 1
 
-## Which overmap generator to use
-## Valid values are: "random", "solar_system"
-OVERMAP_GENERATOR_TYPE solar_system
+## Gamemode configurations
 
-## Size of overmap encounters, vertical and width with a 3 tile border
-OVERMAP_ENCOUNTER_SIZE 127
+## Multipliers for points gained over time for event tracks.
+MUNDANE_POINT_GAIN_MULTIPLIER 1
+MODERATE_POINT_GAIN_MULTIPLIER 1
+MAJOR_POINT_GAIN_MULTIPLIER 1
+ROLESET_POINT_GAIN_MULTIPLIER 1
+OBJECTIVES_POINT_GAIN_MULTIPLIER 1
 
-## The time required before a ship is allowed to bluespace jump. -1 disables it entirely
-## In deciseconds, valid values are -1 to INFINITY
-BLUESPACE_JUMP_WAIT 12000
+## Multipliers for points to spend on roundstart events.
+MUNDANE_ROUNDSTART_POINT_MULTIPLIER 1
+MODERATE_ROUNDSTART_POINT_MULTIPLIER 1
+MAJOR_ROUNDSTART_POINT_MULTIPLIER 1
+ROLESET_ROUNDSTART_POINT_MULTIPLIER 1
+OBJECTIVES_ROUNDSTART_POINT_MULTIPLIER 1
+
+## Minimum population caps for event tracks to run their events.
+MUNDANE_MIN_POP 0
+MODERATE_MIN_POP 0
+MAJOR_MIN_POP 0
+ROLESET_MIN_POP 0
+OBJECTIVES_MIN_POP 0
+
+## Point thresholds for tracks to run events. The lesser the more frequent events will be.
+MUNDANE_POINT_THRESHOLD 25
+MODERATE_POINT_THRESHOLD 50
+MAJOR_POINT_THRESHOLD 90
+ROLESET_POINT_THRESHOLD 120
+OBJECTIVES_POINT_THRESHOLD 130
+
+## Allows the storyteller to scale event frequencies based on population
+ALLOW_STORYTELLER_POP_SCALING
+
+## Thresholds that population frequency scalling penalize up to.
+MUNDANE_POP_SCALE_THRESHOLD 10
+MODERATE_POP_SCALE_THRESHOLD 15
+MAJOR_POP_SCALE_THRESHOLD 40
+ROLESET_POP_SCALE_THRESHOLD 45
+OBJECTIVES_POP_SCALE_THRESHOLD 40
+
+## The maximum penalties population scalling will apply to the tracks for having less pop than POP_SCALE_THRESHOLD. This is treated as percentages
+MUNDANE_POP_SCALE_PENALTY 30
+MODERATE_POP_SCALE_PENALTY 30
+MAJOR_POP_SCALE_PENALTY 30
+ROLESET_POP_SCALE_PENALTY 30
+OBJECTIVES_POP_SCALE_PENALTY 30

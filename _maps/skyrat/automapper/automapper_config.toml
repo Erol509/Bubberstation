@@ -223,12 +223,20 @@ required_map = "birdshot.dmm"
 coordinates = [136, 61, 1]
 trait_name = "Station"
 
+# Birdshot Armory
+[templates.birdshot_armory]
+map_files = ["birdshot_armory.dmm"]
+directory = "_maps/skyrat/automapper/templates/birdshot/"
+required_map = "birdshot.dmm"
+coordinates = [51, 106, 1]
+trait_name = "Station"
+
 # Birdshot Cryo
 [templates.birdshot_cryo]
 map_files = ["birdshot_cryo.dmm"]
 directory = "_maps/skyrat/automapper/templates/birdshot/"
 required_map = "birdshot.dmm"
-coordinates = [147, 142, 1]
+coordinates = [136, 157, 1]
 trait_name = "Station"
 
 # Birdshot Barber
@@ -255,12 +263,20 @@ required_map = "birdshot.dmm"
 coordinates = [188, 72, 1]
 trait_name = "Station"
 
+# Birdshot Vacant Room (to replace the mapped barber with ours)
+[templates.birdshot_vacant]
+map_files = ["birdshot_vacant.dmm"]
+directory = "_maps/skyrat/automapper/templates/birdshot/"
+required_map = "birdshot.dmm"
+coordinates = [117, 145, 1]
+trait_name = "Station"
+
 # Birdshot Supermatter Chamber
 [templates.birdshot_supermatter]
 map_files = ["birdshot_supermatter.dmm"]
 directory = "_maps/skyrat/automapper/templates/birdshot/"
 required_map = "birdshot.dmm"
-coordinates = [41, 201, 1]
+coordinates = [71, 211, 1]
 trait_name = "Station"
 
 # NORTHSTAR MAP EDITS
@@ -304,12 +320,12 @@ required_map = "north_star.dmm"
 coordinates = [105, 117, 2]
 trait_name = "Station"
 
-# Northstar Prison
-[templates.northstar_prison]
-map_files = ["northstar_prison.dmm"]
+# Northstar Armory
+[templates.northstar_armory]
+map_files = ["northstar_armory.dmm"]
 directory = "_maps/skyrat/automapper/templates/northstar/"
 required_map = "north_star.dmm"
-coordinates = [149, 109, 4]
+coordinates = [121, 109, 4]
 trait_name = "Station"
 
 # Northstar NTR Office
@@ -336,6 +352,11 @@ required_map = "Lavaland.dmm"
 coordinates = [223, 224, 1]
 trait_name = "Mining"
 
+# Kilostation Armory
+# [templates.kilostation_armory]
+# map_files = ["kilostation_armory.dmm"]
+# directory = "_maps/skyrat/automapper/templates/kilostation/"
+
 #BUBBER EDITS -------------------------------
 # ADD ALL BUBBER EDITS BENEATH THIS!
 
@@ -355,28 +376,12 @@ required_map = "biodome.dmm"
 coordinates = [176, 63, 1]
 trait_name = "Station"
 
-# Birdshot Armory
-[templates.birdshot_armory]
-map_files = ["birdshot_armory.dmm"]
-directory = "_maps/bubber/automapper/templates/Birdshot/"
-required_map = "birdshot.dmm"
-coordinates = [50, 106, 1]
-trait_name = "Station"
-
 # Deltastation Armory
 [templates.deltastation_armory]
 map_files = ["deltastation_armory.dmm"]
 directory = "_maps/bubber/automapper/templates/Deltastation/"
 required_map = "DeltaStation2.dmm"
 coordinates = [207, 127, 1]
-trait_name = "Station"
-
-# Burgerstation Armory
-[templates.burgerstation_armory]
-map_files = ["burgerstation_armory.dmm"]
-directory = "_maps/bubber/automapper/templates/burgerstation/"
-required_map = "burgerstation.dmm"
-coordinates = [136, 161, 1]
 trait_name = "Station"
 
 # IceBoxStation Armory
@@ -393,14 +398,6 @@ map_files = ["limastation_armory.dmm"]
 directory = "_maps/bubber/automapper/templates/LimaStation/"
 required_map = "LimaStation.dmm"
 coordinates = [66, 136, 2]
-trait_name = "Station"
-
-# NorthStar Armory
-[templates.northstar_armory]
-map_files = ["northstar_armory.dmm"]
-directory = "_maps/bubber/automapper/templates/NorthStar/"
-required_map = "north_star.dmm"
-coordinates = [122, 111, 4]
 trait_name = "Station"
 
 # Tramstation Armory
@@ -423,7 +420,7 @@ trait_name = "Station"
 # Kilostation Arrivals
 [templates.kilostation_arrivals]
 map_files = ["kilostation_arrivals.dmm"]
-directory = "_maps/bubber/automapper/templates/kilostation/"
+directory = "_maps/skyrat/automapper/templates/kilostation/"
 required_map = "KiloStation.dmm"
 coordinates = [151, 80, 1]
 trait_name = "Station"
@@ -431,7 +428,7 @@ trait_name = "Station"
 # Kilostation ERT Bay and Barber
 [templates.kilostation_ert_bay]
 map_files = ["kilostation_ert_bay.dmm"]
-directory = "_maps/bubber/automapper/templates/kilostation/"
+directory = "_maps/skyrat/automapper/templates/kilostation/"
 required_map = "KiloStation.dmm"
 coordinates = [77, 151, 1]
 trait_name = "Station"
@@ -439,7 +436,7 @@ trait_name = "Station"
 # Kilostation Cryo
 [templates.kilostation_cryo]
 map_files = ["kilostation_cryo.dmm"]
-directory = "_maps/bubber/automapper/templates/kilostation/"
+directory = "_maps/skyrat/automapper/templates/kilostation/"
 required_map = "KiloStation.dmm"
 coordinates = [59, 118, 1]
 trait_name = "Station"
@@ -447,7 +444,7 @@ trait_name = "Station"
 # Kilostation Supermatter Chamber
 [templates.kilostation_supermatter]
 map_files = ["kilostation_supermatter.dmm"]
-directory = "_maps/bubber/automapper/templates/kilostation/"
+directory = "_maps/skyrat/automapper/templates/kilostation/"
 required_map = "KiloStation.dmm"
 coordinates = [140, 72, 1]
 trait_name = "Station"
@@ -459,3 +456,84 @@ directory = "_maps/bubber/automapper/templates/generic/"
 required_map = "CentCom_skyrat_z2.dmm"
 coordinates = [72, 183, 2]
 trait_name = "CentCom"
+
+# WAWASTATION MAP EDITS
+# Wawastation Lockers
+[templates.wawastation_lockers]
+map_files = ["wawastation_lockers.dmm"]
+directory = "_maps/skyrat/automapper/templates/wawastation/"
+required_map = "wawastation.dmm"
+coordinates = [111, 93, 1]
+trait_name = "Station"
+
+# Wawastation Arrivals
+[templates.wawastation_arrivals]
+map_files = ["wawastation_arrivals.dmm"]
+directory = "_maps/skyrat/automapper/templates/wawastation/"
+required_map = "wawastation.dmm"
+coordinates = [69, 81, 2]
+trait_name = "Station"
+
+# Wawastation Corridor
+[templates.wawastation_corridor]
+map_files = ["wawastation_corridor.dmm"]
+directory = "_maps/skyrat/automapper/templates/wawastation/"
+required_map = "wawastation.dmm"
+coordinates = [81, 101, 2]
+trait_name = "Station"
+
+# Wawastation Commons
+[templates.wawastation_commons]
+map_files = ["wawastation_commons.dmm"]
+directory = "_maps/skyrat/automapper/templates/wawastation/"
+required_map = "wawastation.dmm"
+coordinates = [109, 88, 2]
+trait_name = "Station"
+
+# Wawastation NTR Office
+[templates.wawastation_ntrep_office]
+map_files = ["wawastation_ntrep_office.dmm"]
+directory = "_maps/skyrat/automapper/templates/wawastation/"
+required_map = "wawastation.dmm"
+coordinates = [108, 122, 1]
+trait_name = "Station"
+
+# Wawastation Elevator
+[templates.wawastation_elevator]
+map_files = ["wawastation_elevator.dmm"]
+directory = "_maps/skyrat/automapper/templates/wawastation/"
+required_map = "wawastation.dmm"
+coordinates = [86, 89, 1]
+trait_name = "Station"
+
+# Wawastation Supermatter
+[templates.wawastation_supermatter]
+map_files = ["wawastation_supermatter.dmm"]
+directory = "_maps/skyrat/automapper/templates/wawastation/"
+required_map = "wawastation.dmm"
+coordinates = [162, 63, 1]
+trait_name = "Station"
+
+# Wawastation Barber
+[templates.wawastation_barber]
+map_files = ["wawastation_barber.dmm"]
+directory = "_maps/skyrat/automapper/templates/wawastation/"
+required_map = "wawastation.dmm"
+coordinates = [116, 111, 2]
+trait_name = "Station"
+
+# Wawastation Kiosk
+[templates.wawastation_kiosk]
+map_files = ["wawastation_kiosk.dmm"]
+directory = "_maps/skyrat/automapper/templates/wawastation/"
+required_map = "wawastation.dmm"
+coordinates = [133, 94, 2]
+trait_name = "Station"
+
+# Wawastation Armory
+[templates.wawastation_armory]
+map_files = ["wawastation_armory.dmm"]
+directory = "_maps/skyrat/automapper/templates/wawastation/"
+required_map = "wawastation.dmm"
+coordinates = [63, 127, 2]
+trait_name = "Station"

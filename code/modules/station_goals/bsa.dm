@@ -52,13 +52,10 @@ GLOBAL_VAR_INIT(bsa_unlock, FALSE)
 	. = ..()
 	AddComponent(/datum/component/simple_rotation)
 
-/obj/machinery/bsa/back/multitool_act(mob/living/user, obj/item/I)
-	if(!multitool_check_buffer(user, I)) //make sure it has a data buffer
-		return
-	var/obj/item/multitool/M = I
+/obj/machinery/bsa/back/multitool_act(mob/living/user, obj/item/multitool/M)
 	M.set_buffer(src)
 	balloon_alert(user, "saved to multitool buffer")
-	return TRUE
+	return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/bsa/front
 	name = "Bluespace Artillery Bore"
@@ -69,13 +66,10 @@ GLOBAL_VAR_INIT(bsa_unlock, FALSE)
 	. = ..()
 	AddComponent(/datum/component/simple_rotation)
 
-/obj/machinery/bsa/front/multitool_act(mob/living/user, obj/item/I)
-	if(!multitool_check_buffer(user, I)) //make sure it has a data buffer
-		return
-	var/obj/item/multitool/M = I
+/obj/machinery/bsa/front/multitool_act(mob/living/user, obj/item/multitool/M)
 	M.set_buffer(src)
 	balloon_alert(user, "saved to multitool buffer")
-	return TRUE
+	return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/bsa/middle
 	name = "Bluespace Artillery Fusor"
@@ -88,22 +82,19 @@ GLOBAL_VAR_INIT(bsa_unlock, FALSE)
 	. = ..()
 	AddComponent(/datum/component/simple_rotation)
 
-/obj/machinery/bsa/middle/multitool_act(mob/living/user, obj/item/I)
-	if(!multitool_check_buffer(user, I))
-		return
-	var/obj/item/multitool/M = I
-	if(M.buffer)
-		if(istype(M.buffer, /obj/machinery/bsa/back))
-			back_ref = WEAKREF(M.buffer)
-			to_chat(user, span_notice("You link [src] with [M.buffer]."))
-			M.set_buffer(null)
-		else if(istype(M.buffer, /obj/machinery/bsa/front))
-			front_ref = WEAKREF(M.buffer)
-			to_chat(user, span_notice("You link [src] with [M.buffer]."))
-			M.set_buffer(null)
-	else
-		to_chat(user, span_warning("[I]'s data buffer is empty!"))
-	return TRUE
+/obj/machinery/bsa/middle/multitool_act(mob/living/user, obj/item/multitool/tool)
+	. = NONE
+
+	if(istype(tool.buffer, /obj/machinery/bsa/back))
+		back_ref = WEAKREF(tool.buffer)
+		to_chat(user, span_notice("You link [src] with [tool.buffer]."))
+		tool.set_buffer(null)
+		return ITEM_INTERACT_SUCCESS
+	else if(istype(tool.buffer, /obj/machinery/bsa/front))
+		front_ref = WEAKREF(tool.buffer)
+		to_chat(user, span_notice("You link [src] with [tool.buffer]."))
+		tool.set_buffer(null)
+		return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/bsa/middle/proc/check_completion()
 	var/obj/machinery/bsa/front/front = front_ref?.resolve()
@@ -249,18 +240,18 @@ GLOBAL_VAR_INIT(bsa_unlock, FALSE)
 	)
 
 	if(!blocker)
-		message_admins("[ADMIN_LOOKUPFLW(user)] has launched an artillery strike targeting [ADMIN_VERBOSEJMP(bullseye)].")
-		user.log_message("has launched an artillery strike targeting [AREACOORD(bullseye)].", LOG_GAME)
+		message_admins("[ADMIN_LOOKUPFLW(user)] has launched a bluespace artillery strike targeting [ADMIN_VERBOSEJMP(bullseye)].")
+		user.log_message("has launched a bluespace artillery strike targeting [AREACOORD(bullseye)].", LOG_GAME)
 		explosion(bullseye, devastation_range = ex_power, heavy_impact_range = ex_power*2, light_impact_range = ex_power*4, explosion_cause = src)
 	else
-		message_admins("[ADMIN_LOOKUPFLW(user)] has launched an artillery strike targeting [ADMIN_VERBOSEJMP(bullseye)] but it was blocked by [blocker] at [ADMIN_VERBOSEJMP(target)].")
-		user.log_message("has launched an artillery strike targeting [AREACOORD(bullseye)] but it was blocked by [blocker] at [AREACOORD(target)].", LOG_GAME)
+		message_admins("[ADMIN_LOOKUPFLW(user)] has launched a bluespace artillery strike targeting [ADMIN_VERBOSEJMP(bullseye)] but it was blocked by [blocker] at [ADMIN_VERBOSEJMP(target)].")
+		user.log_message("has launched a bluespace artillery strike targeting [AREACOORD(bullseye)] but it was blocked by [blocker] at [AREACOORD(target)].", LOG_GAME)
 
 
 /obj/machinery/bsa/full/proc/reload()
 	ready = FALSE
-	use_power(power_used_per_shot)
-	addtimer(CALLBACK(src,"ready_cannon"),600)
+	use_energy(power_used_per_shot)
+	addtimer(CALLBACK(src,"ready_cannon"), 1 MINUTES)
 
 /obj/machinery/bsa/full/proc/ready_cannon()
 	ready = TRUE
@@ -344,7 +335,7 @@ GLOBAL_VAR_INIT(bsa_unlock, FALSE)
 	if(isnull(options[victim]))
 		return
 	target = options[victim]
-	log_game("[key_name(user)] has aimed the artillery strike at [target].")
+	log_game("[key_name(user)] has aimed the bluespace artillery strike at [target].")
 
 
 /obj/machinery/computer/bsa_control/proc/get_target_name()

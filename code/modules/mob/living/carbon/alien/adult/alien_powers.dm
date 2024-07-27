@@ -250,7 +250,8 @@ Doesn't work on other aliens/AI.*/
 	plasma_cost = 50
 
 /datum/action/cooldown/alien/acid/neurotoxin/IsAvailable(feedback = FALSE)
-	if(owner.is_muzzled())
+	var/mob/living/carbon/as_carbon = owner
+	if(istype(as_carbon) && as_carbon.is_mouth_covered(ITEM_SLOT_MASK))
 		return FALSE
 	if(!isturf(owner.loc))
 		return FALSE
@@ -339,7 +340,11 @@ Doesn't work on other aliens/AI.*/
 		span_notice("[owner] vomits up a thick purple substance and begins to shape it."),
 		span_notice("You shape a [choice] out of resin."),
 	)
-
+	//SKYRAT EDIT START - Roundstart xenohybrid organs
+	if(build_duration && !do_after(owner, build_duration))
+		owner.balloon_alert(owner, "interrupted!")
+		return
+	//SKYRAT EDIT END
 	new choice_path(owner.loc)
 	return TRUE
 

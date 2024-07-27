@@ -183,17 +183,6 @@
 /obj/machinery/status_display/evac/directional/south,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/evacuation)
-"aR" = (
-/obj/structure/table/wood,
-/obj/machinery/computer/security/wooden_tv,
-/obj/structure/secure_safe{
-	pixel_x = 32;
-	pixel_y = 24
-	},
-/obj/machinery/status_display/ai/directional/east,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/admin)
 "aS" = (
 /obj/item/kirbyplants/organic/plant22,
 /obj/machinery/power/apc/auto_name/directional/south,
@@ -247,9 +236,7 @@
 /turf/open/floor/iron/dark/herringbone,
 /area/centcom/central_command_areas/evacuation/ship)
 "bd" = (
-/obj/machinery/door/window/brigdoor{
-	base_state = "rightsecure";
-	icon_state = "rightsecure";
+/obj/machinery/door/window/brigdoor/right/directional/south{
 	name = "Thunderdome Booth";
 	req_access = list("cent_captain")
 	},
@@ -426,8 +413,7 @@
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/admin)
 "bP" = (
-/obj/machinery/door/window/brigdoor{
-	base_state = "rightsecure";
+/obj/machinery/door/window/brigdoor/right/directional/south{
 	name = "CentCom Stand";
 	req_access = list("cent_captain")
 	},
@@ -454,6 +440,18 @@
 /obj/effect/light_emitter/thunderdome,
 /turf/open/floor/iron,
 /area/centcom/tdome/arena)
+"cb" = (
+/obj/item/storage/briefcase{
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/storage/briefcase/secure,
+/obj/structure/table/wood,
+/obj/effect/turf_decal/tile/neutral/anticorner/contrasted{
+	dir = 4
+	},
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/briefing)
 "cd" = (
 /obj/structure/sink/directional/east,
 /obj/structure/mirror/directional/west,
@@ -914,17 +912,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/control)
-"ec" = (
-/obj/structure/railing{
-	dir = 4;
-	layer = 4.1
-	},
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/obj/effect/turf_decal/siding/dark{
-	dir = 4
-	},
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/evacuation/ship)
 "eg" = (
 /obj/structure/table/wood,
 /obj/item/storage/box/drinkingglasses,
@@ -1407,9 +1394,19 @@
 	},
 /turf/open/floor/iron/white,
 /area/centcom/tdome/observation)
+"gA" = (
+/obj/item/storage/briefcase{
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/storage/briefcase/secure,
+/obj/structure/table/wood,
+/obj/structure/noticeboard/directional/east,
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/courtroom)
 "gC" = (
-/obj/machinery/door/window/brigdoor{
-	base_state = "rightsecure";
+/obj/machinery/door/window/brigdoor/right/directional/south{
 	name = "CentCom Stand";
 	req_access = list("cent_captain")
 	},
@@ -2080,27 +2077,6 @@
 	},
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/prison)
-"jy" = (
-/obj/machinery/button/door/indestructible{
-	id = "XCCQMLoaddoor";
-	layer = 4;
-	name = "Loading Doors";
-	pixel_x = -27;
-	pixel_y = -5
-	},
-/obj/machinery/button/door/indestructible{
-	id = "XCCQMLoaddoor2";
-	layer = 4;
-	name = "Loading Doors";
-	pixel_x = -27;
-	pixel_y = 5
-	},
-/obj/machinery/computer/cargo{
-	dir = 4
-	},
-/obj/effect/turf_decal/bot,
-/turf/open/floor/iron,
-/area/centcom/central_command_areas/supply)
 "jA" = (
 /obj/structure/fans/tiny/invisible,
 /turf/open/floor/holofloor/hyperspace,
@@ -2406,7 +2382,7 @@
 /area/centcom/central_command_areas/control)
 "lb" = (
 /obj/structure/table/wood,
-/obj/machinery/door/window,
+/obj/machinery/door/window/left/directional/south,
 /obj/item/radio/intercom{
 	desc = "Talk smack through this.";
 	syndie = 1
@@ -2427,8 +2403,7 @@
 	desc = "Talk smack through this.";
 	syndie = 1
 	},
-/obj/machinery/door/window/brigdoor{
-	base_state = "rightsecure";
+/obj/machinery/door/window/brigdoor/right/directional/south{
 	name = "CentCom Stand";
 	req_access = list("cent_captain")
 	},
@@ -2782,22 +2757,6 @@
 	},
 /obj/effect/turf_decal/stripes/line{
 	dir = 6
-	},
-/obj/machinery/status_display/evac/directional/north,
-/turf/open/floor/iron,
-/area/centcom/central_command_areas/prison)
-"mT" = (
-/obj/structure/table/reinforced,
-/obj/machinery/recharger,
-/obj/machinery/button/door/indestructible{
-	id = "XCCsecdepartment";
-	layer = 3;
-	name = "CC Security Checkpoint Control";
-	pixel_x = 24;
-	pixel_y = 24
-	},
-/obj/effect/turf_decal/stripes/line{
-	dir = 10
 	},
 /obj/machinery/status_display/evac/directional/north,
 /turf/open/floor/iron,
@@ -3317,10 +3276,7 @@
 "pl" = (
 /obj/structure/table/reinforced,
 /obj/machinery/door/firedoor,
-/obj/machinery/door/window/brigdoor{
-	base_state = "rightsecure";
-	dir = 4;
-	icon_state = "rightsecure";
+/obj/machinery/door/window/brigdoor/right/directional/east{
 	name = "CentCom Customs";
 	req_access = list("cent_captain")
 	},
@@ -3356,12 +3312,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/admin)
-"pA" = (
-/obj/structure/table/reinforced,
-/obj/item/storage/briefcase/secure,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/briefing)
 "pB" = (
 /obj/effect/turf_decal/stripes/line{
 	dir = 9
@@ -3648,16 +3598,6 @@
 /obj/effect/turf_decal/stripes/line,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/supplypod/loading/ert)
-"qH" = (
-/obj/item/storage/briefcase{
-	pixel_x = -3;
-	pixel_y = 3
-	},
-/obj/item/storage/briefcase/secure,
-/obj/structure/table/wood,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/courtroom)
 "qI" = (
 /obj/effect/turf_decal/stripes/line{
 	dir = 1
@@ -4040,18 +3980,6 @@
 	},
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/ferry)
-"sw" = (
-/obj/structure/railing{
-	dir = 8;
-	layer = 4.1
-	},
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/obj/effect/turf_decal/siding/dark{
-	dir = 8
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/evacuation/ship)
 "sz" = (
 /obj/machinery/status_display/evac/directional/west,
 /obj/effect/turf_decal/tile/neutral/fourcorners,
@@ -4373,6 +4301,29 @@
 /obj/structure/sign/poster/contraband/syndicate_recruitment/directional/north,
 /turf/open/indestructible/dark,
 /area/centcom/central_command_areas/admin)
+"tZ" = (
+/obj/structure/table/reinforced,
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/item/folder/red{
+	pixel_x = -2;
+	pixel_y = -2
+	},
+/obj/item/folder/blue{
+	pixel_x = 2;
+	pixel_y = 2
+	},
+/obj/item/gun/ballistic/automatic/pistol/m1911{
+	pixel_y = 7;
+	pixel_x = 2
+	},
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/evacuation/ship)
 "ub" = (
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/centcom{
@@ -4614,14 +4565,11 @@
 /obj/machinery/door/firedoor,
 /obj/item/folder/red,
 /obj/item/pen/red,
-/obj/machinery/door/window/brigdoor{
-	base_state = "rightsecure";
-	dir = 1;
-	icon_state = "rightsecure";
+/obj/machinery/door/window/brigdoor/right/directional/north{
 	name = "CentCom Customs";
 	req_access = list("cent_captain")
 	},
-/obj/machinery/door/window,
+/obj/machinery/door/window/left/directional/south,
 /obj/effect/turf_decal/bot,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/control)
@@ -4905,27 +4853,6 @@
 /obj/machinery/light/small/directional/west,
 /turf/open/floor/iron/smooth_large,
 /area/centcom/central_command_areas/evacuation/ship)
-"wl" = (
-/obj/machinery/modular_computer/preset/id/centcom{
-	dir = 1
-	},
-/obj/machinery/button/door/indestructible{
-	id = "XCCcustoms1";
-	layer = 3.5;
-	name = "CC Customs 1 Control";
-	pixel_x = 8;
-	pixel_y = -24
-	},
-/obj/machinery/button/door/indestructible{
-	id = "XCCcustoms2";
-	layer = 3.5;
-	name = "CC Customs 2 Control";
-	pixel_x = -8;
-	pixel_y = -24
-	},
-/obj/effect/turf_decal/tile/red/half/contrasted,
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/control)
 "wm" = (
 /obj/effect/landmark/thunderdome/one,
 /obj/effect/turf_decal/stripes/line{
@@ -5189,6 +5116,18 @@
 /obj/effect/turf_decal/tile/green,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/control)
+"xp" = (
+/obj/structure/table/reinforced,
+/obj/item/reagent_containers/cup/glass/bottle/whiskey{
+	pixel_y = 19;
+	pixel_x = 7
+	},
+/obj/item/cigarette/cigar/havana{
+	pixel_x = -6;
+	pixel_y = 5
+	},
+/turf/open/floor/iron,
+/area/centcom/central_command_areas/supplypod)
 "xr" = (
 /obj/structure/chair{
 	dir = 4
@@ -5557,6 +5496,16 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/courtroom)
+"zd" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/evacuation/ship)
 "zf" = (
 /obj/structure/table/reinforced,
 /obj/item/book/manual/wiki/security_space_law,
@@ -6233,10 +6182,7 @@
 /obj/structure/table/reinforced,
 /obj/machinery/door/firedoor,
 /obj/item/storage/fancy/donut_box,
-/obj/machinery/door/window/brigdoor{
-	base_state = "rightsecure";
-	dir = 1;
-	icon_state = "rightsecure";
+/obj/machinery/door/window/brigdoor/right/directional/north{
 	name = "CentCom Customs";
 	req_access = list("cent_captain")
 	},
@@ -6255,10 +6201,7 @@
 "BP" = (
 /obj/structure/table/reinforced,
 /obj/machinery/door/firedoor,
-/obj/machinery/door/window/brigdoor{
-	base_state = "rightsecure";
-	dir = 1;
-	icon_state = "rightsecure";
+/obj/machinery/door/window/brigdoor/right/directional/north{
 	name = "CentCom Customs";
 	req_access = list("cent_captain")
 	},
@@ -6268,6 +6211,20 @@
 "BR" = (
 /turf/open/floor/grass,
 /area/centcom/central_command_areas/evacuation/ship)
+"BS" = (
+/obj/structure/table/wood,
+/obj/item/storage/briefcase/secure{
+	pixel_x = 5;
+	pixel_y = 5
+	},
+/obj/item/storage/lockbox/medal,
+/obj/machinery/newscaster{
+	pixel_x = 32
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/machinery/computer/security/telescreen/research/directional/south,
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/admin)
 "BT" = (
 /obj/structure/table/wood,
 /obj/item/clipboard,
@@ -6352,6 +6309,16 @@
 	},
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/supplypod/loading/four)
+"Cv" = (
+/obj/structure/railing{
+	dir = 6
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/effect/turf_decal/siding/dark{
+	dir = 6
+	},
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/evacuation/ship)
 "Cx" = (
 /obj/structure/table/reinforced,
 /obj/item/storage/box/handcuffs,
@@ -6454,30 +6421,6 @@
 /obj/machinery/light/directional/west,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/control)
-"CT" = (
-/obj/structure/table/reinforced,
-/obj/structure/railing{
-	dir = 8;
-	layer = 4.1
-	},
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/obj/effect/turf_decal/siding/dark{
-	dir = 8
-	},
-/obj/item/folder/red{
-	pixel_x = -2;
-	pixel_y = -2
-	},
-/obj/item/folder/blue{
-	pixel_x = 2;
-	pixel_y = 2
-	},
-/obj/item/gun/ballistic/automatic/pistol/m1911{
-	pixel_y = 7;
-	pixel_x = 2
-	},
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/evacuation/ship)
 "CU" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
 /obj/structure/cable,
@@ -6514,16 +6457,6 @@
 	},
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/control)
-"De" = (
-/obj/item/storage/briefcase{
-	pixel_x = -3;
-	pixel_y = 3
-	},
-/obj/item/storage/briefcase/secure,
-/obj/structure/table/wood,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/turf/open/floor/iron/dark,
-/area/centcom/tdome/administration)
 "Dg" = (
 /obj/machinery/light/floor,
 /turf/open/floor/iron/white,
@@ -6626,14 +6559,11 @@
 /obj/machinery/door/firedoor,
 /obj/item/folder/red,
 /obj/item/pen/red,
-/obj/machinery/door/window/brigdoor{
-	base_state = "rightsecure";
-	dir = 4;
-	icon_state = "rightsecure";
+/obj/effect/turf_decal/bot,
+/obj/machinery/door/window/brigdoor/right/directional/east{
 	name = "CentCom Customs";
 	req_access = list("cent_captain")
 	},
-/obj/effect/turf_decal/bot,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/control)
 "DI" = (
@@ -6641,14 +6571,11 @@
 /obj/machinery/door/firedoor,
 /obj/item/folder/white,
 /obj/item/pen/blue,
-/obj/machinery/door/window/brigdoor{
-	base_state = "rightsecure";
-	dir = 8;
-	icon_state = "rightsecure";
+/obj/effect/turf_decal/bot,
+/obj/machinery/door/window/brigdoor/right/directional/west{
 	name = "CentCom Customs";
 	req_access = list("cent_captain")
 	},
-/obj/effect/turf_decal/bot,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/control)
 "DJ" = (
@@ -6806,9 +6733,7 @@
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/supplypod/loading/four)
 "EH" = (
-/obj/machinery/door/window{
-	dir = 8
-	},
+/obj/machinery/door/window/left/directional/west,
 /obj/effect/turf_decal/siding/wood{
 	dir = 10
 	},
@@ -6950,8 +6875,7 @@
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/fore)
 "Fw" = (
-/obj/machinery/door/window/brigdoor{
-	base_state = "rightsecure";
+/obj/machinery/door/window/brigdoor/right/directional/south{
 	name = "CentCom Stand";
 	req_access = list("cent_captain")
 	},
@@ -7021,19 +6945,6 @@
 /obj/effect/light_emitter/thunderdome,
 /turf/closed/indestructible/fakeglass,
 /area/centcom/tdome/observation)
-"Gc" = (
-/obj/structure/table/wood,
-/obj/item/storage/briefcase/secure{
-	pixel_x = 5;
-	pixel_y = 5
-	},
-/obj/item/storage/lockbox/medal,
-/obj/machinery/newscaster{
-	pixel_x = 32
-	},
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/admin)
 "Gf" = (
 /obj/machinery/firealarm/directional/east,
 /obj/machinery/atmospherics/components/unary/vent_pump{
@@ -7322,23 +7233,24 @@
 /obj/machinery/light/directional/west,
 /turf/open/floor/iron/white,
 /area/centcom/central_command_areas/evacuation/ship)
+"HT" = (
+/obj/machinery/computer/records/security{
+	dir = 8
+	},
+/obj/machinery/button/door/indestructible{
+	id = "XCCcustoms1";
+	name = "CC Emergency Docks Control";
+	pixel_x = 24;
+	pixel_y = 24
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/evacuation)
 "HV" = (
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /obj/structure/closet/secure_closet/quartermaster,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/supply)
-"HX" = (
-/obj/item/storage/briefcase{
-	pixel_x = -3;
-	pixel_y = 3
-	},
-/obj/item/storage/briefcase/secure,
-/obj/structure/table/wood,
-/obj/effect/turf_decal/tile/neutral/anticorner/contrasted{
-	dir = 4
-	},
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/briefing)
 "HY" = (
 /obj/machinery/photocopier,
 /obj/machinery/button/door/indestructible{
@@ -7368,17 +7280,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/control)
-"HZ" = (
-/obj/structure/railing{
-	dir = 6;
-	layer = 3.1
-	},
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/obj/effect/turf_decal/siding/dark{
-	dir = 6
-	},
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/evacuation/ship)
 "Ic" = (
 /obj/machinery/door/poddoor{
 	id = "thunderdomehea";
@@ -7546,16 +7447,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/tdome/administration)
-"JO" = (
-/obj/machinery/modular_computer/preset/id/centcom,
-/obj/machinery/computer/security/telescreen{
-	desc = "Used for watching the RD's goons and the AI's satellite from the safety of his office.";
-	name = "Research Monitor";
-	network = list("rd","minisat");
-	pixel_y = 28
-	},
-/turf/open/floor/iron/grimy,
-/area/centcom/central_command_areas/admin)
 "JU" = (
 /obj/structure/chair{
 	dir = 4
@@ -7577,6 +7468,12 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/tdome/observation)
+"JW" = (
+/obj/structure/table/reinforced,
+/obj/item/storage/briefcase/secure,
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/briefing)
 "Kd" = (
 /obj/effect/turf_decal/tile/red/opposingcorners,
 /obj/effect/turf_decal/tile/yellow/opposingcorners{
@@ -7847,17 +7744,6 @@
 	},
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/evacuation)
-"Lz" = (
-/obj/structure/railing{
-	dir = 10;
-	layer = 3.1
-	},
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/obj/effect/turf_decal/siding/dark{
-	dir = 10
-	},
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/evacuation/ship)
 "LA" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 8
@@ -8070,16 +7956,6 @@
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating,
 /area/centcom/central_command_areas/prison)
-"MB" = (
-/obj/item/storage/briefcase{
-	pixel_x = -3;
-	pixel_y = 3
-	},
-/obj/item/storage/briefcase/secure,
-/obj/structure/table/wood,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/admin)
 "MC" = (
 /obj/structure/flora/grass/jungle/b,
 /obj/effect/decal/cleanable/garbage{
@@ -8174,6 +8050,45 @@
 "MY" = (
 /obj/structure/sign/nanotrasen,
 /turf/closed/indestructible/riveted,
+/area/centcom/central_command_areas/briefing)
+"Na" = (
+/obj/machinery/button/door/indestructible{
+	id = "XCCQMLoaddoor";
+	name = "Loading Doors";
+	pixel_x = -27;
+	pixel_y = -5
+	},
+/obj/machinery/button/door/indestructible{
+	id = "XCCQMLoaddoor2";
+	name = "Loading Doors";
+	pixel_x = -27;
+	pixel_y = 5
+	},
+/obj/machinery/computer/cargo{
+	dir = 4
+	},
+/obj/effect/turf_decal/bot,
+/turf/open/floor/iron,
+/area/centcom/central_command_areas/supply)
+"Nb" = (
+/obj/structure/table/wood,
+/obj/item/phone{
+	desc = "Supposedly a direct line to Nanotrasen Central Command. It's not even plugged in.";
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/cigarette/cigar/cohiba{
+	pixel_x = 6
+	},
+/obj/item/cigarette/cigar/havana{
+	pixel_x = 2
+	},
+/obj/item/cigarette/cigar{
+	pixel_x = 4.5
+	},
+/obj/machinery/newscaster/directional/north,
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/briefing)
 "Ne" = (
 /obj/structure/table/wood,
@@ -8300,6 +8215,17 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/control)
+"NK" = (
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/evacuation/ship)
 "NM" = (
 /obj/structure/closet/crate/bin,
 /obj/machinery/light/directional/south,
@@ -8415,6 +8341,26 @@
 "On" = (
 /turf/closed/indestructible/riveted,
 /area/centcom/central_command_areas/admin)
+"Oo" = (
+/obj/structure/table/wood,
+/obj/item/phone{
+	desc = "Supposedly a direct line to Nanotrasen Central Command. It's not even plugged in.";
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/cigarette/cigar/cohiba{
+	pixel_x = 6
+	},
+/obj/item/cigarette/cigar/havana{
+	pixel_x = 2
+	},
+/obj/item/cigarette/cigar{
+	pixel_x = 4.5
+	},
+/obj/machinery/airalarm/directional/south,
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/turf/open/floor/iron/dark,
+/area/centcom/tdome/administration)
 "Oq" = (
 /obj/effect/turf_decal/tile/brown/anticorner/contrasted,
 /turf/open/floor/iron,
@@ -8632,26 +8578,6 @@
 /obj/machinery/light/small/directional/east,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/briefing)
-"Pe" = (
-/obj/structure/table/wood,
-/obj/item/phone{
-	desc = "Supposedly a direct line to Nanotrasen Central Command. It's not even plugged in.";
-	pixel_x = -3;
-	pixel_y = 3
-	},
-/obj/item/clothing/mask/cigarette/cigar/cohiba{
-	pixel_x = 6
-	},
-/obj/item/clothing/mask/cigarette/cigar/havana{
-	pixel_x = 2
-	},
-/obj/item/clothing/mask/cigarette/cigar{
-	pixel_x = 4.5
-	},
-/obj/machinery/status_display/evac/directional/north,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/courtroom)
 "Pg" = (
 /obj/machinery/computer/auxiliary_base/directional/north,
 /obj/structure/table/reinforced,
@@ -8819,27 +8745,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/briefing)
-"PR" = (
-/obj/structure/table/wood,
-/obj/item/phone{
-	desc = "Supposedly a direct line to Nanotrasen Central Command. It's not even plugged in.";
-	pixel_x = -3;
-	pixel_y = 3
-	},
-/obj/item/clothing/mask/cigarette/cigar/cohiba{
-	pixel_x = 6
-	},
-/obj/item/clothing/mask/cigarette/cigar/havana{
-	pixel_x = 2
-	},
-/obj/item/clothing/mask/cigarette/cigar{
-	pixel_x = 4.5
-	},
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
-	dir = 10
-	},
-/turf/open/floor/iron/grimy,
-/area/centcom/central_command_areas/admin)
 "PT" = (
 /obj/effect/turf_decal/tile/red/half/contrasted,
 /turf/open/floor/iron,
@@ -8971,6 +8876,26 @@
 	},
 /turf/open/floor/iron,
 /area/centcom/tdome/observation)
+"Qw" = (
+/obj/structure/table/wood,
+/obj/item/phone{
+	desc = "Supposedly a direct line to Nanotrasen Central Command. It's not even plugged in.";
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/cigarette/cigar/cohiba{
+	pixel_x = 6
+	},
+/obj/item/cigarette/cigar/havana{
+	pixel_x = 2
+	},
+/obj/item/cigarette/cigar{
+	pixel_x = 4.5
+	},
+/obj/machinery/status_display/evac/directional/north,
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/courtroom)
 "Qx" = (
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /obj/effect/turf_decal/siding/yellow{
@@ -8989,29 +8914,6 @@
 /obj/effect/turf_decal/tile/green,
 /turf/open/floor/iron,
 /area/centcom/tdome/observation)
-"QB" = (
-/obj/structure/table/reinforced,
-/obj/structure/railing{
-	dir = 4;
-	layer = 4.1
-	},
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/obj/effect/turf_decal/siding/dark{
-	dir = 4
-	},
-/obj/item/paper_bin{
-	pixel_y = 3;
-	pixel_x = -6
-	},
-/obj/item/pen{
-	pixel_x = -5;
-	pixel_y = 3
-	},
-/obj/item/clipboard{
-	pixel_x = 5
-	},
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/evacuation/ship)
 "QC" = (
 /turf/closed/indestructible/riveted,
 /area/centcom/tdome/observation)
@@ -9050,26 +8952,6 @@
 /obj/machinery/light/directional/north,
 /turf/open/floor/iron/dark,
 /area/centcom/tdome/observation)
-"QU" = (
-/obj/structure/table/wood,
-/obj/item/phone{
-	desc = "Supposedly a direct line to Nanotrasen Central Command. It's not even plugged in.";
-	pixel_x = -3;
-	pixel_y = 3
-	},
-/obj/item/clothing/mask/cigarette/cigar/cohiba{
-	pixel_x = 6
-	},
-/obj/item/clothing/mask/cigarette/cigar/havana{
-	pixel_x = 2
-	},
-/obj/item/clothing/mask/cigarette/cigar{
-	pixel_x = 4.5
-	},
-/obj/machinery/airalarm/directional/south,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/turf/open/floor/iron/dark,
-/area/centcom/tdome/administration)
 "QV" = (
 /turf/open/floor/iron/grimy,
 /area/centcom/central_command_areas/admin)
@@ -9324,6 +9206,16 @@
 /obj/effect/turf_decal/delivery,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/supplypod/loading/two)
+"Sg" = (
+/obj/item/storage/briefcase{
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/storage/briefcase/secure,
+/obj/structure/table/wood,
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/turf/open/floor/iron/dark,
+/area/centcom/tdome/administration)
 "Sh" = (
 /obj/structure/table/reinforced,
 /obj/item/mod/control/pre_equipped/corporate{
@@ -9379,6 +9271,25 @@
 	},
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/armory)
+"St" = (
+/obj/machinery/modular_computer/preset/id/centcom{
+	dir = 1
+	},
+/obj/machinery/button/door/indestructible{
+	id = "XCCcustoms1";
+	name = "CC Customs 1 Control";
+	pixel_x = 8;
+	pixel_y = -24
+	},
+/obj/machinery/button/door/indestructible{
+	id = "XCCcustoms2";
+	name = "CC Customs 2 Control";
+	pixel_x = -8;
+	pixel_y = -24
+	},
+/obj/effect/turf_decal/tile/red/half/contrasted,
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/control)
 "Su" = (
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/supplypod)
@@ -9414,6 +9325,27 @@
 /obj/effect/light_emitter/podbay,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/supplypod/loading/three)
+"SF" = (
+/obj/structure/table/wood,
+/obj/item/phone{
+	desc = "Supposedly a direct line to Nanotrasen Central Command. It's not even plugged in.";
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/cigarette/cigar/cohiba{
+	pixel_x = 6
+	},
+/obj/item/cigarette/cigar/havana{
+	pixel_x = 2
+	},
+/obj/item/cigarette/cigar{
+	pixel_x = 4.5
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
+	dir = 10
+	},
+/turf/open/floor/iron/grimy,
+/area/centcom/central_command_areas/admin)
 "SG" = (
 /obj/machinery/light/directional/south,
 /obj/effect/turf_decal/tile/neutral/fourcorners,
@@ -9430,6 +9362,10 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/control)
+"SK" = (
+/obj/machinery/modular_computer/preset/id/centcom,
+/turf/open/floor/iron/grimy,
+/area/centcom/central_command_areas/admin)
 "SL" = (
 /obj/structure/reagent_dispensers/wall/peppertank/directional/west,
 /obj/effect/turf_decal/stripes/line{
@@ -9510,18 +9446,16 @@
 /obj/machinery/light/small/directional/east,
 /turf/open/floor/iron/dark,
 /area/centcom/tdome/observation)
-"Tj" = (
-/obj/structure/table/reinforced,
-/obj/item/reagent_containers/cup/glass/bottle/whiskey{
-	pixel_y = 19;
-	pixel_x = 7
+"Tg" = (
+/obj/item/storage/briefcase{
+	pixel_x = -3;
+	pixel_y = 3
 	},
-/obj/item/clothing/mask/cigarette/cigar/havana{
-	pixel_x = -6;
-	pixel_y = 5
-	},
-/turf/open/floor/iron,
-/area/centcom/central_command_areas/supplypod)
+/obj/item/storage/briefcase/secure,
+/obj/structure/table/wood,
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/admin)
 "Tl" = (
 /obj/structure/table/wood,
 /obj/structure/plaque/static_plaque/thunderdome{
@@ -9733,6 +9667,17 @@
 	dir = 8
 	},
 /turf/open/floor/wood,
+/area/centcom/central_command_areas/admin)
+"Ui" = (
+/obj/structure/table/wood,
+/obj/machinery/computer/security/wooden_tv,
+/obj/structure/secure_safe{
+	pixel_x = 32;
+	pixel_y = 24
+	},
+/obj/machinery/status_display/ai/directional/east,
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/admin)
 "Ul" = (
 /obj/structure/flora/bush/lavendergrass/style_random,
@@ -10114,20 +10059,6 @@
 	},
 /turf/open/floor/iron/dark,
 /area/centcom/tdome/observation)
-"VY" = (
-/obj/machinery/computer/records/security{
-	dir = 8
-	},
-/obj/machinery/button/door/indestructible{
-	id = "XCCcustoms1";
-	layer = 3;
-	name = "CC Emergency Docks Control";
-	pixel_x = 24;
-	pixel_y = 24
-	},
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/evacuation)
 "VZ" = (
 /obj/structure/closet/secure_closet/ert_med,
 /obj/structure/sign/directions/medical{
@@ -10181,6 +10112,16 @@
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating,
 /area/centcom/tdome/administration)
+"Wp" = (
+/obj/item/storage/briefcase{
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/storage/briefcase/secure,
+/obj/structure/table/wood,
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/courtroom)
 "Ws" = (
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /obj/effect/turf_decal/siding/yellow/corner{
@@ -10255,26 +10196,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/briefing)
-"WO" = (
-/obj/structure/table/wood,
-/obj/item/phone{
-	desc = "Supposedly a direct line to Nanotrasen Central Command. It's not even plugged in.";
-	pixel_x = -3;
-	pixel_y = 3
-	},
-/obj/item/clothing/mask/cigarette/cigar/cohiba{
-	pixel_x = 6
-	},
-/obj/item/clothing/mask/cigarette/cigar/havana{
-	pixel_x = 2
-	},
-/obj/item/clothing/mask/cigarette/cigar{
-	pixel_x = 4.5
-	},
-/obj/machinery/newscaster/directional/north,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
-/turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/briefing)
 "WP" = (
 /obj/machinery/computer/station_alert{
 	dir = 8
@@ -10323,6 +10244,28 @@
 /obj/effect/mapping_helpers/airlock/access/all/admin/captain,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/admin)
+"WW" = (
+/obj/structure/table/reinforced,
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/item/paper_bin{
+	pixel_y = 3;
+	pixel_x = -6
+	},
+/obj/item/pen{
+	pixel_x = -5;
+	pixel_y = 3
+	},
+/obj/item/clipboard{
+	pixel_x = 5
+	},
+/turf/open/floor/iron/dark,
+/area/centcom/central_command_areas/evacuation/ship)
 "WX" = (
 /obj/machinery/light_switch/directional/west,
 /turf/open/floor/iron/grimy,
@@ -10493,8 +10436,7 @@
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/supplypod/loading/one)
 "XF" = (
-/obj/machinery/door/window/brigdoor{
-	base_state = "rightsecure";
+/obj/machinery/door/window/brigdoor/right/directional/south{
 	name = "CentCom Stand";
 	req_access = list("cent_captain")
 	},
@@ -10683,17 +10625,16 @@
 	},
 /turf/open/floor/iron/grimy,
 /area/centcom/central_command_areas/admin)
-"YR" = (
-/obj/item/storage/briefcase{
-	pixel_x = -3;
-	pixel_y = 3
+"YS" = (
+/obj/structure/railing{
+	dir = 10
 	},
-/obj/item/storage/briefcase/secure,
-/obj/structure/table/wood,
-/obj/structure/noticeboard/directional/east,
 /obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/effect/turf_decal/siding/dark{
+	dir = 10
+	},
 /turf/open/floor/iron/dark,
-/area/centcom/central_command_areas/courtroom)
+/area/centcom/central_command_areas/evacuation/ship)
 "YT" = (
 /obj/structure/table/wood,
 /obj/structure/plaque/static_plaque/thunderdome{
@@ -10748,6 +10689,21 @@
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating,
 /area/centcom/central_command_areas/admin)
+"Zh" = (
+/obj/structure/table/reinforced,
+/obj/machinery/recharger,
+/obj/machinery/button/door/indestructible{
+	id = "XCCsecdepartment";
+	name = "CC Security Checkpoint Control";
+	pixel_x = 24;
+	pixel_y = 24
+	},
+/obj/effect/turf_decal/stripes/line{
+	dir = 10
+	},
+/obj/machinery/status_display/evac/directional/north,
+/turf/open/floor/iron,
+/area/centcom/central_command_areas/prison)
 "Zi" = (
 /obj/effect/landmark/thunderdome/one,
 /obj/effect/turf_decal/stripes/line,
@@ -38423,10 +38379,10 @@ aa
 aa
 aa
 Lw
-QB
-ec
+WW
+zd
 Ae
-HZ
+Cv
 OI
 Lt
 Lt
@@ -39451,10 +39407,10 @@ aa
 aa
 aa
 Lw
-CT
-sw
+tZ
+NK
 dv
-Lz
+YS
 OI
 Lt
 Lt
@@ -47385,7 +47341,7 @@ wv
 mD
 yL
 WN
-HX
+cb
 Bu
 tb
 aV
@@ -47625,7 +47581,7 @@ aa
 aa
 On
 oo
-MB
+Tg
 Bl
 Wl
 Qb
@@ -47640,7 +47596,7 @@ WQ
 xh
 WQ
 mD
-WO
+Nb
 eF
 eF
 eF
@@ -48397,7 +48353,7 @@ aa
 On
 Yc
 VK
-PR
+SF
 Uh
 Xo
 WU
@@ -48670,7 +48626,7 @@ wB
 yr
 RH
 RH
-pA
+JW
 eE
 rB
 RH
@@ -49684,9 +49640,9 @@ yO
 To
 nk
 Gf
-Gc
+BS
 On
-JO
+SK
 Vz
 Em
 hT
@@ -50708,7 +50664,7 @@ mH
 nm
 TO
 On
-aR
+Ui
 JC
 py
 oB
@@ -50951,7 +50907,7 @@ iO
 jc
 jn
 iP
-jy
+Na
 jD
 jL
 jc
@@ -53589,7 +53545,7 @@ uE
 Pr
 Xw
 Sz
-QU
+Oo
 uf
 Wn
 uf
@@ -55388,7 +55344,7 @@ uE
 Xn
 Sz
 Sz
-De
+Sg
 Wn
 ga
 uf
@@ -57386,7 +57342,7 @@ kU
 lv
 lP
 il
-mT
+Zh
 lL
 hW
 oa
@@ -57913,7 +57869,7 @@ iu
 ZS
 sK
 GX
-wl
+St
 iu
 vR
 Ab
@@ -59705,7 +59661,7 @@ rw
 qh
 ps
 ps
-qH
+Wp
 Hv
 qz
 qy
@@ -61780,7 +61736,7 @@ xt
 vZ
 AY
 cg
-VY
+HT
 Xb
 CE
 WF
@@ -62005,7 +61961,7 @@ aa
 aa
 aa
 Hv
-Pe
+Qw
 rk
 kH
 le
@@ -63290,7 +63246,7 @@ aa
 aa
 aa
 Hv
-qH
+Wp
 xX
 QX
 pc
@@ -63302,7 +63258,7 @@ dp
 gC
 ps
 Ha
-YR
+gA
 bC
 Hv
 cg
@@ -63324,7 +63280,7 @@ tV
 cg
 cg
 cg
-Tj
+xp
 Su
 Yn
 Vk

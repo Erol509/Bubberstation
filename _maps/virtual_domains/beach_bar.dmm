@@ -84,34 +84,7 @@
 /turf/open/water/beach,
 /area/virtual_domain/fullbright)
 "db" = (
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/vending_refill/cigarette,
-/obj/item/vending_refill/boozeomat,
-/obj/structure/closet/secure_closet{
-	icon_state = "cabinet";
-	name = "booze storage";
-	req_access = list("bar")
-	},
-/obj/item/storage/backpack/duffelbag,
-/obj/item/etherealballdeployer,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/bottle/beer/light,
-/obj/item/reagent_containers/cup/glass/colocup,
-/obj/item/reagent_containers/cup/glass/colocup,
-/obj/item/reagent_containers/cup/glass/colocup,
-/obj/item/reagent_containers/cup/glass/colocup,
-/obj/item/reagent_containers/cup/glass/colocup,
+/obj/structure/closet/secure_closet/bar/lavaland_bartender_booze,
 /turf/open/floor/wood,
 /area/virtual_domain/fullbright)
 "di" = (
@@ -322,6 +295,15 @@
 /obj/machinery/computer/arcade/battle,
 /turf/open/floor/wood,
 /area/virtual_domain/fullbright)
+"pL" = (
+/obj/structure/window/reinforced/spawner/directional/east,
+/obj/structure/window/reinforced/spawner/directional/north,
+/obj/structure/chair/stool/directional/south,
+/obj/item/storage/backpack/duffelbag,
+/obj/item/clothing/under/shorts/red,
+/obj/item/clothing/glasses/sunglasses,
+/turf/open/floor/wood,
+/area/virtual_domain/fullbright)
 "pT" = (
 /obj/effect/mapping_helpers/broken_floor,
 /turf/open/floor/plating,
@@ -395,19 +377,8 @@
 /turf/open/misc/asteroid/basalt/lava_land_surface,
 /area/virtual_domain/fullbright)
 "ug" = (
-/obj/structure/closet/secure_closet{
-	icon_state = "cabinet";
-	name = "bartender's closet";
-	req_access = list("bar")
-	},
-/obj/item/clothing/shoes/sandal{
-	desc = "A very fashionable pair of flip-flops.";
-	name = "flip-flops"
-	},
-/obj/item/clothing/neck/beads,
-/obj/item/clothing/glasses/sunglasses/reagent,
-/obj/item/clothing/suit/costume/hawaiian,
 /obj/machinery/light/small/directional/east,
+/obj/structure/closet/secure_closet/bar/lavaland_bartender_clothes,
 /turf/open/floor/wood,
 /area/virtual_domain/fullbright)
 "uk" = (
@@ -525,17 +496,6 @@
 	},
 /obj/item/clothing/glasses/sunglasses,
 /obj/item/clothing/neck/beads,
-/turf/open/floor/wood,
-/area/virtual_domain/fullbright)
-"xR" = (
-/obj/structure/window/reinforced/spawner/directional/east,
-/obj/structure/window/reinforced/spawner/directional/north{
-	layer = 2.9
-	},
-/obj/structure/chair/stool/directional/south,
-/obj/item/storage/backpack/duffelbag,
-/obj/item/clothing/under/shorts/red,
-/obj/item/clothing/glasses/sunglasses,
 /turf/open/floor/wood,
 /area/virtual_domain/fullbright)
 "xW" = (
@@ -722,16 +682,6 @@
 /obj/effect/baseturf_helper/virtual_domain,
 /turf/closed/wall/mineral/sandstone,
 /area/virtual_domain/fullbright)
-"Em" = (
-/obj/item/reagent_containers/condiment/enzyme{
-	layer = 5
-	},
-/obj/item/reagent_containers/cup/beaker{
-	pixel_x = 5
-	},
-/obj/structure/table,
-/turf/open/floor/wood,
-/area/virtual_domain/fullbright)
 "Et" = (
 /obj/machinery/light/small/directional/east,
 /obj/effect/mapping_helpers/burnt_floor,
@@ -897,7 +847,7 @@
 /turf/open/misc/beach/sand,
 /area/virtual_domain/fullbright)
 "Nw" = (
-/obj/item/bedsheet/dorms{
+/obj/effect/spawner/random/bedsheet{
 	dir = 4
 	},
 /obj/structure/bed{
@@ -1127,6 +1077,14 @@
 /obj/structure/flora/bush/sparsegrass/style_random,
 /obj/item/toy/seashell,
 /turf/open/misc/beach/sand,
+/area/virtual_domain/fullbright)
+"Yj" = (
+/obj/item/reagent_containers/condiment/enzyme,
+/obj/item/reagent_containers/cup/beaker{
+	pixel_x = 5
+	},
+/obj/structure/table,
+/turf/open/floor/wood,
 /area/virtual_domain/fullbright)
 "Yq" = (
 /obj/machinery/portable_atmospherics/canister/air,
@@ -2165,7 +2123,7 @@ Gz
 WX
 wD
 BM
-Em
+Yj
 TG
 mq
 ri
@@ -2346,7 +2304,7 @@ Ud
 Ud
 YN
 wD
-xR
+pL
 CA
 Uh
 wD

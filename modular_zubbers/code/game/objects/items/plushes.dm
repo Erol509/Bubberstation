@@ -35,13 +35,16 @@
 	squeak_override = list('sound/machines/beep.ogg' = 1)
 	gender = FEMALE
 
-/obj/item/toy/plush/bigdeer_plush
+/obj/item/toy/plush/bigdeer
 	name = "big deer plushie"
 	desc = "An incredibly round deer plush. It appears to have had too many berries for snack time."
 	icon = 'modular_zubbers/icons/obj/toys/plushes.dmi'
 	icon_state = "bigdeer" //sprited by Gavla
 	attack_verb_simple = list("puff", "smother")
 	squeak_override = list('modular_zubbers/sound/misc/squeakle.ogg' = 1)
+	lefthand_file = 'modular_zubbers/icons/mob/inhands/items/plushes_lefthand.dmi'
+	righthand_file = 'modular_zubbers/icons/mob/inhands/items/plushes_righthand.dmi'
+	inhand_icon_state = "bigdeer"
 
 /obj/item/toy/plush/bubbledragon
 	name = "bubbledragon plushie"
@@ -76,3 +79,77 @@
 	icon = 'modular_zubbers/icons/obj/toys/plushes.dmi'
 	icon_state = "tiredtesh"
 	squeak_override = list('modular_skyrat/modules/emotes/sound/emotes/Nose_boop.ogg' = 1)
+
+/obj/item/toy/plush/xenoplush
+	name = "xenomorph plushie"
+	desc = "A cute rendition of the notorious xenomorph. Its stuffing is an acidic green colour."
+	icon = 'modular_zubbers/icons/obj/toys/plushes.dmi'
+	icon_state = "xenoplush"
+	squeak_override = list('sound/voice/hiss6.ogg' = 1)
+	lefthand_file = 'modular_zubbers/icons/mob/inhands/items/plushes_lefthand.dmi'
+	righthand_file = 'modular_zubbers/icons/mob/inhands/items/plushes_righthand.dmi'
+	inhand_icon_state = "xenoplush"
+	attack_verb_continuous = list("hisses at", "bites", "chews", "chomps", "tail stabs")
+	attack_verb_simple = list("hiss at", "bite", "chew", "chomp", "tail stab")
+
+/obj/item/toy/plush/xenoplush/xenomaidplush
+	name = "xenomorph maid plushie"
+	desc = "A cute rendition of the notorious xenomorph, but in a maid costume. It's eager to help you clean the station."
+	icon = 'modular_zubbers/icons/obj/toys/plushes.dmi'
+	icon_state = "xenomaidplush"
+	attack_verb_continuous = list("polishes", "cleans", "tidies", "washes")
+	attack_verb_simple = list("polish", "clean", "tidy", "wash")
+
+/obj/item/toy/plush/skyrat/jecca
+	lefthand_file = 'modular_zubbers/icons/mob/inhands/items/plushes_lefthand.dmi'
+	righthand_file = 'modular_zubbers/icons/mob/inhands/items/plushes_righthand.dmi'
+
+/obj/item/toy/plush/purplecat
+	name = "Purple cat plushie"
+	desc = "A small, fluffy purple cat with an even purpler collar and bell. It also has a translucent green tail that rubbery to the touch."
+	icon = 'modular_zubbers/icons/obj/toys/plushes.dmi'
+	icon_state = "purplecat" //sprited by Bit_Synergy
+	attack_verb_simple = list("mew", "mow")
+	attack_verb_continuous = list("mews", "mows")
+	squeak_override = list('modular_zubbers/sound/misc/moew.ogg' = 1)
+	gender = FEMALE
+
+/obj/item/toy/plush/largeredslime
+	name = "large red slime plushie" //Donator item exclusive for Blovy. Sprited by Casey/Keila.
+	desc = "The plushie is squishy to touch and smells strongly of strawberry."
+	icon = 'modular_zubbers/icons/obj/toys/plushes.dmi'
+	icon_state = "blovyplushie"
+	attack_verb_continuous = list("blorbles", "slimes", "absorbs")
+	attack_verb_simple = list("blorble", "slime", "absorb")
+	squeak_override = list('sound/effects/blobattack.ogg' = 1)
+
+/obj/item/toy/plush/tunafish
+	name = "Piscene Paddle" //Donator plush for Astroturf, sprited by Crumpaloo
+	desc = "Useful for more than just sashimi."
+	icon = 'modular_zubbers/icons/obj/toys/plushes.dmi'
+	icon_state = "tunafish"
+	attack_verb_continuous = list("slaps", "whacks")
+	attack_verb_simple = list("slap", "whack")
+	squeak_override = list('sound/weapons/slap.ogg' = 1)
+	lefthand_file = 'modular_zubbers/icons/mob/inhands/items/plushes_lefthand.dmi'
+	righthand_file = 'modular_zubbers/icons/mob/inhands/items/plushes_righthand.dmi'
+	inhand_icon_state = "tunafish"
+
+/obj/item/toy/plush/secoff
+	name = "GalFed Secoff"
+	desc = "A soft toy representing a popular, young officer, representing the alliance between GalFed and NT. The bottom of his work boot says 'Andy'"
+	icon = 'modular_zubbers/icons/obj/toys/plushes.dmi'
+	icon_state = "secoff"
+	attack_verb_continuous = list("shoots (and misses)", "batongs", "annoys", "harmbatons", "magdumps")
+	attack_verb_simple = list("shot (and missed)", "batong", "annoy", "harmbaton", "magdump")
+	squeak_override = list('sound/weapons/gun/general/bolt_rack.ogg' = 1)
+
+/obj/item/toy/plush/cescrewsplush
+	name = "Chief Screws Plush" //Plush for Steals The Screwdriver/SteamStucKobold, sprited by stickygoat. and Amorbis
+	desc = "An adorable blue Lizard plushie wearing a Chief Engineer's Uniform, Rocket Boots, and Meson Goggles. It has a strange, silicone pocket on its underside..."
+	icon = 'modular_zubbers/icons/obj/toys/plushes.dmi'
+	icon_state = "cescrewsplush"
+	attack_verb_continuous = list("slaps", "plaps", "smears")
+	attack_verb_simple = list("slap", "plap", "smear")
+	gender = FEMALE
+	squeak_override = list('sound/misc/soggy.ogg'=1)

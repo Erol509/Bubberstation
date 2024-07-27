@@ -6,10 +6,15 @@
 /datum/design/xenoarch
 	build_type = PROTOLATHE | AWAY_LATHE
 	departmental_flags = DEPARTMENT_BITFLAG_SCIENCE | DEPARTMENT_BITFLAG_CARGO
-	materials = list(/datum/material/iron = SMALL_MATERIAL_AMOUNT * 5, /datum/material/plastic = SMALL_MATERIAL_AMOUNT * 5)
+	materials = list(
+		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT,
+		/datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT,
+	)
 
 /datum/design/xenoarch/tool
-	category = list(RND_CATEGORY_TOOLS + RND_SUBCATEGORY_TOOLS_XENOARCH)
+	category = list(
+		RND_CATEGORY_TOOLS + RND_SUBCATEGORY_TOOLS_XENOARCH,
+	)
 
 /datum/design/xenoarch/tool/hammer
 	desc = "A hammer that can slowly remove debris on strange rocks."
@@ -68,8 +73,15 @@
 	build_path = /obj/item/xenoarch/handheld_scanner
 
 /datum/design/xenoarch/tool/advanced
-	category = list(RND_CATEGORY_TOOLS + RND_SUBCATEGORY_TOOLS_XENOARCH_ADVANCED)
-	materials = list(/datum/material/iron = SMALL_MATERIAL_AMOUNT * 5, /datum/material/plastic = SMALL_MATERIAL_AMOUNT * 5, /datum/material/diamond = SMALL_MATERIAL_AMOUNT * 5)
+	materials = list(
+		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT,
+		/datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT,
+		/datum/material/diamond = HALF_SHEET_MATERIAL_AMOUNT,
+	)
+	category = list(
+		RND_CATEGORY_TOOLS + RND_SUBCATEGORY_TOOLS_XENOARCH_ADVANCED,
+	)
+
 
 /datum/design/xenoarch/tool/advanced/scanner
 	name = "Xenoarch Advanced Handheld Scanner"
@@ -80,7 +92,10 @@
 	name = "Xenoarch Handheld Recoverer"
 	desc = "A device with the capabilities to recover items lost due to time."
 	id = "xenoarch_handrecoverer"
-	materials = list(/datum/material/iron = SMALL_MATERIAL_AMOUNT * 5, /datum/material/plastic = SMALL_MATERIAL_AMOUNT * 5)
+	materials = list(
+		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT,
+		/datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT,
+	)
 	// rebalance material req after first repath/categorization?
 	build_path = /obj/item/xenoarch/handheld_recoverer
 
@@ -99,7 +114,9 @@
 /datum/design/xenoarch/equipment
 	// everything under this except the adv bag feels redundant because cloth/leather are there too
 	// but i guess we'll burn that bridge another time
-	category = list(RND_CATEGORY_EQUIPMENT + RND_SUBCATEGORY_EQUIPMENT_XENOARCH)
+	category = list(
+		RND_CATEGORY_EQUIPMENT + RND_SUBCATEGORY_EQUIPMENT_XENOARCH,
+	)
 
 /datum/design/xenoarch/equipment/bag
 	name = "Xenoarchaeology Bag"
@@ -117,12 +134,18 @@
 	name = "Advanced Xenoarch Bag"
 	desc = "A bag that can hold about fifty strange rocks."
 	id = "xenoarch_bag_adv"
-	materials = list(/datum/material/iron = SMALL_MATERIAL_AMOUNT * 5, /datum/material/plastic = SMALL_MATERIAL_AMOUNT * 5, /datum/material/diamond = SMALL_MATERIAL_AMOUNT * 5)
+	materials = list(
+		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT,
+		/datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT,
+		/datum/material/diamond = HALF_SHEET_MATERIAL_AMOUNT,
+	)
 	// i kinda hate how this requires diamond, but this is supposed to be a fix pr, burn the gbp on it later
 	build_path = /obj/item/storage/bag/xenoarch/adv
 
 /datum/design/board/xenoarch
-	category = list(RND_CATEGORY_MACHINE + RND_SUBCATEGORY_MACHINE_XENOARCH)
+	category = list(
+		RND_CATEGORY_MACHINE + RND_SUBCATEGORY_MACHINE_XENOARCH,
+	)
 	departmental_flags = DEPARTMENT_BITFLAG_SCIENCE
 
 /datum/design/board/xenoarch/researcher
@@ -168,33 +191,33 @@
 	)
 
 /datum/techweb_node/xenoarch_storage
-	id = "xenoarch_storage"
+	id = TECHWEB_NODE_XENOARCH_STORAGE
 	display_name = "Xenoarchaeology Storage"
 	description = "When dealing with xenoarchaeology, one may need storage."
-	prereq_ids = list("basic_xenoarch")
+	prereq_ids = list(TECHWEB_NODE_XENOARCH_BASIC)
 	design_ids = list(
 		"xenoarch_belt",
 		"xenoarch_bag",
 	)
-	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 1000)
+	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = TECHWEB_TIER_1_POINTS)
 
 /datum/techweb_node/xenoarch_machines
-	id = "xenoarch_machines"
+	id = TECHWEB_NODE_XENOARCH_MACHINES
 	display_name = "Xenoarchaeology Machines"
 	description = "Sometimes, xenoarchaeology can be time consuming, perhaps machines can help?"
-	prereq_ids = list("basic_xenoarch")
+	prereq_ids = list(TECHWEB_NODE_XENOARCH_BASIC)
 	design_ids = list(
 		"xeno_researcher",
 		"xeno_scanner",
 		"xeno_recoverer",
 	)
-	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 1000)
+	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = TECHWEB_TIER_1_POINTS)
 
 /datum/techweb_node/adv_xenoarch
-	id = "adv_xenoarch"
+	id = TECHWEB_NODE_XENOARCH_ADVANCED
 	display_name = "Advanced Xenoarchaeology"
 	description = "After some time, those tools we used have become antiquated-- we need an upgrade."
-	prereq_ids = list("basic_xenoarch", "xenoarch_machines", "xenoarch_storage")
+	prereq_ids = list(TECHWEB_NODE_XENOARCH_BASIC, TECHWEB_NODE_XENOARCH_MACHINES, TECHWEB_NODE_XENOARCH_STORAGE)
 	design_ids = list(
 		"xenoarch_adv_hammer",
 		"xenoarch_adv_brush",
@@ -203,7 +226,7 @@
 		"xenoarch_handrecoverer",
 		"xeno_digger",
 	)
-	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 3000)
+	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = TECHWEB_TIER_2_POINTS)
 	required_experiments = list(/datum/experiment/scanning/points/xenoarch)
 
 /datum/experiment/scanning/points/xenoarch

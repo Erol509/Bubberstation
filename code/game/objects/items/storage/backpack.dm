@@ -32,10 +32,6 @@
  * Backpack Types
  */
 
-/obj/item/storage/backpack/old/Initialize(mapload)
-	. = ..()
-	atom_storage.max_total_storage = 12
-
 /obj/item/bag_of_holding_inert
 	name = "inert bag of holding"
 	desc = "What is currently a just an unwieldly block of metal with a slot ready to accept a bluespace anomaly core."
@@ -51,9 +47,8 @@
 
 /obj/item/bag_of_holding_inert/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/slapcrafting,\
-		slapcraft_recipes = list(/datum/crafting_recipe/boh)\
-	)
+	var/static/list/recipes = list(/datum/crafting_recipe/boh)
+	AddElement(/datum/element/slapcrafting, recipes)
 
 /obj/item/storage/backpack/holding
 	name = "bag of holding"
@@ -192,6 +187,12 @@
 	desc = "A backpack made of hypo-allergenic fibers. It's designed to help prevent the spread of disease. Smells like monkey."
 	icon_state = "backpack-virology"
 	inhand_icon_state = "viropack"
+
+/obj/item/storage/backpack/floortile
+	name = "floortile backpack"
+	desc = "It's a backpack especially designed for use in floortiles..."
+	icon_state = "floortile_backpack"
+	inhand_icon_state = "backpack"
 
 /obj/item/storage/backpack/ert
 	name = "emergency response team commander backpack"
@@ -385,7 +386,7 @@
 	. = ..()
 	AddElement(/datum/element/undertile, TRAIT_T_RAY_VISIBLE, INVISIBILITY_MAXIMUM, use_anchor = TRUE) // SKYRAT EDIT - Ghosts can't see smuggler's satchels
 	atom_storage.max_total_storage = 15
-	atom_storage.set_holdable(cant_hold_list = list(/obj/item/storage/backpack/satchel/flat)) //muh recursive backpacks)
+	atom_storage.set_holdable(cant_hold_list = /obj/item/storage/backpack/satchel/flat) //muh recursive backpacks
 
 /obj/item/storage/backpack/satchel/flat/PopulateContents()
 	for(var/items in 1 to 4)

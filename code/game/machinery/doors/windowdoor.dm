@@ -14,17 +14,21 @@
 	visible = FALSE
 	flags_1 = ON_BORDER_1
 	opacity = FALSE
-	pass_flags_self = PASSGLASS
+	pass_flags_self = PASSGLASS | PASSWINDOW
 	can_atmos_pass = ATMOS_PASS_PROC
 	interaction_flags_machine = INTERACT_MACHINE_WIRES_IF_OPEN | INTERACT_MACHINE_ALLOW_SILICON | INTERACT_MACHINE_OPEN_SILICON | INTERACT_MACHINE_REQUIRES_SILICON | INTERACT_MACHINE_OPEN
 	set_dir_on_move = FALSE
 	opens_with_door_remote = TRUE
+	/// Reference to the airlock electronics inside for determining window access.
 	var/obj/item/electronics/airlock/electronics = null
+	/// If the door is considered reinforced. If TRUE, the door will resist twice as much heat (1600 deg C vs 800 deg C).
 	var/reinf = 0
+	/// On deconstruction, how many shards to drop.
 	var/shards = 2
+	/// On deconstruction, how many rods to drop.
 	var/rods = 2
+	/// On deconstruction, how much cable to drop.
 	var/cable = 1
-	var/list/debris = list()
 
 /datum/armor/door_window
 	melee = 20
@@ -66,11 +70,8 @@
 
 /obj/machinery/door/window/Destroy()
 	set_density(FALSE)
-	if(atom_integrity == 0)
-		playsound(src, SFX_SHATTER, 70, TRUE)
 	electronics = null
-	var/turf/floor = get_turf(src)
-	floor.air_update_turf(TRUE, FALSE)
+	air_update_turf(TRUE, FALSE)
 	return ..()
 
 /obj/machinery/door/window/update_icon_state()
@@ -114,9 +115,9 @@
 		return
 	autoclose = TRUE
 	if(check_access(null))
-		sleep(5 SECONDS)
+		sleep(8 SECONDS)
 	else //secure doors close faster
-		sleep(2 SECONDS)
+		sleep(5 SECONDS)
 	if(!density && autoclose) //did someone change state while we slept?
 		close()
 
@@ -300,23 +301,32 @@
 		if(BURN)
 			playsound(src, 'sound/items/welder.ogg', 100, TRUE)
 
+/obj/machinery/door/window/on_deconstruction(disassembled)
+	if(disassembled)
+		return
 
-/obj/machinery/door/window/deconstruct(disassembled = TRUE)
-	if(!(obj_flags & NO_DECONSTRUCTION) && !disassembled)
-		for(var/i in 1 to shards)
-			drop_debris(new /obj/item/shard(src))
-		if(rods)
-			drop_debris(new /obj/item/stack/rods(src, rods))
-		if(cable)
-			drop_debris(new /obj/item/stack/cable_coil(src, cable))
-	qdel(src)
+	playsound(src, SFX_SHATTER, 70, TRUE)
+
+	for(var/i in 1 to shards)
+		drop_debris(new /obj/item/shard(src))
+	if(rods)
+		drop_debris(new /obj/item/stack/rods(src, rods))
+	if(cable)
+		drop_debris(new /obj/item/stack/cable_coil(src, cable))
 
 /obj/machinery/door/window/proc/drop_debris(obj/item/debris)
 	debris.forceMove(loc)
 	transfer_fingerprints_to(debris)
 
 /obj/machinery/door/window/narsie_act()
-	add_atom_colour("#7D1919", FIXED_COLOUR_PRIORITY)
+	add_atom_colour(NARSIE_WINDOW_COLOUR, FIXED_COLOUR_PRIORITY)
+
+/obj/machinery/door/window/rust_heretic_act()
+	add_atom_colour(COLOR_RUSTED_GLASS, FIXED_COLOUR_PRIORITY)
+	AddElement(/datum/element/rust)
+	set_armor(/datum/armor/none)
+	take_damage(get_integrity() * 0.5)
+	modify_max_integrity(max_integrity * 0.5)
 
 /obj/machinery/door/window/should_atmos_process(datum/gas_mixture/air, exposed_temperature)
 	return (exposed_temperature > T0C + (reinf ? 1600 : 800))
@@ -343,11 +353,13 @@
 	. = ..()
 	if(obj_flags & EMAGGED)
 		. += span_warning("Its access panel is smoking slightly.")
+	if(!density)
+		if(panel_open)
+			. += span_notice("The [span_boldnotice("airlock electronics")] could be [span_boldnotice("levered")] out.")
+
 
 /obj/machinery/door/window/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ..()
-	if(obj_flags & NO_DECONSTRUCTION)
-		return
 	if(density || operating)
 		to_chat(user, span_warning("You need to open the door to access the maintenance panel!"))
 		return
@@ -359,8 +371,6 @@
 
 /obj/machinery/door/window/crowbar_act(mob/living/user, obj/item/tool)
 	. = ..()
-	if(obj_flags & NO_DECONSTRUCTION)
-		return
 	if(!panel_open || density || operating)
 		return
 	add_fingerprint(user)

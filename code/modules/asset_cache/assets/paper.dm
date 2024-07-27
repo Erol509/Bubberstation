@@ -2,7 +2,7 @@
 	name = "paper"
 	assets = list(
 
-		// SKYRAT ADDITION: START - Donator stamp icons
+		// SKYRAT EDIT ADDITION: START - Donator stamp icons
 		"stamp-cat_blue" = 'modular_skyrat/master_files/icons/stamp_icons/cat_blue.png',
 		"stamp-paw_blue" = 'modular_skyrat/master_files/icons/stamp_icons/paw_blue.png',
 		"stamp-cat_red" = 'modular_skyrat/master_files/icons/stamp_icons/cat_red.png',
@@ -11,16 +11,14 @@
 		"stamp-paw_orange" = 'modular_skyrat/master_files/icons/stamp_icons/paw_orange.png',
 		"stamp-cat_green" = 'modular_skyrat/master_files/icons/stamp_icons/cat_green.png',
 		"stamp-paw_green" = 'modular_skyrat/master_files/icons/stamp_icons/paw_green.png',
-		// SKYRAT ADDITION: END - Donator stamp icons
-
-		// SKYRAT ADDITION: START - Other stamp icons
+		// Other stamp icons
 		"stamp-nri" = 'modular_skyrat/master_files/icons/stamp_icons/large_stamp-nri.png',
 		"stamp-solfed" = 'modular_skyrat/master_files/icons/stamp_icons/large_stamp-solfed.png',
-		// SKYRAT ADDITION: END - Other stamp icons
-
+		// SKYRAT EDIT ADDITION: END
 		//BUBBERSTATION ADDITION: START - Bubberstation Stamp Icons
 		"stamp-merged" = 'icons/stamp_icons/large_stamp-merged.png',
 		"stamp-closed" = 'icons/stamp_icons/large_stamp-closed.png',
+		"stamp-crow" = 'icons/stamp_icons/crow-stamp.png',
 		//BUBBERSTATION ADDITION: END - Bubberstation Stamp Icons
 
 		"stamp-clown" = 'icons/stamp_icons/large_stamp-clown.png',

@@ -16,6 +16,7 @@
 #define ROLE_OPERATIVE "Operative"
 #define ROLE_TRAITOR "Traitor"
 #define ROLE_WIZARD "Wizard"
+#define ROLE_SPY "Spy"
 // SKYRAT EDIT START
 #define ROLE_ASSAULT_OPERATIVE "Assault Operative"
 #define ROLE_OPFOR_CANDIDATE "OPFOR Candidate"
@@ -36,7 +37,6 @@
 #define ROLE_OPERATIVE_MIDROUND "Operative (Midround)"
 #define ROLE_PARADOX_CLONE "Paradox Clone"
 #define ROLE_REV_HEAD "Head Revolutionary"
-#define ROLE_SENTIENT_DISEASE "Sentient Disease"
 #define ROLE_SLEEPER_AGENT "Syndicate Sleeper Agent"
 #define ROLE_SPACE_DRAGON "Space Dragon"
 #define ROLE_SPIDER "Spider"
@@ -86,6 +86,11 @@
 #define ROLE_SLAUGHTER_DEMON "Slaughter Demon"
 #define ROLE_WIZARD_APPRENTICE "apprentice"
 #define ROLE_SYNDICATE_MONKEY "Syndicate Monkey Agent"
+#define ROLE_CONTRACTOR_SUPPORT "Contractor Support Unit"
+#define ROLE_OPERATIVE_OVERWATCH "Operative Overwatch Agent"
+#define ROLE_SYNDICATE_SABOBORG "Syndicate Sabotage Cyborg"
+#define ROLE_SYNDICATE_MEDBORG "Syndicate Medical Cyborg"
+#define ROLE_SYNDICATE_ASSAULTBORG "Syndicate Assault Cyborg"
 
 //Spawner roles
 #define ROLE_ANCIENT_CREW "Ancient Crew"
@@ -136,6 +141,9 @@
 #define ROLE_VAMPIRICACCIDENT "Bloodsucker (Midround)"
 #define ROLE_BLOODSUCKERBREAKOUT "Bloodsucker (Latejoin)"
 #define ROLE_MONSTERHUNTER "Monster Hunter"
+#define ROLE_VASSAL "Vassal"
+
+#define ROLE_CHANGELING_ZOMBIE "Changeling Zombie"
 //BUBBER EDIT END
 
 /// This defines the antagonists you can operate with in the settings.
@@ -153,6 +161,7 @@ GLOBAL_LIST_INIT(special_roles, list(
 	ROLE_REV_HEAD = 14,
 	ROLE_TRAITOR = 0,
 	ROLE_WIZARD = 14,
+	ROLE_SPY = 0,
 	// SKYRAT EDIT ADDITION
 	ROLE_ASSAULT_OPERATIVE = 14,
 	// SKYRAT EDIT END
@@ -172,7 +181,6 @@ GLOBAL_LIST_INIT(special_roles, list(
 	ROLE_OPERATIVE_MIDROUND = 14,
 	ROLE_PARADOX_CLONE = 0,
 	ROLE_REVENANT = 0,
-	ROLE_SENTIENT_DISEASE = 0,
 	ROLE_SLEEPER_AGENT = 0,
 	ROLE_SPACE_DRAGON = 0,
 	ROLE_SPIDER = 0,
@@ -199,6 +207,7 @@ GLOBAL_LIST_INIT(special_roles, list(
 	ROLE_VAMPIRICACCIDENT = 14,
 	ROLE_BLOODSUCKERBREAKOUT = 14,
 	ROLE_MONSTERHUNTER = 14,
+	ROLE_CHANGELING_ZOMBIE = 0
 	//BUBBER EDIT END
 ))
 

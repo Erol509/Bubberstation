@@ -375,7 +375,7 @@
 		return
 
 	// Defer to later frame because pixel_* is actually updated after all callbacks
-	addtimer(CALLBACK(parent_obj, TYPE_PROC_REF(/atom/, update_appearance)), 1)
+	addtimer(CALLBACK(parent_obj, TYPE_PROC_REF(/atom/, update_appearance)), 0.1 SECONDS)
 
 ///has one pipe input that only takes, example is manual output pipe
 /datum/component/plumbing/simple_demand
@@ -393,10 +393,6 @@
 /datum/component/plumbing/manifold
 	demand_connects = NORTH
 	supply_connects = SOUTH
-
-/datum/component/plumbing/iv_drip
-	demand_connects = SOUTH
-	supply_connects = NORTH
 
 /datum/component/plumbing/manifold/change_ducting_layer(obj/caller, obj/changer, new_layer)
 	return
