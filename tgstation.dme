@@ -9210,4 +9210,7 @@
 #include "modular_zubbers\master_files\skyrat\modules\cortical_borer\code\cortical_borer_antag.dm"
 #include "modular_zubbers\master_files\skyrat\modules\opposing_force\code\opposing_force_subsystem.dm"
 #include "modular_zubbers\master_files\skyrat\modules\verbs\code\subtle.dm"
+#include "modular_zubbers\code\modules\vespera_outpost\code\cave_gen_areas.dm"
+#include "modular_zubbers\code\modules\vespera_outpost\code\cave_gen.dm"
+#include "modular_zubbers\code\modules\vespera_outpost\code\areas.dm"
 // END_INCLUDE

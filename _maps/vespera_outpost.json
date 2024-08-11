@@ -1,0 +1,37 @@
+{
+	"version": 1,
+	"map_name": "Vespera Research Outpost",
+	"map_path": "map_files/vespera_outpost",
+	"map_file": "vespera_outpost.dmm",
+	"space_ruin_levels": 0,
+	"space_empty_levels": 0,
+	"planetary": 1,
+	"shuttles": {
+		"cargo": "cargo_delta_skyrat",
+		"ferry": "ferry_kilo",
+		"whiteship": "whiteship_birdshot",
+		"emergency": "emergency_kilo"
+	},
+	"traits": [
+		{
+			"Up": true,
+			"Mining": true,
+			"Linkage": null,
+			"Gravity": true,
+			"Baseturf": "/turf/open/water",
+			"Weather_Rainstorm": true,
+			"No Parallax": true,
+			"Jungle Ruins": true,
+			"Jungle Cave Ruins": true
+		},
+		{
+			"Down": true,
+			"Baseturf": "/turf/open/openspace",
+			"Linkage": null,
+			"Gravity": true,
+			"Weather_Rainstorm": true,
+			"No Parallax": true,
+			"Jungle Cave Ruins": true
+		}
+	]
+}
