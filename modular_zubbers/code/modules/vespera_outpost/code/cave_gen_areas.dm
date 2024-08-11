@@ -19,11 +19,7 @@
 	area_flags = VALID_TERRITORY | UNIQUE_AREA | CAVES_ALLOWED | FLORA_ALLOWED | MOB_SPAWN_ALLOWED
 	map_generator = /datum/map_generator/jungle_generator
 
-/area/zyphoria/unexplored/danger // Additional to said theory: megafauna.
-	icon_state = "danger"
-	area_flags = VALID_TERRITORY | UNIQUE_AREA | CAVES_ALLOWED | FLORA_ALLOWED | MOB_SPAWN_ALLOWED | MEGAFAUNA_SPAWN_ALLOWED
-
-/area/taeloth/underground
+/area/zyphoria/underground
 	name = "Zyphoria Caves"
 
 /area/zyphoria/underground/unexplored
