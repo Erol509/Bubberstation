@@ -159,6 +159,8 @@ GLOBAL_DATUM_INIT(ahelp_tickets, /datum/admin_help_tickets, new)
 		return
 
 	GLOB.ahelp_tickets.BrowseTickets(current_state)
+	var/datum/admin_help/Ahelp = new /datum/admin_help
+	Ahelp.ui_interact(usr)
 
 //called by admin topic
 /obj/effect/statclick/ticket_list/proc/Action()
@@ -485,6 +487,7 @@ GLOBAL_DATUM_INIT(ahelp_tickets, /datum/admin_help_tickets, new)
 	SSblackbox.LogAhelp(id, "Reopened", "Reopened by [usr.key]", usr.ckey)
 	SSblackbox.record_feedback("tally", "ahelp_stats", 1, "reopened")
 	TicketPanel() //can only be done from here, so refresh it
+	ui_interact(usr.client)
 
 //private
 /datum/admin_help/proc/RemoveActive()
@@ -598,39 +601,21 @@ GLOBAL_DATUM_INIT(ahelp_tickets, /datum/admin_help_tickets, new)
 
 //Show the ticket panel
 /datum/admin_help/proc/TicketPanel()
-	var/list/dat = list("<html><head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'><title>Ticket #[id]</title></head>")
-	var/ref_src = "[REF(src)]"
-	dat += "<h4>Admin Help Ticket #[id]: [LinkedReplyName(ref_src)]</h4>"
-	dat += "<b>State: [ticket_status()]</b>"
-	dat += "[FOURSPACES][TicketHref("Refresh", ref_src)][FOURSPACES][TicketHref("Re-Title", ref_src, "retitle")]"
-	if(state != AHELP_ACTIVE)
-		dat += "[FOURSPACES][TicketHref("Reopen", ref_src, "reopen")]"
-	dat += "<br><br>Opened at: [gameTimestamp(wtime = opened_at)] (Approx [DisplayTimeText(world.time - opened_at)] ago)"
-	if(closed_at)
-		dat += "<br>Closed at: [gameTimestamp(wtime = closed_at)] (Approx [DisplayTimeText(world.time - closed_at)] ago)"
-	dat += "<br><br>"
-	if(initiator)
-		dat += "<b>Actions:</b> [FullMonty(ref_src)]<br>"
-	else
-		dat += "<b>DISCONNECTED</b>[FOURSPACES][ClosureLinks(ref_src)]<br>"
-	dat += "<br><b>Log:</b><br><br>"
-	for(var/I in ticket_interactions)
-		dat += "[I]<br>"
+	ui_interact(usr)
 
-	// Helper for opening directly to player ticket history
-	dat += "<br><br><b>Player Ticket History:</b>"
-	dat += "[FOURSPACES]<A href='?_src_=holder;[HrefToken()];player_ticket_history=[initiator_ckey]'>Open</A>"
+/datum/admin_help/ui_interact(mob/user, datum/tgui/ui)
+	. = ..()
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "ticketspanel")
+		ui.open()
 
-	// Append any tickets also opened by this user if relevant
-	var/list/related_tickets = GLOB.ahelp_tickets.TicketsByCKey(initiator_ckey)
-	if (related_tickets.len > 1)
-		dat += "<br/><b>Other Tickets by User</b><br/>"
-		for (var/datum/admin_help/related_ticket in related_tickets)
-			if (related_ticket.id == id)
-				continue
-			dat += "[related_ticket.TicketHref("#[related_ticket.id]")] ([related_ticket.ticket_status()]): [related_ticket.name]<br/>"
-
-	usr << browse(dat.Join(), "window=ahelp[id];size=750x480")
+/datum/admin_help_tickets/ui_interact(mob/user, datum/tgui/ui)
+	. = ..()
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "ticketspanel")
+		ui.open()
 
 /**
  * Renders the current status of the ticket into a displayable string
@@ -730,6 +715,7 @@ GLOBAL_DATUM_INIT(ahelp_tickets, /datum/admin_help_tickets, new)
 	var/datum/browser/player_panel = new(usr, "ahelp[id]", 0, 620, 480)
 	player_panel.set_content(dat.Join())
 	player_panel.open()
+	ui_interact(usr)
 
 
 //
@@ -753,6 +739,7 @@ GLOBAL_DATUM_INIT(ahelp_tickets, /datum/admin_help_tickets, new)
 		return
 
 	ahelp_datum.TicketPanel()
+	ahelp_datum.ui_interact(usr)
 
 /obj/effect/statclick/ahelp/Destroy()
 	ahelp_datum = null
